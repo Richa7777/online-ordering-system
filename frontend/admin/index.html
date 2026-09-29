@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Bites - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../public/style.css">
+    <link rel="stylesheet" href="admin.css">
+    <script defer src="admin.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar flex between wrapper">
+
+
+            <a href="index.html" class="logo">
+                Quick Bites
+            </a>
+
+
+            <!-- ================= DESKTOP NAVIGATION ================= -->
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html" class="active">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="orders.html">
+                        Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="products.html">
+                        Products
+                    </a>
+                </li>
+
+                <li>
+                    <a href="customers.html">
+                        Customers
+                    </a>
+                </li>
+
+                <li>
+                    <a href="riders.html">
+                        Riders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="categories.html">
+                        Categories
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <!-- ================= RIGHT SIDE ACTIONS ================= -->
+
+            <div class="desktop-action flex gap-2">
+
+
+                <!-- Admin Profile -->
+
+                <a href="#" class="admin-profile">
+
+                    <i class="fa-regular fa-circle-user"></i>
+
+                </a>
+
+
+                <!-- Logout -->
+
+                <a href="#" class="admin-logout">
+
+                    <span>Logout</span>
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </a>
+
+
+                <!-- Hamburger -->
+
+                <a href="#" class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- =====================================================
+                 MOBILE MENU
+                 ===================================================== -->
+
+            <ul class="mobile-menu">
+
+
+                <!-- Dashboard -->
+
+                <li>
+
+                    <a href="index.html">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <!-- Orders -->
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-solid fa-bag-shopping"></i>
+
+                        Orders
+
+                    </a>
+
+                </li>
+
+
+                <!-- Products -->
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-solid fa-utensils"></i>
+
+                        Products
+
+                    </a>
+
+                </li>
+
+
+                <!-- Customers -->
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        Customers
+
+                    </a>
+
+                </li>
+
+
+                <!-- Riders -->
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-solid fa-motorcycle"></i>
+
+                        Riders
+
+                    </a>
+
+                </li>
+
+
+                <!-- Categories -->
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-solid fa-layer-group"></i>
+
+                        Categories
+
+                    </a>
+
+                </li>
+
+
+                <!-- Profile -->
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-regular fa-circle-user"></i>
+
+                        Profile
+
+                    </a>
+
+                </li>
+
+
+                <!-- Logout -->
+
+                <li>
+
+                    <a href="#" class="mobile-logout">
+
+                        Logout
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main>
+
+
+        <section class="admin-dashboard wrapper p-top">
+
+
+            <!-- =================================================
+                 DASHBOARD HEADING
+                 ================================================= -->
+
+            <div class="text-center">
+
+
+                <h5>
+                    Admin Panel
+                </h5>
+
+
+                <h2>
+                    Dashboard
+                </h2>
+
+
+                <p class="admin-description">
+
+                    Manage your Quick Bites food ordering system
+                    from one place.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STATISTICS
+                 ================================================= -->
+
+            <div class="admin-stats flex">
+
+
+                <!-- ================= TOTAL ORDERS ================= -->
+
+                <div class="admin-stat-card">
+
+
+                    <div class="admin-stat-icon">
+
+                        <i class="fa-solid fa-bag-shopping"></i>
+
+                    </div>
+
+
+                    <div class="admin-stat-info">
+
+                        <h3 id="total-orders">
+                            0
+                        </h3>
+
+                        <p>
+                            Total Orders
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================= TOTAL PRODUCTS ================= -->
+
+                <div class="admin-stat-card">
+
+
+                    <div class="admin-stat-icon">
+
+                        <i class="fa-solid fa-utensils"></i>
+
+                    </div>
+
+
+                    <div class="admin-stat-info">
+
+                        <h3 id="total-products">
+                            0
+                        </h3>
+
+                        <p>
+                            Total Products
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================= TOTAL CUSTOMERS ================= -->
+
+                <div class="admin-stat-card">
+
+
+                    <div class="admin-stat-icon">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+
+                    <div class="admin-stat-info">
+
+                        <h3 id="total-customers">
+                            0
+                        </h3>
+
+                        <p>
+                            Customers
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ================= TOTAL RIDERS ================= -->
+
+                <div class="admin-stat-card">
+
+
+                    <div class="admin-stat-icon">
+
+                        <i class="fa-solid fa-motorcycle"></i>
+
+                    </div>
+
+
+                    <div class="admin-stat-info">
+
+                        <h3 id="total-riders">
+                            0
+                        </h3>
+
+                        <p>
+                            Riders
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+                 ================================================= -->
+
+            <section class="admin-section">
+
+
+                <div class="text-center">
+
+                    <h3>
+                        Quick Actions
+                    </h3>
+
+                </div>
+
+
+                <div class="quick-actions flex">
+
+
+                    <!-- ================= ADD PRODUCT ================= -->
+
+                    <a href="#" class="quick-action-card">
+
+
+                        <div class="quick-action-icon">
+
+                            <i class="fa-solid fa-plus"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h4>
+                                Add Product
+                            </h4>
+
+                            <p>
+                                Add a new food item
+                            </p>
+
+                        </div>
+
+                    </a>
+
+
+
+                    <!-- ================= MANAGE ORDERS ================= -->
+
+                    <a href="#" class="quick-action-card">
+
+
+                        <div class="quick-action-icon">
+
+                            <i class="fa-solid fa-list-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h4>
+                                Manage Orders
+                            </h4>
+
+                            <p>
+                                View customer orders
+                            </p>
+
+                        </div>
+
+                    </a>
+
+
+
+                    <!-- ================= CUSTOMERS ================= -->
+
+                    <a href="#" class="quick-action-card">
+
+
+                        <div class="quick-action-icon">
+
+                            <i class="fa-solid fa-user-group"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h4>
+                                Customers
+                            </h4>
+
+                            <p>
+                                View customers
+                            </p>
+
+                        </div>
+
+                    </a>
+
+
+
+                    <!-- ================= RIDERS ================= -->
+
+                    <a href="#" class="quick-action-card">
+
+
+                        <div class="quick-action-icon">
+
+                            <i class="fa-solid fa-motorcycle"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h4>
+                                Riders
+                            </h4>
+
+                            <p>
+                                Manage delivery riders
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ORDER OVERVIEW
+                 ================================================= -->
+
+            <section class="admin-section">
+
+
+                <div class="section-heading flex between">
+
+
+                    <div>
+
+                        <h3>
+                            Order Overview
+                        </h3>
+
+                        <p>
+                            Current order status
+                        </p>
+
+                    </div>
+
+
+                    <a href="#" class="btn admin-small-btn">
+
+                        View All Orders
+
+                    </a>
+
+                </div>
+
+
+
+                <div class="order-status-grid flex">
+
+
+                    <!-- ================= PENDING ================= -->
+
+                    <div class="order-status-card">
+
+
+                        <div class="status-icon pending">
+
+                            <i class="fa-regular fa-clock"></i>
+
+                        </div>
+
+
+                        <h3 id="pending-orders">
+                            0
+                        </h3>
+
+
+                        <p>
+                            Pending
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- ================= PREPARING ================= -->
+
+                    <div class="order-status-card">
+
+
+                        <div class="status-icon preparing">
+
+                            <i class="fa-solid fa-fire-burner"></i>
+
+                        </div>
+
+
+                        <h3 id="preparing-orders">
+                            0
+                        </h3>
+
+
+                        <p>
+                            Preparing
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- ================= OUT FOR DELIVERY ================= -->
+
+                    <div class="order-status-card">
+
+
+                        <div class="status-icon delivery">
+
+                            <i class="fa-solid fa-motorcycle"></i>
+
+                        </div>
+
+
+                        <h3 id="delivery-orders">
+                            0
+                        </h3>
+
+
+                        <p>
+                            Out for Delivery
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- ================= COMPLETED ================= -->
+
+                    <div class="order-status-card">
+
+
+                        <div class="status-icon completed">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        </div>
+
+
+                        <h3 id="completed-orders">
+                            0
+                        </h3>
+
+
+                        <p>
+                            Completed
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 RECENT ORDERS
+                 ================================================= -->
+
+            <section class="admin-section recent-orders-section">
+
+
+                <div class="section-heading flex between">
+
+
+                    <div>
+
+                        <h3>
+                            Recent Orders
+                        </h3>
+
+                        <p>
+                            Latest customer orders
+                        </p>
+
+                    </div>
+
+
+                    <a href="#" class="btn admin-small-btn">
+
+                        View Orders
+
+                    </a>
+
+                </div>
+
+
+
+                <div class="orders-table-container">
+
+
+                    <table class="orders-table">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Order ID
+                                </th>
+
+                                <th>
+                                    Customer
+                                </th>
+
+                                <th>
+                                    Items
+                                </th>
+
+                                <th>
+                                    Total
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="recent-orders">
+
+                            <!-- JavaScript adds orders here -->
+
+                        </tbody>
+
+                    </table>
+
+
+
+                    <!-- ================= EMPTY ORDERS ================= -->
+
+                    <div id="no-orders" class="no-orders">
+
+
+                        <i class="fa-solid fa-receipt"></i>
+
+
+                        <h4>
+                            No Orders Yet
+                        </h4>
+
+
+                        <p>
+                            Customer orders will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="admin-footer">
+
+
+        <div class="wrapper text-center">
+
+
+            <a href="index.html" class="logo">
+
+                Quick Bites
+
+            </a>
+
+
+            <p>
+
+                Admin Panel © 2026 Quick Bites
+
+            </p>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Order Details - Quick Bites</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="../public/style.css">
+    <link rel="stylesheet" href="order_details.css">
+
+    <script defer src="common.js"></script>
+    <script defer src="order_details.js"></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+            <a href="index.html" class="logo">
+                Quick Bites
+            </a>
+
+            <div class="profile-nav flex gap-2">
+
+                <a href="orders.html" class="profile-home">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    My Orders
+                </a>
+
+                <a href="profile.html" class="btn">
+                    <i class="fa-solid fa-user"></i>
+                    Profile
+                </a>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ORDER DETAILS -->
+    <main>
+
+        <section class="order-details-section">
+
+            <div class="order-details-container">
+
+                <div class="order-details-heading">
+
+                    <h1>
+                        Order Details
+                    </h1>
+
+                    <p>
+                        View your order information
+                    </p>
+
+                </div>
+
+
+                <!-- ORDER INFORMATION -->
+                <div class="order-info-card">
+
+                    <div class="order-top">
+
+                        <div>
+                            <span>Order ID</span>
+                            <h3 id="order-id">QB1001</h3>
+                        </div>
+
+                        <span id="order-status" class="order-status">
+                            Delivered
+                        </span>
+
+                    </div>
+
+
+                    <div class="order-info-grid">
+
+                        <div class="info-box">
+
+                            <i class="fa-solid fa-calendar"></i>
+
+                            <div>
+                                <small>Order Date</small>
+                                <p id="order-date">
+                                    7 September 2026
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="info-box">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <div>
+                                <small>Delivery Address</small>
+                                <p id="order-address">
+                                    Kathmandu, Nepal
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ORDER ITEMS -->
+                <div class="order-items-card">
+
+                    <h2>
+                        Ordered Items
+                    </h2>
+
+                    <div id="order-items">
+
+                        <!-- Items will be added by JavaScript -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- ORDER SUMMARY -->
+                <div class="order-summary-card">
+
+                    <h2>
+                        Order Summary
+                    </h2>
+
+                    <div class="summary-row">
+
+                        <span>Subtotal</span>
+
+                        <span id="subtotal">
+                            Rs.0.00
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Delivery Fee</span>
+
+                        <span id="delivery-fee">
+                            Rs.50.00
+                        </span>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <div class="summary-row total-row">
+
+                        <strong>Total</strong>
+
+                        <strong id="order-total">
+                            Rs.0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="order-detail-buttons">
+
+                    <a href="orders.html" class="back-btn">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Back to Orders
+                    </a>
+
+                    <a href="index.html" class="continue-btn">
+                        <i class="fa-solid fa-utensils"></i>
+                        Continue Shopping
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="admin-footer">
+
+        <div class="admin-footer-logo"> Quick Bites </div>
+
+        <p>
+            Customer Panel © 2026 Quick Bites
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

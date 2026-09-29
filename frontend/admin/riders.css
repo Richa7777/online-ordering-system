@@ -1,0 +1,1031 @@
+/* =========================================
+   QUICK BITES ADMIN - RIDERS
+========================================= */
+
+.riders-page {
+    padding-top: 4rem;
+    padding-bottom: 5rem;
+}
+
+
+/* =========================================
+   PAGE HEADING
+========================================= */
+
+.riders-heading {
+    margin-bottom: 3rem;
+}
+
+.riders-heading h5 {
+    margin-bottom: .5rem;
+}
+
+.riders-heading h2 {
+    margin-bottom: .5rem;
+}
+
+.riders-heading p {
+    max-width: 650px;
+    margin: auto;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.admin-profile {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.admin-profile i {
+    font-size: 35px;
+}
+
+.admin-profile:hover {
+    color: var(--gold-finger);
+}
+
+
+.logout-link {
+    display: flex;
+    align-items: center;
+
+    gap: .5rem;
+
+    font-size: 1rem;
+
+    color: var(--lead);
+
+    transition: .3s ease-in-out;
+}
+
+.logout-link i {
+    font-size: 1.1rem;
+}
+
+.logout-link:hover {
+    color: var(--gold-finger);
+}
+
+
+.navlist a.active {
+    color: var(--gold-finger);
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   RIDER CONTROLS
+========================================= */
+
+.rider-controls {
+    display: flex;
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-bottom: 1.5rem;
+}
+
+
+/* Search */
+
+.rider-search {
+    width: 360px;
+
+    display: flex;
+    align-items: center;
+
+    gap: .8rem;
+
+    padding: .8rem 1.2rem;
+
+    background: var(--pure-white);
+
+    border: .1rem solid #e5e5e5;
+
+    border-radius: 1rem;
+
+    transition: .3s ease-in-out;
+}
+
+.rider-search:focus-within {
+    border-color: var(--gold-finger);
+
+    box-shadow:
+        rgba(255, 123, 0, .12) 0 4px 12px;
+}
+
+.rider-search i {
+    color: var(--gold-finger);
+}
+
+.rider-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 1rem;
+
+    color: var(--lead);
+}
+
+.rider-search input::placeholder {
+    color: #999;
+}
+
+
+/* Status filter */
+
+.status-filter {
+    padding: .8rem 1rem;
+
+    border: .1rem solid #e5e5e5;
+
+    border-radius: 1rem;
+
+    background: var(--pure-white);
+
+    color: var(--lead);
+
+    font-size: .95rem;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+.status-filter:focus {
+    border-color: var(--gold-finger);
+}
+
+
+/* Add button */
+
+.add-rider-btn {
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: .5rem;
+
+    padding: .8rem 1.2rem;
+
+    border: none;
+
+    border-radius: 1rem;
+
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.add-rider-btn:hover {
+    background: var(--lead);
+}
+
+
+/* =========================================
+   RIDER COUNT
+========================================= */
+
+.rider-count-row {
+    margin-bottom: 2rem;
+}
+
+.rider-count-row p {
+    font-size: .95rem;
+
+    color: #888;
+}
+
+.rider-count-row strong {
+    color: var(--gold-finger);
+}
+
+
+/* =========================================
+   SECTION
+========================================= */
+
+.riders-section {
+    margin-top: 1rem;
+}
+
+.section-title {
+    margin-bottom: 2rem;
+}
+
+.section-title h3 {
+    margin-bottom: .3rem;
+}
+
+.section-title p {
+    font-size: 1rem;
+
+    color: grey;
+}
+
+
+/* =========================================
+   RIDER LIST
+========================================= */
+
+.rider-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(310px, 1fr));
+
+    gap: 1.5rem;
+}
+
+
+/* =========================================
+   RIDER CARD
+========================================= */
+
+.rider-card {
+    background: var(--pure-white);
+
+    border: .1rem solid var(--gold-finger);
+
+    border-radius: 2rem;
+
+    padding: 1.5rem;
+
+    box-shadow:
+        rgba(0, 0, 0, .05) 8px 8px 8px,
+        rgba(0, 0, 0, .04) 8px 8px 8px inset;
+
+    transition: .3s ease-in-out;
+}
+
+.rider-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        rgba(0, 0, 0, .08) 10px 12px 15px;
+}
+
+
+/* =========================================
+   RIDER CARD TOP
+========================================= */
+
+.rider-card-top {
+    display: flex;
+    align-items: center;
+
+    gap: 1rem;
+
+    padding-bottom: 1.2rem;
+
+    border-bottom: 1px solid #eee;
+}
+
+
+.rider-avatar {
+    width: 58px;
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--hint-yellow);
+
+    color: var(--gold-finger);
+
+    font-size: 1.5rem;
+}
+
+
+.rider-card-name {
+    flex: 1;
+}
+
+.rider-card-name h4 {
+    font-size: 1.25rem;
+
+    color: var(--lead);
+
+    margin-bottom: .2rem;
+}
+
+.rider-card-name p {
+    font-size: .85rem;
+
+    color: #999;
+
+    line-height: 1.2rem;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.rider-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: .4rem;
+
+    padding: .35rem .7rem;
+
+    border-radius: 2rem;
+
+    font-size: .75rem;
+
+    font-weight: 600;
+}
+
+.rider-status::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+.status-available {
+    color: #248a3d;
+
+    background: #eaf7ed;
+}
+
+.status-busy {
+    color: #c77a00;
+
+    background: #fff4dc;
+}
+
+.status-offline {
+    color: #888;
+
+    background: #f0f0f0;
+}
+
+
+/* =========================================
+   RIDER INFO
+========================================= */
+
+.rider-info {
+    display: flex;
+    flex-direction: column;
+
+    gap: .8rem;
+
+    padding: 1.2rem 0;
+}
+
+.rider-info-row {
+    display: flex;
+    align-items: center;
+
+    gap: .8rem;
+
+    font-size: .95rem;
+
+    color: #555;
+}
+
+.rider-info-row i {
+    width: 20px;
+
+    color: var(--gold-finger);
+
+    text-align: center;
+}
+
+.rider-info-row span {
+    word-break: break-word;
+}
+
+
+/* =========================================
+   RIDER STATS
+========================================= */
+
+.rider-stats {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: .8rem;
+
+    padding: 1rem 0;
+
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.rider-stat {
+    text-align: center;
+}
+
+.rider-stat small {
+    display: block;
+
+    margin-bottom: .2rem;
+
+    font-size: .72rem;
+
+    color: #999;
+
+    text-transform: uppercase;
+}
+
+.rider-stat strong {
+    font-size: 1rem;
+
+    color: var(--lead);
+}
+
+
+/* =========================================
+   RIDER CARD ACTIONS
+========================================= */
+
+.rider-actions {
+    display: flex;
+
+    gap: .6rem;
+
+    margin-top: 1rem;
+}
+
+.rider-action-btn {
+    flex: 1;
+
+    padding: .65rem .7rem;
+
+    border: none;
+
+    border-radius: .8rem;
+
+    font-size: .85rem;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.view-rider-btn {
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+}
+
+.view-rider-btn:hover {
+    background: var(--lead);
+}
+
+.edit-rider-btn {
+    background: #f3f3f3;
+
+    color: var(--lead);
+}
+
+.edit-rider-btn:hover {
+    background: var(--hint-yellow);
+}
+
+.delete-rider-btn {
+    background: #fff0f0;
+
+    color: #c62828;
+}
+
+.delete-rider-btn:hover {
+    background: #c62828;
+
+    color: var(--pure-white);
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-riders {
+    display: none;
+
+    text-align: center;
+
+    padding: 4rem 1rem;
+
+    background: var(--pure-white);
+
+    border: .1rem dashed var(--gold-finger);
+
+    border-radius: 2rem;
+}
+
+.empty-riders i {
+    font-size: 3rem;
+
+    color: var(--gold-finger);
+
+    margin-bottom: 1rem;
+}
+
+.empty-riders h3 {
+    margin-bottom: .5rem;
+}
+
+.empty-riders p {
+    font-size: 1rem;
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+.rider-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 1.5rem;
+
+    background: rgba(0, 0, 0, .45);
+}
+
+.rider-modal.active {
+    display: flex;
+}
+
+.rider-modal-content {
+    width: min(520px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: var(--pure-white);
+
+    border: .1rem solid var(--gold-finger);
+
+    border-radius: 2rem;
+
+    padding: 1.8rem;
+
+    box-shadow:
+        rgba(0, 0, 0, .2) 0 10px 30px;
+}
+
+
+/* =========================================
+   MODAL HEADER
+========================================= */
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding-bottom: 1rem;
+
+    margin-bottom: 1.5rem;
+
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    font-size: 1.7rem;
+}
+
+.close-modal {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f3f3f3;
+
+    color: var(--lead);
+
+    font-size: 1.1rem;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.close-modal:hover {
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: .4rem;
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+    color: var(--lead);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    padding: .8rem 1rem;
+
+    border: 1px solid #ddd;
+
+    border-radius: .8rem;
+
+    outline: none;
+
+    background: var(--pure-white);
+
+    color: var(--lead);
+
+    font-size: .95rem;
+
+    transition: .3s ease-in-out;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--gold-finger);
+
+    box-shadow:
+        rgba(255, 123, 0, .1) 0 3px 8px;
+}
+
+
+/* =========================================
+   FORM ACTIONS
+========================================= */
+
+.form-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: .8rem;
+
+    margin-top: 1.5rem;
+}
+
+.cancel-btn,
+.save-rider-btn {
+    padding: .75rem 1.2rem;
+
+    border: none;
+
+    border-radius: .8rem;
+
+    font-size: .95rem;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.cancel-btn {
+    background: #f3f3f3;
+
+    color: var(--lead);
+}
+
+.cancel-btn:hover {
+    background: #ddd;
+}
+
+.save-rider-btn {
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+}
+
+.save-rider-btn:hover {
+    background: var(--lead);
+}
+
+
+/* =========================================
+   DETAILS MODAL
+========================================= */
+
+.details-modal-content {
+    width: min(600px, 100%);
+}
+
+.rider-details-header {
+    display: flex;
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-bottom: 1.5rem;
+}
+
+.rider-details-avatar {
+    width: 68px;
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--hint-yellow);
+
+    color: var(--gold-finger);
+
+    font-size: 1.8rem;
+}
+
+.rider-details-header h4 {
+    font-size: 1.4rem;
+
+    color: var(--lead);
+
+    margin-bottom: .3rem;
+}
+
+.rider-details-header p {
+    font-size: .9rem;
+
+    color: #999;
+}
+
+.details-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: .8rem;
+}
+
+.details-row {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 1rem;
+
+    padding: .9rem 1rem;
+
+    background: #fffaf0;
+
+    border-radius: .8rem;
+}
+
+.details-row i {
+    width: 22px;
+
+    margin-top: .15rem;
+
+    color: var(--gold-finger);
+
+    text-align: center;
+}
+
+.details-row div {
+    flex: 1;
+}
+
+.details-row small {
+    display: block;
+
+    margin-bottom: .15rem;
+
+    color: #999;
+
+    font-size: .75rem;
+
+    text-transform: uppercase;
+}
+
+.details-row strong {
+    color: var(--lead);
+
+    font-size: .95rem;
+
+    word-break: break-word;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+.admin-footer {
+
+    padding: 45px 0;
+
+    background: var(--hint-yellow);
+
+    border-top:
+        1px solid rgba(255, 123, 0, 0.3);
+
+}
+
+
+.admin-footer .logo {
+
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+}
+
+
+.admin-footer p {
+
+    font-size: 1rem;
+
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 950px) {
+
+    .rider-controls {
+        flex-wrap: wrap;
+    }
+
+    .rider-search {
+        width: 100%;
+    }
+
+    .status-filter {
+        flex: 1;
+    }
+
+    .add-rider-btn {
+        margin-left: 0;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 780px) {
+
+    .logout-link {
+        display: none;
+    }
+
+    .admin-profile {
+        width: 40px;
+        height: 40px;
+    }
+
+    .admin-profile i {
+        font-size: 30px;
+    }
+
+    .rider-list {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .riders-page {
+        padding-top: 3rem;
+    }
+
+    .riders-heading h2 {
+        font-size: 2.7rem;
+    }
+
+    .riders-heading p {
+        font-size: 1rem;
+    }
+
+    .rider-controls {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .rider-search {
+        width: 100%;
+    }
+
+    .status-filter {
+        width: 100%;
+    }
+
+    .add-rider-btn {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+    .rider-card {
+        padding: 1.2rem;
+
+        border-radius: 1.5rem;
+    }
+
+    .rider-card-name h4 {
+        font-size: 1.1rem;
+    }
+
+    .rider-actions {
+        flex-wrap: wrap;
+    }
+
+    .rider-action-btn {
+        min-width: 30%;
+    }
+
+    .rider-modal-content {
+        padding: 1.3rem;
+
+        border-radius: 1.5rem;
+    }
+
+    .modal-header h3 {
+        font-size: 1.4rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .cancel-btn,
+    .save-rider-btn {
+        width: 100%;
+    }
+
+}

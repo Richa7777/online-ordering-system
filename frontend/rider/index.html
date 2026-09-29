@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Dashboard - Quick Bites</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"  crossorigin="anonymous"  referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="../public/style.css">
+    <link rel="stylesheet"  href="rider.css">
+    <script defer src="rider.js"></script>
+</head>
+
+<body>
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+            <a href="index.html" class="logo">Quick Bites</a>
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html"> Dashboard  </a>
+                </li>
+
+                <li>
+                    <a href="deliveries.html">
+                        Deliveries
+                    </a>
+                </li>
+
+                <li>
+                    <a href="earnings.html">
+                        Earnings
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        Profile
+                    </a>
+                </li>
+
+            </ul>
+
+            <!-- DESKTOP ACTION -->
+            <div class="desktop-action flex gap-2">
+
+                <!-- PROFILE -->
+                <a
+                    href="profile.html"
+                    class="rider-profile">
+                    <i class="fa-regular fa-circle-user"></i>
+
+                </a>
+
+                <!-- LOGOUT -->
+                <a
+                    href="#"
+                    class="logout-link"
+                    id="logout-btn">
+                    Logout
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+
+                <!-- HAMBURGER -->
+                <a
+                    href="#"
+                    class="hamburger">
+                    <i class="fa-solid fa-bars"></i>
+                </a>
+            </div>
+
+
+            <!-- MOBILE MENU -->
+            <ul class="mobile-menu">
+
+                <li>
+                    <a href="index.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="deliveries.html">
+                        Deliveries
+                    </a>
+                </li>
+
+                <li>
+                    <a href="earnings.html">
+                        Earnings
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        My Profile
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="#"
+                        id="mobile-logout-btn">
+                        Logout
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- ================= MAIN ================= -->
+    <main>
+
+        <!-- DASHBOARD HEADING -->
+        <section class="rider-dashboard">
+
+            <div class="wrapper">
+
+                <div class="dashboard-heading">
+
+                    <p class="section-subtitle">
+                        RIDER PANEL
+                    </p>
+
+                    <h1>
+                        Rider <span>Dashboard</span>
+                    </h1>
+
+                    <p>
+                        Manage your deliveries and track your earnings.
+                    </p>
+
+                </div>
+
+                <!-- ================= STATISTICS ================= -->
+                <div class="rider-stats">
+
+                    <!-- TODAY'S DELIVERIES -->
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+
+                            <i class="fa-solid fa-motorcycle"></i>
+
+                        </div>
+
+                        <div>
+                            <p>
+                                Today's Deliveries
+                            </p>
+
+                            <h2 id="today-deliveries">
+                                8
+                            </h2>
+                        </div>
+                    </div>
+
+                    <!-- PENDING -->
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+
+                        <div>
+                            <p>
+                                Pending
+                            </p>
+
+                            <h2 id="pending-deliveries">
+                                3
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <div>
+                            <p>
+                                Completed
+                            </p>
+                            <h2 id="completed-deliveries">
+                                5
+                            </h2>
+                        </div>
+                    </div>
+
+
+                    <!-- EARNINGS -->
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+
+                        <div>
+                            <p>
+                                Today's Earnings
+                            </p>
+
+                            <h2 id="today-earnings">
+                                Rs.850
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- ================= RECENT DELIVERIES ================= -->
+
+                <section class="recent-section">
+
+
+                    <div class="section-heading">
+
+                        <div>
+
+                            <p class="section-subtitle">
+                                DELIVERY ACTIVITY
+                            </p>
+
+                            <h2>
+                                Recent <span>Deliveries</span>
+                            </h2>
+
+                        </div>
+
+
+                        <a
+                            href="deliveries.html"
+                            class="btn">
+
+                            View All
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+
+
+                    <!-- DELIVERY TABLE -->
+
+                    <div class="delivery-table-wrapper">
+
+                        <table class="delivery-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Order
+                                    </th>
+
+                                    <th>
+                                        Customer
+                                    </th>
+
+                                    <th>
+                                        Address
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Total
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="delivery-table-body">
+
+                                <tr>
+
+                                    <td>
+                                        #QB1001
+                                    </td>
+
+                                    <td>
+                                        Susmita Tamang
+                                    </td>
+
+                                    <td>
+                                        Kathmandu
+                                    </td>
+
+                                    <td>
+
+                                        <span class="status delivered">
+                                            Delivered
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+                                        Rs.900
+                                    </td>
+
+                                    <td>
+
+                                        <a
+                                            href="delivery_details.html"
+                                            class="view-btn">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        #QB1002
+                                    </td>
+
+                                    <td>
+                                        Priya Rai
+                                    </td>
+
+                                    <td>
+                                        Lalitpur
+                                    </td>
+
+                                    <td>
+
+                                        <span class="status preparing">
+                                            Preparing
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+                                        Rs.750
+                                    </td>
+
+                                    <td>
+
+                                        <a
+                                            href="delivery_details.html"
+                                            class="view-btn">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        #QB1003
+                                    </td>
+
+                                    <td>
+                                        Anita Sharma
+                                    </td>
+
+                                    <td>
+                                        Bhaktapur
+                                    </td>
+
+                                    <td>
+
+                                        <span class="status pending">
+                                            Pending
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+                                        Rs.500
+                                    </td>
+
+                                    <td>
+
+                                        <a
+                                            href="delivery_details.html"
+                                            class="view-btn">
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- ================= QUICK ACTIONS ================= -->
+
+                <section class="quick-actions-section">
+
+                    <div class="text-center">
+
+                        <p class="section-subtitle">
+                            QUICK ACCESS
+                        </p>
+
+                        <h2>
+                            Quick <span>Actions</span>
+                        </h2>
+
+                    </div>
+
+
+                    <div class="quick-actions">
+
+
+                        <a
+                            href="deliveries.html"
+                            class="quick-action-card">
+
+                            <i class="fa-solid fa-motorcycle"></i>
+
+                            <h3>
+                                My Deliveries
+                            </h3>
+
+                            <p>
+                                View and manage assigned deliveries.
+                            </p>
+
+                        </a>
+
+
+
+                        <a
+                            href="earnings.html"
+                            class="quick-action-card">
+
+                            <i class="fa-solid fa-wallet"></i>
+
+                            <h3>
+                                My Earnings
+                            </h3>
+
+                            <p>
+                                View your delivery earnings.
+                            </p>
+
+                        </a>
+
+
+
+                        <a
+                            href="profile.html"
+                            class="quick-action-card">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <h3>
+                                My Profile
+                            </h3>
+
+                            <p>
+                                View and update your profile.
+                            </p>
+
+                        </a>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="admin-footer">
+
+        <div class="admin-footer-logo">
+            Quick Bites
+        </div>
+
+        <p>
+            Rider Panel © 2026 Quick Bites
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

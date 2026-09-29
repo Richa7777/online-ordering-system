@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Categories - Quick Bites Admin</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Allura&family=Edu+VIC+WA+NT+Hand:wght@400;500;600;700&family=Playball&family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Main Quick Bites CSS -->
+    <link rel="stylesheet" href="../public/style.css">
+
+    <!-- Categories CSS -->
+    <link rel="stylesheet" href="categories.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+            <!-- Logo -->
+
+            <a href="index.html" class="logo">
+                Quick Bites
+            </a>
+
+
+            <!-- Desktop Navigation -->
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="orders.html">
+                        Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="products.html">
+                        Products
+                    </a>
+                </li>
+
+                <li>
+                    <a href="customers.html">
+                        Customers
+                    </a>
+                </li>
+
+                <li>
+                    <a href="riders.html">
+                        Riders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="categories.html" class="active">
+                        Categories
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <!-- Header Actions -->
+
+            <div class="desktop-action flex gap-2">
+
+                <!-- Profile -->
+
+                <a href="profile.html" class="admin-profile">
+
+                    <i class="fa-regular fa-circle-user"></i>
+
+                </a>
+
+
+                <!-- Logout -->
+
+                <a href="../public/index.html" class="logout-link">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </a>
+
+
+                <!-- Hamburger -->
+
+                <a href="#" class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- Mobile Menu -->
+
+            <ul class="mobile-menu">
+
+                <li>
+                    <a href="index.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="orders.html">
+                        Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="products.html">
+                        Products
+                    </a>
+                </li>
+
+                <li>
+                    <a href="customers.html">
+                        Customers
+                    </a>
+                </li>
+
+                <li>
+                    <a href="riders.html">
+                        Riders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="categories.html">
+                        Categories
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        My Profile
+                    </a>
+                </li>
+
+                <li>
+                    <a href="../public/index.html">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="wrapper categories-page">
+
+
+        <!-- Page Heading -->
+
+        <section class="categories-heading text-center">
+
+            <h5>
+                Quick Bites Admin
+            </h5>
+
+            <h2>
+                Categories
+            </h2>
+
+            <p>
+                Organize your food products into categories.
+            </p>
+
+        </section>
+
+
+        <!-- ================= CONTROLS ================= -->
+
+        <section class="category-controls">
+
+            <!-- Search -->
+
+            <div class="category-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text" id="category-search" placeholder="Search categories..." autocomplete="off">
+
+            </div>
+
+
+            <!-- Category Count -->
+
+            <div class="category-count">
+
+                <span id="category-count">
+                    0
+                </span>
+
+                Categories
+
+            </div>
+
+
+            <!-- Add Category -->
+
+            <button type="button" id="add-category-btn" class="add-category-btn">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Category
+
+            </button>
+
+        </section>
+
+
+        <!-- ================= CATEGORY LIST ================= -->
+
+        <section class="categories-section">
+
+            <div class="section-title">
+
+                <h3>
+                    Food Categories
+                </h3>
+
+                <p>
+                    Manage the categories used by your food products.
+                </p>
+
+            </div>
+
+
+            <!-- Categories -->
+
+            <div id="category-list" class="category-list">
+
+                <!-- Categories inserted by JavaScript -->
+
+            </div>
+
+
+            <!-- Empty State -->
+
+            <div id="empty-categories" class="empty-categories">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+                <h3>
+                    No Categories Found
+                </h3>
+
+                <p>
+                    No categories match your search.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= CATEGORY MODAL ================= -->
+
+    <div id="category-modal" class="category-modal">
+
+        <div class="category-modal-content">
+
+            <!-- Modal Header -->
+
+            <div class="modal-header">
+
+                <h3 id="modal-title">
+                    Add Category
+                </h3>
+
+                <button type="button" id="close-category-modal" class="close-modal">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <!-- Form -->
+
+            <form id="category-form">
+
+                <input type="hidden" id="category-id">
+
+
+                <!-- Category Name -->
+
+                <div class="form-group">
+
+                    <label for="category-name">
+                        Category Name
+                    </label>
+
+                    <input type="text" id="category-name" placeholder="e.g. Burgers" required>
+
+                </div>
+
+
+                <!-- Category Icon -->
+
+                <div class="form-group">
+
+                    <label for="category-icon">
+                        Category Icon
+                    </label>
+
+                    <select id="category-icon">
+
+                        <option value="fa-burger">
+                            Burger
+                        </option>
+
+                        <option value="fa-pizza-slice">
+                            Pizza
+                        </option>
+
+                        <option value="fa-drumstick-bite">
+                            Chicken
+                        </option>
+
+                        <option value="fa-bread-slice">
+                            Sandwich
+                        </option>
+
+                        <option value="fa-bowl-food">
+                            Pasta
+                        </option>
+
+                        <option value="fa-cookie-bite">
+                            Snacks
+                        </option>
+
+                        <option value="fa-utensils">
+                            Food
+                        </option>
+
+                        <option value="fa-layer-group">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="form-actions">
+
+                    <button type="button" id="cancel-category-btn" class="cancel-btn">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="save-category-btn">
+                        Save Category
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+<footer class="admin-footer">
+
+
+        <div class="wrapper text-center">
+
+
+            <a href="index.html" class="logo">
+
+                Quick Bites
+
+            </a>
+
+
+            <p>
+
+                Admin Panel © 2026 Quick Bites
+
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+
+    <script src="categories.js"></script>
+
+</body>
+
+</html>

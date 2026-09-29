@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Delivery Details - Quick Bites</title>
+
+
+    <!-- Font Awesome -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+
+    <!-- Main CSS -->
+
+    <link
+        rel="stylesheet"
+        href="../public/style.css">
+
+
+    <!-- Rider CSS -->
+
+    <link
+        rel="stylesheet"
+        href="rider.css">
+
+
+    <!-- Delivery Details CSS -->
+
+    <link
+        rel="stylesheet"
+        href="delivery_details.css">
+
+
+    <!-- Rider Common JS -->
+
+    <script
+        defer
+        src="rider.js">
+    </script>
+
+
+    <!-- Delivery Details JS -->
+
+    <script
+        defer
+        src="delivery_details.js">
+    </script>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+
+            <!-- LOGO -->
+
+            <a
+                href="index.html"
+                class="logo">
+
+                Quick Bites
+
+            </a>
+
+
+            <!-- DESKTOP NAVIGATION -->
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+
+                    <a href="index.html">
+
+                        <i class="fa-solid fa-house"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="deliveries.html">
+
+                        <i class="fa-solid fa-motorcycle"></i>
+
+                        Deliveries
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="earnings.html">
+
+                        <i class="fa-solid fa-wallet"></i>
+
+                        Earnings
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="profile.html">
+
+                        <i class="fa-regular fa-circle-user"></i>
+
+                        Profile
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+
+            <!-- DESKTOP ACTION -->
+
+            <div class="desktop-action flex gap-2">
+
+
+                <a
+                    href="#"
+                    class="logout-btn"
+                    id="logout-btn">
+
+                    Logout
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- MOBILE MENU -->
+
+            <ul class="mobile-menu">
+
+
+                <li>
+
+                    <a href="index.html">
+
+                        <i class="fa-solid fa-house"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="deliveries.html">
+
+                        <i class="fa-solid fa-motorcycle"></i>
+
+                        Deliveries
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="earnings.html">
+
+                        <i class="fa-solid fa-wallet"></i>
+
+                        Earnings
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="profile.html">
+
+                        <i class="fa-regular fa-circle-user"></i>
+
+                        Profile
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="#"
+                        id="mobile-logout-btn"
+                        class="mobile-logout">
+
+                        Logout
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+        <section class="delivery-details-section">
+
+            <div class="wrapper">
+
+
+                <!-- PAGE HEADING -->
+
+                <div class="page-heading">
+
+                    <h5>
+                        Delivery
+                    </h5>
+
+                    <h1>
+                        Delivery <span>Details</span>
+                    </h1>
+
+                    <p>
+                        View the information for this delivery.
+                    </p>
+
+                </div>
+
+
+
+                <!-- BACK BUTTON -->
+
+                <div class="back-button-container">
+
+                    <a
+                        href="deliveries.html"
+                        class="back-btn">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Back to Deliveries
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- DELIVERY CARD -->
+
+                <div class="delivery-details-card">
+
+
+                    <!-- DELIVERY HEADER -->
+
+                    <div class="delivery-card-header">
+
+                        <div>
+
+                            <span class="delivery-id-label">
+                                Delivery ID
+                            </span>
+
+                            <h2 id="delivery-id">
+                                #QB1001
+                            </h2>
+
+                        </div>
+
+
+                        <span
+                            class="delivery-status"
+                            id="delivery-status">
+
+                            Assigned
+
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- CUSTOMER INFORMATION -->
+
+                    <div class="details-section">
+
+
+                        <h3>
+
+                            <i class="fa-solid fa-user"></i>
+
+                            Customer Information
+
+                        </h3>
+
+
+                        <div class="details-grid">
+
+
+                            <div class="detail-item">
+
+                                <small>
+                                    Customer Name
+                                </small>
+
+                                <p id="customer-name">
+                                    John Doe
+                                </p>
+
+                            </div>
+
+
+                            <div class="detail-item">
+
+                                <small>
+                                    Phone
+                                </small>
+
+                                <p id="customer-phone">
+                                    98XXXXXXXX
+                                </p>
+
+                            </div>
+
+
+                            <div class="detail-item">
+
+                                <small>
+                                    Email
+                                </small>
+
+                                <p id="customer-email">
+                                    john@email.com
+                                </p>
+
+                            </div>
+
+
+                            <div class="detail-item">
+
+                                <small>
+                                    Address
+                                </small>
+
+                                <p id="customer-address">
+                                    Kathmandu, Nepal
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ORDER INFORMATION -->
+
+                    <div class="details-section">
+
+
+                        <h3>
+
+                            <i class="fa-solid fa-bag-shopping"></i>
+
+                            Order Information
+
+                        </h3>
+
+
+                        <div class="order-table">
+
+
+                            <div class="order-row order-heading">
+
+                                <span>
+                                    Item
+                                </span>
+
+                                <span>
+                                    Quantity
+                                </span>
+
+                                <span>
+                                    Price
+                                </span>
+
+                            </div>
+
+
+                            <div class="order-row">
+
+                                <span>
+                                    Double Beef Burger
+                                </span>
+
+                                <span>
+                                    2
+                                </span>
+
+                                <span>
+                                    Rs.600
+                                </span>
+
+                            </div>
+
+
+                            <div class="order-row">
+
+                                <span>
+                                    Fried Chicken
+                                </span>
+
+                                <span>
+                                    1
+                                </span>
+
+                                <span>
+                                    Rs.150
+                                </span>
+
+                            </div>
+
+
+                            <div class="order-total">
+
+                                <strong>
+                                    Total
+                                </strong>
+
+                                <strong>
+                                    Rs.750
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DELIVERY INFORMATION -->
+
+                    <div class="details-section">
+
+
+                        <h3>
+
+                            <i class="fa-solid fa-motorcycle"></i>
+
+                            Delivery Information
+
+                        </h3>
+
+
+                        <div class="details-grid">
+
+
+                            <div class="detail-item">
+
+                                <small>
+                                    Pickup Location
+                                </small>
+
+                                <p>
+                                    Quick Bites Restaurant
+                                </p>
+
+                            </div>
+
+
+                            <div class="detail-item">
+
+                                <small>
+                                    Delivery Address
+                                </small>
+
+                                <p>
+                                    Kathmandu, Nepal
+                                </p>
+
+                            </div>
+
+
+                            <div class="detail-item">
+
+                                <small>
+                                    Order Time
+                                </small>
+
+                                <p>
+                                    5:30 PM
+                                </p>
+
+                            </div>
+
+
+                            <div class="detail-item">
+
+                                <small>
+                                    Estimated Delivery
+                                </small>
+
+                                <p>
+                                    6:00 PM
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ACTION BUTTONS -->
+
+                    <div class="delivery-actions">
+
+
+                        <button
+                            type="button"
+                            class="action-btn accept-btn"
+                            id="accept-btn">
+
+                            <i class="fa-solid fa-check"></i>
+
+                            Accept Delivery
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="action-btn complete-btn"
+                            id="complete-btn">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            Mark as Delivered
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- MESSAGE -->
+
+                    <p
+                        class="delivery-message"
+                        id="delivery-message">
+                    </p>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-container">
+
+            <div class="flex wrapper gap-4">
+
+
+                <!-- QUICK BITES -->
+
+                <div class="footer-wrapper">
+
+                    <a
+                        href="index.html"
+                        class="logo">
+
+                        Quick Bites
+
+                    </a>
+
+                    <p class="mt-one-half">
+
+                        We will fill your tummy
+                        with delicious food
+                        with fast delivery.
+
+                    </p>
+
+                </div>
+
+
+                <!-- RIDER PANEL -->
+
+                <ul class="footer-wrapper">
+
+                    <li>
+
+                        <h4>
+                            Rider Panel
+                        </h4>
+
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="index.html"
+                            class="footer-link">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="deliveries.html"
+                            class="footer-link">
+
+                            Deliveries
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="earnings.html"
+                            class="footer-link">
+
+                            Earnings
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+                <!-- ACCOUNT -->
+
+                <ul class="footer-wrapper">
+
+                    <li>
+
+                        <h4>
+                            Account
+                        </h4>
+
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="profile.html"
+                            class="footer-link">
+
+                            Profile
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="#"
+                            id="footer-logout"
+                            class="footer-link">
+
+                            Logout
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Deliveries - Quick Bites</title>
+
+
+    <!-- ================= FONT AWESOME ================= -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+
+    <!-- ================= PUBLIC CSS ================= -->
+
+    <link
+        rel="stylesheet"
+        href="../public/style.css">
+
+
+    <!-- ================= RIDER CSS ================= -->
+
+    <link
+        rel="stylesheet"
+        href="rider.css">
+
+    <link
+        rel="stylesheet"
+        href="deliveries.css">
+
+
+    <!-- ================= RIDER JAVASCRIPT ================= -->
+
+    <script
+        defer
+        src="rider.js">
+    </script>
+
+    <script
+        defer
+        src="deliveries.js">
+    </script>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+         SAME HEADER AS RIDER DASHBOARD (index.html)
+    ====================================================== -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+
+            <!-- ================= LOGO ================= -->
+
+            <a
+                href="index.html"
+                class="logo">
+
+                Quick Bites
+
+            </a>
+
+
+            <!-- ================= DESKTOP NAVIGATION ================= -->
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+
+                    <a
+                        href="index.html">
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="deliveries.html"
+                        class="active">
+
+                        Deliveries
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="earnings.html">
+
+                        Earnings
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="profile.html">
+
+                        Profile
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+
+            <!-- ================= DESKTOP ACTION ================= -->
+
+            <div class="desktop-action flex gap-2">
+
+
+                <!-- PROFILE -->
+
+                <a
+                    href="profile.html"
+                    class="rider-profile">
+
+                    <i class="fa-regular fa-circle-user"></i>
+
+                </a>
+
+
+                <!-- LOGOUT -->
+
+                <a
+                    href="#"
+                    class="logout-link"
+                    id="logout-btn">
+
+                    Logout
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </a>
+
+
+                <!-- HAMBURGER -->
+
+                <a
+                    href="#"
+                    class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- ================= MOBILE MENU ================= -->
+
+            <ul class="mobile-menu">
+
+
+                <li>
+
+                    <a
+                        href="index.html">
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="deliveries.html">
+
+                        Deliveries
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="earnings.html">
+
+                        Earnings
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="profile.html">
+
+                        My Profile
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="#"
+                        id="mobile-logout-btn">
+
+                        Logout
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         KEPT AS IT WAS
+    ====================================================== -->
+
+    <main>
+
+
+        <section class="deliveries-section">
+
+
+            <div class="deliveries-container">
+
+
+                <!-- ================= PAGE HEADING ================= -->
+
+                <div class="page-heading">
+
+                    <p class="section-subtitle">
+                        RIDER PANEL
+                    </p>
+
+                    <h1>
+                        My <span>Deliveries</span>
+                    </h1>
+
+                    <p>
+                        View and manage your assigned food deliveries.
+                    </p>
+
+                </div>
+
+
+
+                <!-- ================= SUMMARY CARDS ================= -->
+
+                <div class="delivery-summary">
+
+
+                    <!-- TOTAL DELIVERIES -->
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon">
+
+                            <i class="fa-solid fa-box"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Total Deliveries
+                            </span>
+
+                            <h3 id="total-deliveries">
+                                0
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PENDING -->
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon">
+
+                            <i class="fa-solid fa-clock"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Pending
+                            </span>
+
+                            <h3 id="pending-deliveries">
+                                0
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- IN DELIVERY -->
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon">
+
+                            <i class="fa-solid fa-truck-fast"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                In Delivery
+                            </span>
+
+                            <h3 id="active-deliveries">
+                                0
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DELIVERED -->
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Delivered
+                            </span>
+
+                            <h3 id="completed-deliveries">
+                                0
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================= DELIVERY LIST ================= -->
+
+                <div class="delivery-card">
+
+
+                    <div class="delivery-card-header">
+
+
+                        <div>
+
+                            <h2>
+                                Assigned Deliveries
+                            </h2>
+
+                            <p>
+                                Your current delivery assignments
+                            </p>
+
+                        </div>
+
+
+                        <!-- STATUS FILTER -->
+
+                        <div class="filter-container">
+
+                            <select
+                                id="status-filter">
+
+                                <option value="all">
+                                    All Deliveries
+                                </option>
+
+                                <option value="Pending">
+                                    Pending
+                                </option>
+
+                                <option value="In Delivery">
+                                    In Delivery
+                                </option>
+
+                                <option value="Delivered">
+                                    Delivered
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ================= DELIVERY TABLE ================= -->
+
+                    <div class="table-container">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Delivery ID
+                                    </th>
+
+                                    <th>
+                                        Order
+                                    </th>
+
+                                    <th>
+                                        Customer
+                                    </th>
+
+                                    <th>
+                                        Address
+                                    </th>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="delivery-table-body">
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         SAME FOOTER AS RIDER DASHBOARD (index.html)
+    ====================================================== -->
+
+    <footer class="admin-footer">
+
+        <div class="admin-footer-logo">
+
+            Quick Bites
+
+        </div>
+
+        <p>
+
+            Rider Panel © 2026 Quick Bites
+
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

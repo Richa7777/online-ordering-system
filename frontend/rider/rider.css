@@ -1,0 +1,544 @@
+/* =========================================
+   RIDER DASHBOARD
+========================================= */
+
+.rider-dashboard {
+    min-height: 80vh;
+    padding: 80px 0;
+}
+
+
+/* =========================================
+   DASHBOARD HEADING
+========================================= */
+
+.dashboard-heading {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-subtitle {
+    font-size: 1rem;
+    letter-spacing: .15rem;
+    color: var(--gold-finger);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.dashboard-heading h1 {
+    font-size: 4rem;
+    margin: 10px 0;
+}
+
+.dashboard-heading h1 span,
+.section-heading h2 span,
+.quick-actions-section h2 span {
+    color: var(--gold-finger);
+}
+
+
+/* =========================================
+   RIDER NAVIGATION
+========================================= */
+
+.rider-profile {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--lead);
+
+    border-radius: 50%;
+
+    transition: .3s ease-in-out;
+}
+
+.rider-profile i {
+    font-size: 32px;
+}
+
+.rider-profile:hover {
+    transform: scale(1.05);
+}
+
+
+.logout-link {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+
+    padding: .8rem 1rem;
+
+    border-radius: 1rem;
+
+    background: var(--gold-finger);
+    color: var(--pure-white);
+
+    font-size: 1rem;
+
+    transition: .3s ease-in-out;
+}
+
+.logout-link:hover {
+    background: var(--lead);
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.rider-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin-bottom: 80px;
+}
+
+
+.stat-card {
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 25px;
+
+    background: var(--pure-white);
+
+    border: 1px solid var(--gold-finger);
+
+    border-radius: 20px;
+
+    box-shadow:
+        rgba(0, 0, 0, 0.05)
+        8px 8px 8px;
+
+    transition: .3s ease-in-out;
+}
+
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+
+.stat-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--hint-yellow);
+
+    color: var(--gold-finger);
+}
+
+
+.stat-icon i {
+    font-size: 24px;
+}
+
+
+.stat-card p {
+    margin: 0;
+
+    font-size: 14px;
+
+    color: #777;
+}
+
+
+.stat-card h2 {
+    margin-top: 5px;
+
+    font-size: 28px;
+}
+
+
+/* =========================================
+   RECENT DELIVERIES
+========================================= */
+
+.recent-section {
+    margin-bottom: 90px;
+}
+
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+}
+
+
+.section-heading h2 {
+    margin-top: 5px;
+
+    font-size: 2.5rem;
+}
+
+
+.section-heading .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/* =========================================
+   DELIVERY TABLE
+========================================= */
+
+.delivery-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    background: var(--pure-white);
+
+    border: 1px solid var(--gold-finger);
+
+    border-radius: 20px;
+
+    box-shadow:
+        rgba(0, 0, 0, 0.05)
+        8px 8px 8px;
+}
+
+
+.delivery-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 850px;
+}
+
+
+.delivery-table th {
+    padding: 18px;
+
+    text-align: left;
+
+    background: var(--hint-yellow);
+
+    color: var(--lead);
+
+    font-size: 15px;
+}
+
+
+.delivery-table td {
+    padding: 18px;
+
+    border-top: 1px solid #eee;
+
+    font-size: 15px;
+
+    color: #555;
+}
+
+
+.delivery-table tbody tr {
+    transition: .2s ease-in-out;
+}
+
+
+.delivery-table tbody tr:hover {
+    background: #fffaf0;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.status {
+    display: inline-block;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.status.delivered {
+    background: #d9f7df;
+    color: #218838;
+}
+
+
+.status.preparing {
+    background: #fff0c2;
+    color: #9a7100;
+}
+
+
+.status.pending {
+    background: #ffe0d5;
+    color: #d9532b;
+}
+
+
+/* =========================================
+   VIEW BUTTON
+========================================= */
+
+.view-btn {
+    width: 35px;
+    height: 35px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+
+    transition: .3s ease-in-out;
+}
+
+
+.view-btn:hover {
+    background: var(--lead);
+
+    transform: scale(1.05);
+}
+
+
+/* =========================================
+   QUICK ACTIONS
+========================================= */
+
+.quick-actions-section {
+    margin-bottom: 50px;
+}
+
+
+.quick-actions-section h2 {
+    margin-top: 5px;
+
+    font-size: 2.5rem;
+}
+
+
+.quick-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+
+    margin-top: 35px;
+}
+
+
+.quick-action-card {
+    padding: 35px 25px;
+
+    text-align: center;
+
+    background: var(--pure-white);
+
+    border: 1px solid var(--gold-finger);
+
+    border-radius: 20px;
+
+    box-shadow:
+        rgba(0, 0, 0, 0.05)
+        8px 8px 8px;
+
+    transition: .3s ease-in-out;
+}
+
+
+.quick-action-card:hover {
+    transform: translateY(-5px);
+
+    background: var(--hint-yellow);
+}
+
+
+.quick-action-card > i {
+    font-size: 40px;
+
+    color: var(--gold-finger);
+
+    margin-bottom: 15px;
+}
+
+
+.quick-action-card h3 {
+    font-size: 1.5rem;
+
+    margin-bottom: 10px;
+}
+
+
+.quick-action-card p {
+    font-size: 1rem;
+
+    line-height: 1.5rem;
+}
+
+
+/* =========================================
+   ADMIN / RIDER FOOTER
+========================================= */
+
+.admin-footer {
+    margin-top: 5rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: var(--hint-yellow);
+    border-top: 1px solid var(--gold-finger);
+    border-radius: 0 0 1rem 1rem;
+}
+
+.admin-footer-logo {
+    font-family: "Playball", cursive;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--gold-finger);
+    margin-bottom: .8rem;
+}
+
+.admin-footer p {
+    margin: 0;
+    font-size: 1rem;
+    color: #777;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media screen and (max-width: 1000px) {
+
+    .rider-stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media screen and (max-width: 780px) {
+
+    .dashboard-heading h1 {
+        font-size: 3.2rem;
+    }
+
+
+    .section-heading {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+    }
+
+
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+
+    .rider-stats {
+        grid-template-columns: 1fr;
+    }
+
+
+    .rider-profile {
+        width: 40px;
+        height: 40px;
+    }
+
+
+    .rider-profile i {
+        font-size: 28px;
+    }
+
+
+    .logout-link {
+        display: none;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .rider-dashboard {
+        padding: 60px 0;
+    }
+
+
+    .dashboard-heading {
+        margin-bottom: 40px;
+    }
+
+
+    .dashboard-heading h1 {
+        font-size: 2.7rem;
+    }
+
+
+    .stat-card {
+        padding: 20px;
+    }
+
+
+    .section-heading h2 {
+        font-size: 2rem;
+    }
+
+
+    .quick-actions-section h2 {
+        font-size: 2rem;
+    }
+
+
+    .admin-footer {
+        margin-top: 3rem;
+
+        padding: 2.5rem 1rem;
+    }
+
+
+    .admin-footer-logo {
+        font-size: 1.8rem;
+    }
+
+
+    .admin-footer p {
+        font-size: .9rem;
+    }
+
+}

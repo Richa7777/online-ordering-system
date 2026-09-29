@@ -1,0 +1,660 @@
+/* =========================================
+   RIDER PROFILE
+========================================= */
+
+.rider-profile-section {
+    min-height: 80vh;
+    padding: 80px 5% 60px;
+}
+
+.rider-profile-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+
+/* =========================================
+   HEADING
+========================================= */
+
+.profile-heading {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.profile-heading .section-subtitle {
+    color: var(--gold-finger);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.profile-heading h1 {
+    font-size: 3.5rem;
+    margin: 10px 0;
+}
+
+.profile-heading h1 span {
+    color: var(--gold-finger);
+}
+
+.profile-heading p:last-child {
+    color: #777;
+}
+
+
+
+/* =========================================
+   PROFILE CARD
+========================================= */
+
+.rider-profile-card {
+    background: var(--pure-white);
+
+    padding: 45px;
+
+    border-radius: 22px;
+
+    text-align: center;
+
+    box-shadow:
+        rgba(0, 0, 0, 0.05) 0 5px 25px;
+
+    border: 1px solid #eee;
+}
+
+
+
+/* =========================================
+   PROFILE IMAGE
+========================================= */
+
+.rider-profile-image {
+    width: 120px;
+    height: 120px;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    background: var(--hint-yellow);
+
+    border: 4px solid var(--gold-finger);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.rider-profile-image i {
+    font-size: 55px;
+    color: var(--gold-finger);
+}
+
+
+
+/* =========================================
+   NAME
+========================================= */
+
+.rider-profile-card h2 {
+    font-size: 2rem;
+    color: var(--lead);
+    margin-bottom: 5px;
+}
+
+
+.rider-role {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+
+
+/* =========================================
+   DETAILS
+========================================= */
+
+.rider-details {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 15px;
+
+    text-align: left;
+
+    margin-top: 20px;
+}
+
+
+.rider-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    background: #f8f8f8;
+
+    border: 1px solid #eee;
+}
+
+
+.info-icon {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--hint-yellow);
+
+    color: var(--gold-finger);
+
+    font-size: 17px;
+}
+
+
+.rider-info small {
+    display: block;
+
+    color: #888;
+
+    font-size: 13px;
+
+    margin-bottom: 4px;
+}
+
+
+.rider-info p {
+    color: var(--lead);
+
+    font-size: 15px;
+
+    line-height: 1.3;
+
+    margin: 0;
+}
+
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.profile-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 35px;
+
+    flex-wrap: wrap;
+}
+
+
+.secondary-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: .9rem 1rem;
+
+    border-radius: 1rem;
+
+    background: #f2f2f2;
+
+    color: var(--lead);
+
+    font-size: 1.1rem;
+
+    transition: .3s ease-in-out;
+}
+
+
+.secondary-btn:hover {
+    background: var(--lead);
+
+    color: var(--pure-white);
+}
+
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+.logout-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px 18px;
+
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+
+    border-radius: 12px;
+
+    font-size: 1rem;
+
+    transition: .3s ease-in-out;
+}
+
+
+.logout-btn:hover {
+    background: var(--lead);
+}
+
+
+
+/* =========================================
+   MOBILE MENU
+========================================= */
+
+.mobile-menu {
+    display: none;
+}
+
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 780px) {
+
+    .navlist {
+        display: none;
+    }
+
+    .desktop-action .hamburger {
+        display: block;
+    }
+
+    .logout-btn {
+        display: none;
+    }
+
+
+    .mobile-menu {
+        display: flex;
+
+        flex-direction: column;
+
+        justify-content: center;
+
+        align-items: center;
+
+        gap: 2rem;
+
+        position: absolute;
+
+        top: 20%;
+
+        left: -50%;
+
+        transform: translateX(-50%);
+
+        width: 20rem;
+
+        padding: 2rem;
+
+        background: var(--pure-white);
+
+        border: .1rem solid var(--gold-finger);
+
+        border-radius: 2rem;
+
+        box-shadow:
+            rgba(0, 0, 0, 0.05) 8px 8px 8px,
+            rgba(0, 0, 0, 0.05) 8px 8px 8px inset;
+
+        transition: all .5s ease-in-out;
+
+        z-index: 100;
+    }
+
+
+    .mobile-menu-active {
+        left: 50%;
+
+        transform: translateX(-50%);
+    }
+
+
+    .rider-profile-section {
+        padding: 60px 5%;
+    }
+
+
+    .profile-heading h1 {
+        font-size: 2.8rem;
+    }
+
+
+    .rider-profile-card {
+        padding: 30px 20px;
+    }
+
+
+    .rider-details {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .profile-heading h1 {
+        font-size: 2.4rem;
+    }
+
+
+    .profile-heading p:last-child {
+        font-size: 1rem;
+    }
+
+
+    .profile-buttons {
+        flex-direction: column;
+    }
+
+
+    .profile-buttons .btn,
+    .secondary-btn {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+}
+
+/* =========================================
+   EDIT PROFILE
+   Uses the same design as the profile page
+========================================= */
+
+
+/* =========================================
+   EDIT PROFILE CARD
+========================================= */
+
+#profile-edit {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   EDIT PROFILE HEADER
+========================================= */
+
+#profile-edit .edit-profile-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+
+#profile-edit .edit-profile-header .rider-profile-image {
+    margin: 0 auto 18px;
+}
+
+
+#profile-edit .edit-profile-header h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+}
+
+
+#profile-edit .edit-profile-header p {
+    margin: 0;
+    font-size: 15px;
+    opacity: 0.75;
+}
+
+
+/* =========================================
+   EDIT FORM
+========================================= */
+
+#profile-edit #edit-profile-form {
+    width: 100%;
+}
+
+
+/* =========================================
+   FORM GROUP
+========================================= */
+
+#profile-edit .form-group {
+    margin-bottom: 22px;
+}
+
+
+#profile-edit .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: left;
+}
+
+
+/* =========================================
+   INPUT WRAPPER
+========================================= */
+
+#profile-edit .input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+
+#profile-edit .input-wrapper > i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+
+/* =========================================
+   INPUTS + SELECT
+========================================= */
+
+#profile-edit .input-wrapper input,
+#profile-edit .input-wrapper select {
+    width: 100%;
+    height: 48px;
+    box-sizing: border-box;
+
+    padding: 0 15px 0 45px;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    background: #fff;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+
+/* =========================================
+   INPUT FOCUS
+========================================= */
+
+#profile-edit .input-wrapper input:focus,
+#profile-edit .input-wrapper select:focus {
+    border-color: #f28c28;
+    box-shadow: 0 0 0 2px rgba(242, 140, 40, 0.12);
+}
+
+
+/* =========================================
+   READONLY FIELDS
+========================================= */
+
+#profile-edit .input-wrapper input[readonly] {
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   SELECT
+========================================= */
+
+#profile-edit .input-wrapper select {
+    appearance: auto;
+    cursor: pointer;
+}
+
+
+/* =========================================
+   HELP TEXT
+========================================= */
+
+#profile-edit .form-help {
+    display: block;
+    margin-top: 7px;
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    opacity: 0.65;
+}
+
+
+/* =========================================
+   FORM MESSAGE
+========================================= */
+
+#profile-edit .profile-message {
+    min-height: 20px;
+
+    margin: 10px 0 20px;
+
+    text-align: center;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* SUCCESS MESSAGE */
+
+#profile-edit .profile-message.success {
+    color: #2e8b57;
+}
+
+
+/* ERROR MESSAGE */
+
+#profile-edit .profile-message.error {
+    color: #d9534f;
+}
+
+
+/* =========================================
+   EDIT BUTTONS
+========================================= */
+
+#profile-edit .edit-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+
+    margin-top: 10px;
+}
+
+
+/* Make both buttons same height */
+
+#profile-edit .edit-buttons .btn,
+#profile-edit .edit-buttons .secondary-btn {
+    min-height: 46px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 24px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 768px) {
+
+    #profile-edit {
+        padding: 30px 22px;
+    }
+
+    #profile-edit .edit-profile-header h2 {
+        font-size: 24px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    #profile-edit {
+        padding: 25px 18px;
+    }
+
+
+    #profile-edit .edit-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+
+    #profile-edit .edit-buttons .btn,
+    #profile-edit .edit-buttons .secondary-btn {
+        width: 100%;
+    }
+
+}

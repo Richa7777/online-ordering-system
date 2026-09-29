@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "name": "Double Beef Burger",
+        "price": "Rs.300",
+        "image": "images/burger.png",
+        "category": "Burgers",
+        "popular": true
+    },
+    {
+        "id": 2,
+        "name": "Veggie Pizza",
+        "price": "Rs.470",
+        "image": "images/pizza.png",
+        "category": "Pizza",
+        "popular": true
+    },
+    {
+        "id": 3,
+        "name": "Fried Chicken",
+        "price": "Rs.150",
+        "image": "images/fried-chicken.png",
+        "category": "Chicken",
+        "popular": true
+    },
+    {
+        "id": 4,
+        "name": "Chicken Roll",
+        "price": "Rs.200",
+        "image": "images/chicken-roll.png",
+        "category": "Snacks",
+        "popular": true
+    },
+    {
+        "id": 5,
+        "name": "Chicken Sandwich",
+        "price": "Rs.250",
+        "image": "images/sandwich.png",
+        "category": "Sandwiches",
+        "popular": false
+    },
+    {
+        "id": 6,
+        "name": "Chicken Lasagna",
+        "price": "Rs.550",
+        "image": "images/lasagna.png",
+        "category": "Pasta",
+        "popular": false
+    },
+    {
+        "id": 7,
+        "name": "Italian Spaghetti",
+        "price": "Rs.500",
+        "image": "images/spaghetti.png",
+        "category": "Pasta",
+        "popular": false
+    },
+    {
+        "id": 8,
+        "name": "Spring Roll",
+        "price": "Rs.190",
+        "image": "images/spring-roll.png",
+        "category": "Snacks",
+        "popular": false
+    }
+]

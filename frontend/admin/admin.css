@@ -1,0 +1,1167 @@
+
+
+/* =========================================================
+   ADMIN PROFILE
+   ========================================================= */
+
+.admin-profile {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--lead);
+
+    border-radius: 50%;
+
+    transition: 0.3s ease-in-out;
+}
+
+
+.admin-profile i {
+    font-size: 24px;
+}
+
+
+.admin-profile:hover {
+
+    color: var(--gold-finger);
+
+    transform: scale(1.08);
+}
+
+
+
+/* =========================================================
+   ADMIN LOGOUT
+   ========================================================= */
+
+.admin-logout {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--lead);
+
+    font-size: 1.1rem;
+
+    transition: 0.3s ease-in-out;
+}
+
+
+.admin-logout i {
+
+    font-size: 20px;
+
+}
+
+
+.admin-logout:hover {
+
+    color: var(--gold-finger);
+
+}
+
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.navlist li a {
+
+    transition: 0.3s ease-in-out;
+
+}
+
+
+.navlist li a:hover,
+.navlist li a.active {
+
+    color: var(--gold-finger);
+
+}
+
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.admin-dashboard {
+
+    padding-bottom: 6rem;
+
+}
+
+
+.admin-description {
+
+    max-width: 650px;
+
+    margin: 10px auto 0;
+
+}
+
+
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+.admin-stats {
+
+    justify-content: center;
+
+    gap: 25px;
+
+    margin-top: 55px;
+
+}
+
+
+.admin-stat-card {
+
+    width: 245px;
+
+    min-height: 145px;
+
+    padding: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    background: var(--pure-white);
+
+    border: 0.1rem solid var(--gold-finger);
+
+    border-radius: 2rem;
+
+    box-shadow:
+
+        rgba(0, 0, 0, 0.05) 8px 8px 8px,
+
+        rgba(0, 0, 0, 0.05) 8px 8px 8px inset;
+
+    transition: 0.3s ease-in-out;
+
+}
+
+
+.admin-stat-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow:
+
+        rgba(0, 0, 0, 0.10) 10px 10px 12px,
+
+        rgba(0, 0, 0, 0.04) 8px 8px 8px inset;
+
+}
+
+
+
+/* =========================================================
+   STATISTIC ICON
+   ========================================================= */
+
+.admin-stat-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: var(--hint-yellow);
+
+    border-radius: 50%;
+
+    color: var(--gold-finger);
+
+}
+
+
+.admin-stat-icon i {
+
+    font-size: 25px;
+
+}
+
+
+
+/* =========================================================
+   STATISTIC TEXT
+   ========================================================= */
+
+.admin-stat-info h3 {
+
+    margin: 0;
+
+    font-size: 2.2rem;
+
+    color: var(--lead);
+
+    line-height: 1;
+
+}
+
+
+.admin-stat-info p {
+
+    margin-top: 8px;
+
+    font-size: 1rem;
+
+    color: grey;
+
+}
+
+
+
+/* =========================================================
+   ADMIN SECTIONS
+   ========================================================= */
+
+.admin-section {
+
+    margin-top: 80px;
+
+}
+
+
+.admin-section > .text-center {
+
+    margin-bottom: 30px;
+
+}
+
+
+
+/* =========================================================
+   SECTION HEADING
+   ========================================================= */
+
+.section-heading {
+
+    margin-bottom: 30px;
+
+    padding-bottom: 15px;
+
+    border-bottom:
+
+        1px solid rgba(255, 123, 0, 0.25);
+
+}
+
+
+.section-heading h3 {
+
+    margin-bottom: 5px;
+
+}
+
+
+.section-heading p {
+
+    font-size: 1rem;
+
+}
+
+
+
+/* =========================================================
+   QUICK ACTIONS
+   ========================================================= */
+
+.quick-actions {
+
+    justify-content: center;
+
+    gap: 20px;
+
+}
+
+
+.quick-action-card {
+
+    width: 260px;
+
+    min-height: 120px;
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    background: var(--pure-white);
+
+    border: 0.1rem solid var(--gold-finger);
+
+    border-radius: 2rem;
+
+    box-shadow:
+
+        rgba(0, 0, 0, 0.05) 8px 8px 8px,
+
+        rgba(0, 0, 0, 0.05) 8px 8px 8px inset;
+
+    transition: 0.3s ease-in-out;
+
+}
+
+
+.quick-action-card:hover {
+
+    transform: translateY(-5px);
+
+    background: var(--hint-yellow);
+
+}
+
+
+.quick-action-icon {
+
+    width: 52px;
+
+    height: 52px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+
+}
+
+
+.quick-action-icon i {
+
+    font-size: 21px;
+
+}
+
+
+.quick-action-card h4 {
+
+    font-size: 1.25rem;
+
+    color: var(--lead);
+
+    margin-bottom: 5px;
+
+}
+
+
+.quick-action-card p {
+
+    font-size: 0.95rem;
+
+    line-height: 1.4rem;
+
+}
+
+
+
+/* =========================================================
+   SMALL BUTTON
+   ========================================================= */
+
+.admin-small-btn {
+
+    padding: 0.65rem 1rem;
+
+    font-size: 0.95rem;
+
+    border-radius: 0.8rem;
+
+}
+
+
+
+/* =========================================================
+   ORDER STATUS
+   ========================================================= */
+
+.order-status-grid {
+
+    justify-content: center;
+
+    gap: 20px;
+
+}
+
+
+.order-status-card {
+
+    flex: 1;
+
+    min-width: 180px;
+
+    max-width: 260px;
+
+    padding: 25px 20px;
+
+    text-align: center;
+
+    background: var(--pure-white);
+
+    border: 0.1rem solid var(--gold-finger);
+
+    border-radius: 2rem;
+
+    box-shadow:
+
+        rgba(0, 0, 0, 0.05) 8px 8px 8px,
+
+        rgba(0, 0, 0, 0.05) 8px 8px 8px inset;
+
+    transition: 0.3s ease-in-out;
+
+}
+
+
+.order-status-card:hover {
+
+    transform: translateY(-4px);
+
+}
+
+
+
+/* =========================================================
+   STATUS ICON
+   ========================================================= */
+
+.status-icon {
+
+    width: 55px;
+
+    height: 55px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--hint-yellow);
+
+    color: var(--gold-finger);
+
+}
+
+
+.status-icon i {
+
+    font-size: 22px;
+
+}
+
+
+
+/* =========================================================
+   ORDER STATUS TEXT
+   ========================================================= */
+
+.order-status-card h3 {
+
+    font-size: 2.2rem;
+
+    margin-bottom: 3px;
+
+}
+
+
+.order-status-card p {
+
+    font-size: 1rem;
+
+    line-height: 1.4rem;
+
+}
+
+
+
+/* =========================================================
+   RECENT ORDERS
+   ========================================================= */
+
+.recent-orders-section {
+
+    margin-bottom: 70px;
+
+}
+
+
+.orders-table-container {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    background: var(--pure-white);
+
+    border: 0.1rem solid var(--gold-finger);
+
+    border-radius: 2rem;
+
+    padding: 15px;
+
+    box-shadow:
+
+        rgba(0, 0, 0, 0.05) 8px 8px 8px,
+
+        rgba(0, 0, 0, 0.05) 8px 8px 8px inset;
+
+}
+
+
+.orders-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 700px;
+
+}
+
+
+.orders-table th {
+
+    padding: 16px 15px;
+
+    text-align: left;
+
+    color: var(--lead);
+
+    background: var(--hint-yellow);
+
+    font-size: 1rem;
+
+}
+
+
+.orders-table td {
+
+    padding: 16px 15px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    color: #555;
+
+    font-size: 0.98rem;
+
+}
+
+
+.orders-table tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+.orders-table tbody tr:hover {
+
+    background: #fffaf0;
+
+}
+
+
+
+/* =========================================================
+   ORDER STATUS BADGES
+   ========================================================= */
+
+.order-badge {
+
+    display: inline-block;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+}
+
+
+.order-badge.pending {
+
+    background: #fff3cd;
+
+    color: #856404;
+
+}
+
+
+.order-badge.preparing {
+
+    background: #ffe5d0;
+
+    color: #a84a00;
+
+}
+
+
+.order-badge.delivery {
+
+    background: #dbeafe;
+
+    color: #1e40af;
+
+}
+
+
+.order-badge.completed {
+
+    background: #d4edda;
+
+    color: #155724;
+
+}
+
+
+
+/* =========================================================
+   EMPTY ORDERS
+   ========================================================= */
+
+.no-orders {
+
+    text-align: center;
+
+    padding: 45px 20px;
+
+}
+
+
+.no-orders i {
+
+    font-size: 42px;
+
+    color: var(--gold-finger);
+
+    margin-bottom: 15px;
+
+}
+
+
+.no-orders h4 {
+
+    font-size: 1.5rem;
+
+    color: var(--lead);
+
+    margin-bottom: 5px;
+
+}
+
+
+.no-orders p {
+
+    font-size: 1rem;
+
+}
+
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.admin-footer {
+
+    padding: 45px 0;
+
+    background: var(--hint-yellow);
+
+    border-top:
+        1px solid rgba(255, 123, 0, 0.3);
+
+}
+
+
+.admin-footer .logo {
+
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+}
+
+
+.admin-footer p {
+
+    font-size: 1rem;
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+
+    .navlist {
+
+        gap: 1.5rem;
+
+    }
+
+
+    .admin-stat-card {
+
+        width: 220px;
+
+    }
+
+
+    .quick-action-card {
+
+        width: 230px;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 780px) {
+
+
+    /* Hide desktop navigation */
+
+    .navlist {
+
+        display: none;
+
+    }
+
+
+    /* Hide desktop logout */
+
+    .admin-logout {
+
+        display: none;
+
+    }
+
+
+    /* Profile */
+
+    .admin-profile {
+
+        width: 40px;
+
+        height: 40px;
+
+    }
+
+
+    .admin-profile i {
+
+        font-size: 30px;
+
+    }
+
+
+    /* Hamburger */
+
+    .desktop-action .hamburger {
+
+        display: block;
+
+    }
+
+
+    .desktop-action {
+
+        gap: 1rem;
+
+    }
+
+
+
+    /* =====================================================
+       MOBILE MENU
+       ===================================================== */
+
+    .mobile-menu {
+
+        display: flex;
+
+        flex-direction: column;
+
+        justify-content: center;
+
+        align-items: center;
+
+        gap: 1.5rem;
+
+        position: absolute;
+
+        top: 20%;
+
+        left: -50%;
+
+        transform: translateX(-50%);
+
+        width: 20rem;
+
+        padding: 2rem;
+
+        background: var(--pure-white);
+
+        border: 0.1rem solid var(--gold-finger);
+
+        border-radius: 2rem;
+
+        box-shadow:
+
+            rgba(0, 0, 0, 0.1) 0 5px 15px;
+
+        transition: all 0.5s ease-in-out;
+
+        z-index: 100;
+
+    }
+
+
+    .mobile-menu-active {
+
+        left: 50%;
+
+        transform: translateX(-50%);
+
+    }
+
+
+    .mobile-menu li {
+
+        width: 100%;
+
+        text-align: center;
+
+    }
+
+
+    .mobile-menu li a {
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 10px;
+
+        font-size: 1.1rem;
+
+        transition: 0.3s;
+
+    }
+
+
+    .mobile-menu li a:hover {
+
+        color: var(--gold-finger);
+
+    }
+
+
+    .mobile-logout {
+
+        color: #d9534f;
+
+    }
+
+
+
+    /* =====================================================
+       DASHBOARD
+       ===================================================== */
+
+    .admin-dashboard {
+
+        padding-top: 7rem;
+
+    }
+
+
+    .admin-stats {
+
+        gap: 15px;
+
+    }
+
+
+    .admin-stat-card {
+
+        width: calc(50% - 10px);
+
+        min-width: 0;
+
+        padding: 18px;
+
+        border-radius: 1.5rem;
+
+    }
+
+
+    .admin-stat-icon {
+
+        width: 48px;
+
+        height: 48px;
+
+    }
+
+
+    .admin-stat-icon i {
+
+        font-size: 20px;
+
+    }
+
+
+    .admin-stat-info h3 {
+
+        font-size: 1.8rem;
+
+    }
+
+
+
+    /* =====================================================
+       ADMIN SECTIONS
+       ===================================================== */
+
+    .admin-section {
+
+        margin-top: 60px;
+
+    }
+
+
+
+    /* =====================================================
+       QUICK ACTIONS
+       ===================================================== */
+
+    .quick-actions {
+
+        gap: 15px;
+
+    }
+
+
+    .quick-action-card {
+
+        width: calc(50% - 10px);
+
+        min-height: 110px;
+
+        padding: 15px;
+
+        border-radius: 1.5rem;
+
+    }
+
+
+    .quick-action-icon {
+
+        width: 45px;
+
+        height: 45px;
+
+    }
+
+
+
+    /* =====================================================
+       ORDER STATUS
+       ===================================================== */
+
+    .order-status-grid {
+
+        gap: 15px;
+
+    }
+
+
+    .order-status-card {
+
+        flex: 0 0 calc(50% - 10px);
+
+        max-width: none;
+
+        border-radius: 1.5rem;
+
+        padding: 20px 15px;
+
+    }
+
+
+
+    /* =====================================================
+       SECTION HEADINGS
+       ===================================================== */
+
+    .section-heading {
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+
+    .wrapper {
+
+        padding-inline: 1.2rem;
+
+    }
+
+
+    .admin-dashboard {
+
+        padding-top: 6rem;
+
+    }
+
+
+
+    /* Statistics */
+
+    .admin-stats {
+
+        flex-direction: column;
+
+    }
+
+
+    .admin-stat-card {
+
+        width: 100%;
+
+        max-width: 350px;
+
+    }
+
+
+
+    /* Quick actions */
+
+    .quick-actions {
+
+        flex-direction: column;
+
+    }
+
+
+    .quick-action-card {
+
+        width: 100%;
+
+        max-width: 350px;
+
+    }
+
+
+
+    /* Order status */
+
+    .order-status-grid {
+
+        flex-direction: column;
+
+    }
+
+
+    .order-status-card {
+
+        flex: none;
+
+        width: 100%;
+
+        max-width: 350px;
+
+    }
+
+
+
+    /* Section heading */
+
+    .section-heading {
+
+        flex-direction: column;
+
+    }
+
+
+    .admin-small-btn {
+
+        margin-top: 5px;
+
+    }
+
+
+    .admin-welcome {
+
+        margin-bottom: 50px;
+
+    }
+
+}

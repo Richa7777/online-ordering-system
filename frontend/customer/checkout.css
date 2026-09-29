@@ -1,0 +1,311 @@
+/* ================= CHECKOUT PAGE ================= */
+
+.checkout-section {
+    padding: 60px 20px;
+    min-height: 75vh;
+}
+
+.checkout-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+
+/* ================= HEADING ================= */
+
+.checkout-heading {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.checkout-heading h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.checkout-heading h1 span {
+    color: #ff6b35;
+}
+
+.checkout-heading p:last-child {
+    color: #777;
+}
+
+
+
+/* ================= LAYOUT ================= */
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+
+/* ================= CARD ================= */
+
+.checkout-card {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.checkout-card h2 {
+    margin-bottom: 25px;
+    font-size: 1.3rem;
+}
+
+.checkout-card h2 i {
+    margin-right: 8px;
+}
+
+
+/* ================= FORM ================= */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #ff6b35;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+
+/* ================= PAYMENT ================= */
+
+.payment-heading {
+    margin-top: 30px;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.payment-option {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.payment-option:hover {
+    border-color: #ff6b35;
+}
+
+.payment-option input {
+    margin-right: 10px;
+}
+
+.payment-option span {
+    font-weight: 500;
+}
+
+.payment-option i {
+    margin-right: 7px;
+}
+
+
+/* ================= MESSAGE ================= */
+
+#checkout-message {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+
+/* ================= PLACE ORDER ================= */
+
+.place-order-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #ff6b35;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.place-order-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+
+/* ================= ORDER ITEMS ================= */
+
+.checkout-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.checkout-item:last-child {
+    border-bottom: none;
+}
+
+.checkout-item-image {
+    width: 65px;
+    height: 65px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.checkout-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.checkout-item-info {
+    flex: 1;
+}
+
+.checkout-item-info h4 {
+    margin-bottom: 5px;
+}
+
+.checkout-item-info p {
+    color: #777;
+    font-size: 14px;
+}
+
+.checkout-item-price {
+    font-weight: 600;
+}
+
+
+/* ================= SUMMARY ================= */
+
+.checkout-summary {
+    margin-top: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.checkout-summary hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+}
+
+.total-row {
+    font-size: 1.15rem;
+}
+
+
+/* ================= CONTINUE SHOPPING ================= */
+
+.continue-shopping {
+    display: block;
+    text-align: center;
+    margin-top: 25px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.continue-shopping i {
+    margin-right: 5px;
+}
+
+
+/* ================= EMPTY CART ================= */
+
+.empty-checkout {
+    text-align: center;
+    padding: 30px 10px;
+    color: #777;
+}
+
+.empty-checkout i {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.admin-footer {
+    margin-top: 5rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: var(--hint-yellow);
+    border-top: 0px solid var(--gold-finger);
+    border-radius: 0 0 1rem 1rem;
+}
+
+.admin-footer-logo {
+    font-family: "Playball", cursive;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--gold-finger);
+    margin-bottom: .8rem;
+}
+
+.admin-footer p {
+    margin: 0;
+    font-size: 1rem;
+    color: #777;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 800px) {
+
+    .checkout-section {
+        padding: 40px 15px;
+    }
+
+    .checkout-heading h1 {
+        font-size: 1.8rem;
+    }
+
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-card {
+        padding: 22px;
+    }
+
+}

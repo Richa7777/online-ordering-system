@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Earnings - Quick Bites</title>
+
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+
+    <!-- PUBLIC CSS -->
+    <link
+        rel="stylesheet"
+        href="../public/style.css">
+
+
+    <!-- RIDER CSS -->
+    <link
+        rel="stylesheet"
+        href="rider.css">
+
+
+    <!-- EARNINGS CSS -->
+    <link
+        rel="stylesheet"
+        href="earnings.css">
+
+
+    <!-- RIDER JAVASCRIPT -->
+    <script
+        defer
+        src="rider.js">
+    </script>
+
+
+    <!-- EARNINGS JAVASCRIPT -->
+    <script
+        defer
+        src="earnings.js">
+    </script>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+
+            <!-- LOGO -->
+
+            <a
+                href="index.html"
+                class="logo">
+
+                Quick Bites
+
+            </a>
+
+
+            <!-- DESKTOP NAVIGATION -->
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="deliveries.html">
+                        Deliveries
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="earnings.html"
+                        class="active">
+
+                        Earnings
+
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        Profile
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <!-- DESKTOP ACTION -->
+
+            <div class="desktop-action flex gap-2">
+
+
+                <!-- PROFILE -->
+
+                <a
+                    href="profile.html"
+                    class="rider-profile">
+
+                    <i class="fa-regular fa-circle-user"></i>
+
+                </a>
+
+
+                <!-- LOGOUT -->
+
+                <a
+                    href="#"
+                    class="logout-link"
+                    id="logout-btn">
+
+                    Logout
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </a>
+
+
+                <!-- HAMBURGER -->
+
+                <a
+                    href="#"
+                    class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- MOBILE MENU -->
+
+            <ul class="mobile-menu">
+
+                <li>
+                    <a href="index.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="deliveries.html">
+                        Deliveries
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="earnings.html"
+                        class="active">
+
+                        Earnings
+
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        My Profile
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="#"
+                        id="mobile-logout-btn">
+
+                        Logout
+
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+
+        <section class="earnings-section">
+
+
+            <div class="earnings-container">
+
+
+                <!-- ================= PAGE HEADING ================= -->
+
+                <div class="page-heading">
+
+                    <p class="section-subtitle">
+                        RIDER PANEL
+                    </p>
+
+                    <h1>
+                        My <span>Earnings</span>
+                    </h1>
+
+                    <p>
+                        Track your delivery earnings and payment history.
+                    </p>
+
+                </div>
+
+
+
+                <!-- ================= EARNINGS SUMMARY ================= -->
+
+                <div class="earnings-summary">
+
+
+                    <!-- TODAY -->
+
+                    <div class="earning-card">
+
+                        <div class="earning-icon">
+
+                            <i class="fa-solid fa-calendar-day"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Today's Earnings
+                            </span>
+
+                            <h2 id="today-earnings">
+                                Rs.850
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- THIS WEEK -->
+
+                    <div class="earning-card">
+
+                        <div class="earning-icon">
+
+                            <i class="fa-solid fa-calendar-week"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                This Week
+                            </span>
+
+                            <h2 id="weekly-earnings">
+                                Rs.4,250
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- THIS MONTH -->
+
+                    <div class="earning-card">
+
+                        <div class="earning-icon">
+
+                            <i class="fa-solid fa-calendar-days"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                This Month
+                            </span>
+
+                            <h2 id="monthly-earnings">
+                                Rs.17,850
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- TOTAL -->
+
+                    <div class="earning-card">
+
+                        <div class="earning-icon">
+
+                            <i class="fa-solid fa-wallet"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Total Earnings
+                            </span>
+
+                            <h2 id="total-earnings">
+                                Rs.45,600
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================= EARNINGS CONTENT ================= -->
+
+                <div class="earnings-card">
+
+
+                    <div class="earnings-card-header">
+
+                        <div>
+
+                            <p class="section-subtitle">
+                                PAYMENT HISTORY
+                            </p>
+
+                            <h2>
+                                Recent <span>Earnings</span>
+                            </h2>
+
+                            <p>
+                                View your recent delivery earnings.
+                            </p>
+
+                        </div>
+
+
+                        <div class="filter-container">
+
+                            <select id="earnings-filter">
+
+                                <option value="all">
+                                    All Earnings
+                                </option>
+
+                                <option value="today">
+                                    Today
+                                </option>
+
+                                <option value="week">
+                                    This Week
+                                </option>
+
+                                <option value="month">
+                                    This Month
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ================= EARNINGS TABLE ================= -->
+
+                    <div class="table-container">
+
+                        <table class="earnings-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Delivery ID
+                                    </th>
+
+                                    <th>
+                                        Order
+                                    </th>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Delivery Fee
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="earnings-table-body">
+
+
+                                <tr>
+
+                                    <td>
+                                        D1001
+                                    </td>
+
+                                    <td>
+                                        #QB1001
+                                    </td>
+
+                                    <td>
+                                        16 Sep 2026
+                                    </td>
+
+                                    <td>
+                                        Rs.150
+                                    </td>
+
+                                    <td>
+
+                                        <span class="earning-status paid">
+                                            Paid
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        D1002
+                                    </td>
+
+                                    <td>
+                                        #QB1002
+                                    </td>
+
+                                    <td>
+                                        16 Sep 2026
+                                    </td>
+
+                                    <td>
+                                        Rs.100
+                                    </td>
+
+                                    <td>
+
+                                        <span class="earning-status paid">
+                                            Paid
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        D1003
+                                    </td>
+
+                                    <td>
+                                        #QB1003
+                                    </td>
+
+                                    <td>
+                                        15 Sep 2026
+                                    </td>
+
+                                    <td>
+                                        Rs.150
+                                    </td>
+
+                                    <td>
+
+                                        <span class="earning-status paid">
+                                            Paid
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        D1004
+                                    </td>
+
+                                    <td>
+                                        #QB1004
+                                    </td>
+
+                                    <td>
+                                        15 Sep 2026
+                                    </td>
+
+                                    <td>
+                                        Rs.120
+                                    </td>
+
+                                    <td>
+
+                                        <span class="earning-status paid">
+                                            Paid
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <tr>
+
+                                    <td>
+                                        D1005
+                                    </td>
+
+                                    <td>
+                                        #QB1005
+                                    </td>
+
+                                    <td>
+                                        14 Sep 2026
+                                    </td>
+
+                                    <td>
+                                        Rs.130
+                                    </td>
+
+                                    <td>
+
+                                        <span class="earning-status paid">
+                                            Paid
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================= EARNINGS NOTE ================= -->
+
+                <div class="earnings-note">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    <div>
+
+                        <h3>
+                            About Your Earnings
+                        </h3>
+
+                        <p>
+                            Your earnings are calculated based on completed
+                            deliveries. Delivery fees are added to your
+                            earnings after an order has been successfully
+                            delivered.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="admin-footer">
+
+        <div class="admin-footer-logo">
+            Quick Bites
+        </div>
+
+        <p>
+            Rider Panel © 2026 Quick Bites
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

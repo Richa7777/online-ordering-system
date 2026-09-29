@@ -1,0 +1,497 @@
+/* =========================================
+   DELIVERY DETAILS
+========================================= */
+
+.delivery-details-section {
+
+    min-height: 80vh;
+
+    padding: 100px 20px 80px;
+
+}
+
+
+/* =========================================
+   PAGE HEADING
+========================================= */
+
+.page-heading {
+
+    text-align: center;
+
+    margin-bottom: 35px;
+
+}
+
+
+.page-heading h1 {
+
+    font-size: 3.7rem;
+
+    margin: 10px 0;
+
+}
+
+
+.page-heading h1 span {
+
+    color: var(--gold-finger);
+
+}
+
+
+.page-heading p {
+
+    color: grey;
+
+}
+
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
+
+.back-button-container {
+
+    margin-bottom: 25px;
+
+}
+
+
+.back-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--lead);
+
+    font-weight: 600;
+
+    transition: .3s ease-in-out;
+
+}
+
+
+.back-btn:hover {
+
+    color: var(--gold-finger);
+
+}
+
+
+
+/* =========================================
+   DELIVERY CARD
+========================================= */
+
+.delivery-details-card {
+
+    width: 100%;
+
+    max-width: 950px;
+
+    margin: auto;
+
+    padding: 35px;
+
+    background: var(--pure-white);
+
+    border: .1rem solid var(--gold-finger);
+
+    border-radius: 2rem;
+
+    box-shadow:
+        rgba(0, 0, 0, .05) 8px 8px 8px,
+        rgba(0, 0, 0, .05) 8px 8px 8px inset;
+
+}
+
+
+
+/* =========================================
+   CARD HEADER
+========================================= */
+
+.delivery-card-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+
+.delivery-id-label {
+
+    color: grey;
+
+    font-size: .95rem;
+
+}
+
+
+.delivery-card-header h2 {
+
+    margin-top: 5px;
+
+    font-size: 2rem;
+
+}
+
+
+.delivery-status {
+
+    padding: 8px 18px;
+
+    border-radius: 20px;
+
+    background: var(--hint-yellow);
+
+    color: var(--lead);
+
+    font-weight: 600;
+
+}
+
+
+
+/* =========================================
+   DETAILS SECTION
+========================================= */
+
+.details-section {
+
+    padding: 25px 0;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+
+.details-section h3 {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 1.5rem;
+
+    margin-bottom: 20px;
+
+}
+
+
+.details-section h3 i {
+
+    color: var(--gold-finger);
+
+}
+
+
+
+/* =========================================
+   DETAILS GRID
+========================================= */
+
+.details-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+
+}
+
+
+.detail-item {
+
+    padding: 15px;
+
+    background: var(--eye-ball);
+
+    border-radius: 10px;
+
+}
+
+
+.detail-item small {
+
+    display: block;
+
+    color: grey;
+
+    margin-bottom: 5px;
+
+}
+
+
+.detail-item p {
+
+    color: var(--lead);
+
+    font-size: 1rem;
+
+    line-height: 1.4rem;
+
+}
+
+
+
+/* =========================================
+   ORDER TABLE
+========================================= */
+
+.order-table {
+
+    width: 100%;
+
+}
+
+
+.order-row {
+
+    display: grid;
+
+    grid-template-columns: 2fr 1fr 1fr;
+
+    gap: 15px;
+
+    padding: 14px 10px;
+
+    align-items: center;
+
+}
+
+
+.order-heading {
+
+    font-weight: 600;
+
+    background: var(--hint-yellow);
+
+    border-radius: 8px;
+
+}
+
+
+.order-total {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 18px 10px 5px;
+
+    font-size: 1.2rem;
+
+}
+
+
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.delivery-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    padding-top: 25px;
+
+}
+
+
+.action-btn {
+
+    border: none;
+
+    padding: 12px 20px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+
+}
+
+
+.accept-btn {
+
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+
+}
+
+
+.complete-btn {
+
+    background: var(--lead);
+
+    color: var(--pure-white);
+
+}
+
+
+.action-btn:hover {
+
+    transform: translateY(-2px);
+
+}
+
+
+.action-btn:disabled {
+
+    opacity: .5;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.delivery-message {
+
+    min-height: 25px;
+
+    text-align: right;
+
+    margin-top: 15px;
+
+    font-weight: 600;
+
+    color: #28a745;
+
+}
+
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media screen and (max-width: 780px) {
+
+    .delivery-details-section {
+
+        padding: 80px 20px 60px;
+
+    }
+
+
+    .page-heading h1 {
+
+        font-size: 3rem;
+
+    }
+
+
+    .delivery-details-card {
+
+        padding: 25px 20px;
+
+    }
+
+
+    .delivery-card-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .details-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .order-row {
+
+        grid-template-columns: 1.5fr 1fr 1fr;
+
+        font-size: .9rem;
+
+    }
+
+
+    .delivery-actions {
+
+        flex-direction: column;
+
+    }
+
+
+    .action-btn {
+
+        width: 100%;
+
+    }
+
+}
+
+
+@media screen and (max-width: 480px) {
+
+    .page-heading h1 {
+
+        font-size: 2.5rem;
+
+    }
+
+
+    .delivery-details-card {
+
+        padding: 20px 15px;
+
+    }
+
+
+    .order-row {
+
+        gap: 8px;
+
+        padding-inline: 5px;
+
+        font-size: .8rem;
+
+    }
+
+}

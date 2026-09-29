@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout - Quick Bites</title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="../public/style.css">
+
+    <!-- Checkout CSS -->
+    <link rel="stylesheet" href="checkout.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+    <script defer src="common.js"></script>
+    <script defer src="checkout.js"></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+            <a href="index.html" class="logo">
+                Quick Bites
+            </a>
+
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#menu">
+                        Menu
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#service">
+                        Service
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#about">
+                        About Us
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#contact">
+                        Contacts
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <div class="desktop-action flex gap-2">
+
+                <a href="index.html" class="cart-icon">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <span class="cart-value">
+                        0
+                    </span>
+
+                </a>
+
+
+                <a href="profile.html" class="customer-profile">
+
+                    <i class="fa-slab-press fa-regular fa-circle-user"></i>
+
+                </a>
+
+
+                <a href="#" class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- MOBILE MENU -->
+
+            <ul class="mobile-menu">
+
+                <li>
+                    <a href="index.html">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#menu">
+                        Menu
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#service">
+                        Service
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#about">
+                        About Us
+                    </a>
+                </li>
+
+                <li>
+                    <a href="index.html#contact">
+                        Contacts
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        My Profile
+                    </a>
+                </li>
+
+                <li>
+                    <a href="orders.html">
+                        My Orders
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================= CHECKOUT ================= -->
+
+    <main>
+
+        <section class="checkout-section">
+
+            <div class="checkout-container">
+
+
+                <!-- PAGE HEADING -->
+
+                <div class="checkout-heading">
+
+                    <p class="section-subtitle">
+                        CHECKOUT
+                    </p>
+
+                    <h1>
+                        Complete Your <span>Order</span>
+                    </h1>
+
+                    <p>
+                        Enter your delivery details and review your order.
+                    </p>
+
+                </div>
+
+
+                <div class="checkout-layout">
+
+
+                    <!-- ================= DELIVERY DETAILS ================= -->
+
+                    <div class="checkout-card">
+
+                        <h2>
+                            <i class="fa-solid fa-location-dot"></i>
+                            Delivery Details
+                        </h2>
+
+
+                        <form id="checkout-form">
+
+
+                            <div class="form-group">
+
+                                <label for="customer-name">
+                                    Full Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customer-name"
+                                    placeholder="Enter your full name"
+                                    required>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="customer-phone">
+                                    Phone Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="customer-phone"
+                                    placeholder="Enter your phone number"
+                                    required>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="customer-address">
+                                    Delivery Address
+                                </label>
+
+                                <textarea
+                                    id="customer-address"
+                                    rows="3"
+                                    placeholder="Enter your delivery address"
+                                    required></textarea>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="customer-city">
+                                    City
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customer-city"
+                                    placeholder="Enter your city"
+                                    required>
+
+                            </div>
+
+
+                            <!-- PAYMENT -->
+
+                            <h2 class="payment-heading">
+                                <i class="fa-solid fa-credit-card"></i>
+                                Payment Method
+                            </h2>
+
+
+                            <div class="payment-options">
+
+                                <label class="payment-option">
+
+                                    <input
+                                        type="radio"
+                                        name="payment"
+                                        value="Cash on Delivery"
+                                        checked>
+
+                                    <span>
+                                        <i class="fa-solid fa-money-bill"></i>
+                                        Cash on Delivery
+                                    </span>
+
+                                </label>
+
+
+                                <label class="payment-option">
+
+                                    <input
+                                        type="radio"
+                                        name="payment"
+                                        value="Online Payment">
+
+                                    <span>
+                                        <i class="fa-solid fa-mobile-screen-button"></i>
+                                        Online Payment
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+
+                            <p id="checkout-message"></p>
+
+
+                            <button
+                                type="submit"
+                                class="place-order-btn">
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Place Order
+
+                            </button>
+
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- ================= ORDER SUMMARY ================= -->
+
+                    <div class="checkout-card order-summary">
+
+                        <h2>
+                            <i class="fa-solid fa-bag-shopping"></i>
+                            Your Order
+                        </h2>
+
+
+                        <div id="checkout-items">
+
+                            <!-- Cart items appear here -->
+
+                        </div>
+
+
+                        <div class="checkout-summary">
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Subtotal
+                                </span>
+
+                                <span id="checkout-subtotal">
+                                    Rs.0.00
+                                </span>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Delivery Fee
+                                </span>
+
+                                <span id="checkout-delivery">
+                                    Rs.50.00
+                                </span>
+
+                            </div>
+
+
+                            <hr>
+
+
+                            <div class="summary-row total-row">
+
+                                <strong>
+                                    Total
+                                </strong>
+
+                                <strong id="checkout-total">
+                                    Rs.0.00
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <a href="index.html" class="continue-shopping">
+
+                            <i class="fa-solid fa-arrow-left"></i>
+
+                            Continue Shopping
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="admin-footer">
+
+        <div class="admin-footer-logo"> Quick Bites </div>
+
+        <p>
+            Customer Panel © 2026 Quick Bites
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

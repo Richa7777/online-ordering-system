@@ -1,0 +1,233 @@
+/* ORDER DETAILS PAGE */
+
+.order-details-section {
+    padding: 60px 20px;
+    min-height: 75vh;
+}
+
+.order-details-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.order-details-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.order-details-heading h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.order-details-heading p {
+    color: #777;
+}
+
+
+/* ORDER INFORMATION */
+
+.order-info-card,
+.order-items-card,
+.order-summary-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.order-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.order-top span:first-child {
+    color: #777;
+}
+
+.order-top h3 {
+    margin-top: 5px;
+    font-size: 1.3rem;
+}
+
+
+/* STATUS */
+
+.order-status {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: #e8f7e8;
+    color: #218838;
+}
+
+
+/* ORDER INFO GRID */
+
+.order-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.info-box i {
+    font-size: 20px;
+    margin-top: 3px;
+}
+
+.info-box small {
+    color: #777;
+}
+
+.info-box p {
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+
+/* ORDER ITEMS */
+
+.order-items-card h2,
+.order-summary-card h2 {
+    margin-bottom: 20px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.order-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.order-item-info {
+    flex: 1;
+}
+
+.order-item-info h4 {
+    margin-bottom: 5px;
+}
+
+.order-item-info p {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.order-item-price {
+    font-weight: 600;
+}
+
+
+/* SUMMARY */
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.order-summary-card hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+}
+
+.total-row {
+    font-size: 1.15rem;
+}
+
+
+/* BUTTONS */
+
+.order-detail-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.back-btn,
+.continue-btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.back-btn {
+    border: 1px solid #ddd;
+}
+
+.continue-btn {
+    background: #ff6b35;
+    color: white;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .order-details-section {
+        padding: 40px 15px;
+    }
+
+    .order-details-heading h1 {
+        font-size: 1.8rem;
+    }
+
+    .order-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-top {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .order-item {
+        gap: 12px;
+    }
+
+    .order-item-image {
+        width: 65px;
+        height: 65px;
+    }
+
+    .order-detail-buttons {
+        flex-direction: column;
+    }
+
+    .back-btn,
+    .continue-btn {
+        text-align: center;
+    }
+}

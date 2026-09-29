@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Riders - Quick Bites Admin</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Allura&family=Edu+VIC+WA+NT+Hand:wght@400;500;600;700&family=Playball&family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Main Quick Bites CSS -->
+    <link rel="stylesheet" href="../public/style.css">
+
+    <!-- Riders CSS -->
+    <link rel="stylesheet" href="riders.css">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                Quick Bites
+            </a>
+
+
+            <!-- Desktop Navigation -->
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="orders.html">
+                        Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="products.html">
+                        Products
+                    </a>
+                </li>
+
+                <li>
+                    <a href="customers.html">
+                        Customers
+                    </a>
+                </li>
+
+                <li>
+                    <a href="riders.html" class="active">
+                        Riders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="categories.html">
+                        Categories
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <!-- Header Actions -->
+
+            <div class="desktop-action flex gap-2">
+
+                <!-- Profile -->
+
+                <a href="profile.html" class="admin-profile">
+
+                    <i class="fa-regular fa-circle-user"></i>
+
+                </a>
+
+
+                <!-- Logout -->
+
+                <a href="../public/index.html" class="logout-link">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </a>
+
+
+                <!-- Hamburger -->
+
+                <a href="#" class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- Mobile Menu -->
+
+            <ul class="mobile-menu">
+
+                <li>
+                    <a href="index.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="orders.html">
+                        Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="products.html">
+                        Products
+                    </a>
+                </li>
+
+                <li>
+                    <a href="customers.html">
+                        Customers
+                    </a>
+                </li>
+
+                <li>
+                    <a href="riders.html">
+                        Riders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="categories.html">
+                        Categories
+                    </a>
+                </li>
+
+                <li>
+                    <a href="profile.html">
+                        My Profile
+                    </a>
+                </li>
+
+                <li>
+                    <a href="../public/index.html">
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                        Logout
+
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="wrapper riders-page">
+
+
+        <!-- Page Heading -->
+
+        <section class="riders-heading text-center">
+
+            <h5>
+                Quick Bites Admin
+            </h5>
+
+            <h2>
+                Riders
+            </h2>
+
+            <p>
+                Manage delivery riders and their delivery information.
+            </p>
+
+        </section>
+
+
+        <!-- ================= CONTROLS ================= -->
+
+        <section class="rider-controls">
+
+            <!-- Search -->
+
+            <div class="rider-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text" id="rider-search" placeholder="Search riders..." autocomplete="off">
+
+            </div>
+
+
+            <!-- Filter -->
+
+            <select id="status-filter" class="status-filter">
+
+                <option value="All">
+                    All Riders
+                </option>
+
+                <option value="Available">
+                    Available
+                </option>
+
+                <option value="Busy">
+                    Busy
+                </option>
+
+                <option value="Offline">
+                    Offline
+                </option>
+
+            </select>
+
+
+            <!-- Add Rider -->
+
+            <button type="button" id="add-rider-btn" class="add-rider-btn">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add New Rider
+
+            </button>
+
+        </section>
+
+
+        <!-- ================= RIDER COUNT ================= -->
+
+        <div class="rider-count-row">
+
+            <p>
+                Showing
+                <strong id="rider-count">0</strong>
+                riders
+            </p>
+
+        </div>
+
+
+        <!-- ================= RIDERS ================= -->
+
+        <section class="riders-section">
+
+            <div class="section-title">
+
+                <h3>
+                    Delivery Riders
+                </h3>
+
+                <p>
+                    View and manage your delivery team.
+                </p>
+
+            </div>
+
+
+            <!-- Rider Cards -->
+
+            <div id="rider-list" class="rider-list">
+
+                <!-- Riders inserted using JavaScript -->
+
+            </div>
+
+
+            <!-- Empty State -->
+
+            <div id="empty-riders" class="empty-riders">
+
+                <i class="fa-solid fa-motorcycle"></i>
+
+                <h3>
+                    No Riders Found
+                </h3>
+
+                <p>
+                    No riders match your current search or filter.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= RIDER MODAL ================= -->
+
+    <div id="rider-modal" class="rider-modal">
+
+        <div class="rider-modal-content">
+
+            <!-- Modal Header -->
+
+            <div class="modal-header">
+
+                <h3 id="modal-title">
+                    Add New Rider
+                </h3>
+
+                <button type="button" id="close-rider-modal" class="close-modal">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <!-- Rider Form -->
+
+            <form id="rider-form">
+
+                <input type="hidden" id="rider-id">
+
+
+                <!-- Name -->
+
+                <div class="form-group">
+
+                    <label for="rider-name">
+                        Rider Name
+                    </label>
+
+                    <input type="text" id="rider-name" placeholder="Enter rider name" required>
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="form-group">
+
+                    <label for="rider-phone">
+                        Phone Number
+                    </label>
+
+                    <input type="tel" id="rider-phone" placeholder="Enter phone number" required>
+
+                </div>
+
+
+                <!-- Vehicle -->
+
+                <div class="form-group">
+
+                    <label for="rider-vehicle">
+                        Vehicle
+                    </label>
+
+                    <input type="text" id="rider-vehicle" placeholder="e.g. Honda Dio" required>
+
+                </div>
+
+
+                <!-- Vehicle Number -->
+
+                <div class="form-group">
+
+                    <label for="vehicle-number">
+                        Vehicle Number
+                    </label>
+
+                    <input type="text" id="vehicle-number" placeholder="e.g. BA 12 PA 3456" required>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="form-group">
+
+                    <label for="rider-status">
+                        Status
+                    </label>
+
+                    <select id="rider-status">
+
+                        <option value="Available">
+                            Available
+                        </option>
+
+                        <option value="Busy">
+                            Busy
+                        </option>
+
+                        <option value="Offline">
+                            Offline
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="form-actions">
+
+                    <button type="button" id="cancel-rider-btn" class="cancel-btn">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="save-rider-btn">
+                        Save Rider
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= DETAILS MODAL ================= -->
+
+    <div id="rider-details-modal" class="rider-modal">
+
+        <div class="rider-modal-content details-modal-content">
+
+            <div class="modal-header">
+
+                <h3>
+                    Rider Details
+                </h3>
+
+                <button type="button" id="close-details-modal" class="close-modal">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <div id="rider-details">
+
+                <!-- Details inserted using JavaScript -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+<footer class="admin-footer">
+
+
+        <div class="wrapper text-center">
+
+
+            <a href="index.html" class="logo">
+
+                Quick Bites
+
+            </a>
+
+
+            <p>
+
+                Admin Panel © 2026 Quick Bites
+
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+
+    <script src="riders.js"></script>
+
+</body>
+
+</html>

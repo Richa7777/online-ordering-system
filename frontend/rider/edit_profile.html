@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Profile - Quick Bites</title>
+
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+
+    <!-- Main Quick Bites CSS -->
+    <link
+        rel="stylesheet"
+        href="../public/style.css">
+
+
+    <!-- Rider CSS -->
+    <link
+        rel="stylesheet"
+        href="rider.css">
+
+
+    <!-- Edit Profile CSS -->
+    <link
+        rel="stylesheet"
+        href="edit_profile.css">
+
+
+    <!-- Rider JavaScript -->
+    <script
+        defer
+        src="rider.js">
+    </script>
+
+
+    <!-- Edit Profile JavaScript -->
+    <script
+        defer
+        src="edit_profile.js">
+    </script>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+
+            <!-- LOGO -->
+
+            <a
+                href="index.html"
+                class="logo">
+
+                Quick Bites
+
+            </a>
+
+
+            <!-- DESKTOP NAVIGATION -->
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html">
+
+                        <i class="fa-solid fa-house"></i>
+
+                        Dashboard
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="deliveries.html">
+
+                        <i class="fa-solid fa-motorcycle"></i>
+
+                        Deliveries
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="earnings.html">
+
+                        <i class="fa-solid fa-wallet"></i>
+
+                        Earnings
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="profile.html">
+
+                        <i class="fa-regular fa-circle-user"></i>
+
+                        Profile
+
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <!-- DESKTOP ACTION -->
+
+            <div class="desktop-action flex gap-2">
+
+
+                <!-- LOGOUT -->
+
+                <a
+                    href="#"
+                    class="logout-btn"
+                    id="logout-btn">
+
+                    Logout
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </a>
+
+
+                <!-- HAMBURGER -->
+
+                <a
+                    href="#"
+                    class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- MOBILE MENU -->
+
+            <ul class="mobile-menu">
+
+
+                <li>
+                    <a href="index.html">
+
+                        <i class="fa-solid fa-house"></i>
+
+                        Dashboard
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="deliveries.html">
+
+                        <i class="fa-solid fa-motorcycle"></i>
+
+                        Deliveries
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="earnings.html">
+
+                        <i class="fa-solid fa-wallet"></i>
+
+                        Earnings
+
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="profile.html">
+
+                        <i class="fa-regular fa-circle-user"></i>
+
+                        Profile
+
+                    </a>
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="#"
+                        class="mobile-logout"
+                        id="mobile-logout-btn">
+
+                        Logout
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- ================= EDIT PROFILE ================= -->
+
+    <main>
+
+
+        <section class="edit-profile-section">
+
+
+            <div class="edit-profile-container">
+
+
+                <!-- PAGE HEADING -->
+
+                <div class="edit-profile-heading">
+
+                    <h5>
+                        Rider Profile
+                    </h5>
+
+                    <h1>
+                        Edit <span>Profile</span>
+                    </h1>
+
+                    <p>
+                        Update your personal information.
+                    </p>
+
+                </div>
+
+
+
+                <!-- PROFILE FORM -->
+
+                <form
+                    class="profile-form"
+                    id="edit-profile-form">
+
+
+                    <!-- PROFILE ICON -->
+
+                    <div class="profile-picture-section">
+
+                        <div class="profile-picture">
+
+                            <i class="fa-regular fa-circle-user"></i>
+
+                        </div>
+
+                        <h3>
+                            Rider Profile
+                        </h3>
+
+                        <p>
+                            Keep your information up to date.
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- FULL NAME -->
+
+                    <div class="form-group">
+
+                        <label for="rider-name">
+                            Full Name
+                        </label>
+
+                        <div class="input-container">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <input
+                                type="text"
+                                id="rider-name"
+                                name="rider-name"
+                                value="Rider Name"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="rider-email">
+                            Email
+                        </label>
+
+                        <div class="input-container">
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            <input
+                                type="email"
+                                id="rider-email"
+                                name="rider-email"
+                                value="rider@email.com"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label for="rider-phone">
+                            Phone Number
+                        </label>
+
+                        <div class="input-container">
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            <input
+                                type="tel"
+                                id="rider-phone"
+                                name="rider-phone"
+                                value="98XXXXXXXX"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ADDRESS -->
+
+                    <div class="form-group">
+
+                        <label for="rider-address">
+                            Address
+                        </label>
+
+                        <div class="input-container textarea-container">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <textarea
+                                id="rider-address"
+                                name="rider-address"
+                                rows="3"
+                                required>Kathmandu, Nepal</textarea>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- MESSAGE -->
+
+                    <p
+                        id="profile-message"
+                        class="profile-message">
+                    </p>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="profile-buttons">
+
+
+                        <a
+                            href="profile.html"
+                            class="cancel-btn">
+
+                            <i class="fa-solid fa-xmark"></i>
+
+                            Cancel
+
+                        </a>
+
+
+                        <button
+                            type="submit"
+                            class="save-btn">
+
+                            <i class="fa-solid fa-check"></i>
+
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer id="contact">
+
+        <div class="footer-container">
+
+            <div class="flex wrapper gap-4">
+
+
+                <!-- QUICK BITES -->
+
+                <div class="footer-wrapper">
+
+                    <a
+                        href="index.html"
+                        class="logo">
+
+                        Quick Bites
+
+                    </a>
+
+                    <p class="mt-one-half">
+
+                        We will fill your tummy
+                        with delicious food
+                        with fast delivery.
+
+                    </p>
+
+                </div>
+
+
+                <!-- RIDER PANEL -->
+
+                <ul class="footer-wrapper">
+
+                    <li>
+                        <h4>
+                            Rider Panel
+                        </h4>
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="index.html"
+                            class="footer-link">
+
+                            Dashboard
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="deliveries.html"
+                            class="footer-link">
+
+                            Deliveries
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="earnings.html"
+                            class="footer-link">
+
+                            Earnings
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+                <!-- ACCOUNT -->
+
+                <ul class="footer-wrapper">
+
+                    <li>
+                        <h4>
+                            Account
+                        </h4>
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="profile.html"
+                            class="footer-link">
+
+                            Profile
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="mt-one-half">
+
+                        <a
+                            href="#"
+                            class="footer-link"
+                            id="footer-logout">
+
+                            Logout
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>

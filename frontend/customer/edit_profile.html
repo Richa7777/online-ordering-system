@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Profile - Quick Bites</title>
+
+    <link rel="stylesheet" href="../public/style.css">
+    <link rel="stylesheet" href="edit_profile.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+            <a href="index.html" class="logo">
+                Quick Bites
+            </a>
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="index.html#menu">Menu</a>
+                </li>
+
+                <li>
+                    <a href="index.html#service">Service</a>
+                </li>
+
+                <li>
+                    <a href="index.html#about">About Us</a>
+                </li>
+
+                <li>
+                    <a href="index.html#contact">Contacts</a>
+                </li>
+
+            </ul>
+
+            <div class="desktop-action flex gap-2">
+
+                <a href="index.html" class="cart-icon">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <span class="cart-value">
+                        0
+                    </span>
+
+                </a>
+
+                <a href="profile.html" class="customer-profile">
+
+                    <i class="fa-slab-press fa-regular fa-circle-user"></i>
+
+                </a>
+
+                <a href="#" class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- MOBILE MENU -->
+
+            <ul class="mobile-menu">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="index.html#menu">Menu</a>
+                </li>
+
+                <li>
+                    <a href="index.html#service">Service</a>
+                </li>
+
+                <li>
+                    <a href="index.html#about">About Us</a>
+                </li>
+
+                <li>
+                    <a href="index.html#contact">Contacts</a>
+                </li>
+
+                <li>
+                    <a href="profile.html">My Profile</a>
+                </li>
+
+                <li>
+                    <a href="orders.html">My Orders</a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================= EDIT PROFILE ================= -->
+
+    <main class="edit-profile-section">
+
+        <div class="edit-profile-container">
+
+            <div class="edit-profile-heading">
+
+                <p class="section-subtitle">
+                    MY PROFILE
+                </p>
+
+                <h1>
+                    Edit <span>Profile</span>
+                </h1>
+
+                <p>
+                    Update your personal and delivery information.
+                </p>
+
+            </div>
+
+
+            <!-- PROFILE FORM -->
+
+            <form id="edit-profile-form" class="profile-form">
+
+
+                <!-- PROFILE IMAGE -->
+
+                <div class="profile-picture-section">
+
+                    <div class="profile-picture">
+
+                        <i class="fa-slab-press fa-regular fa-circle-user"></i>
+
+                    </div>
+
+                    <h3>
+                        Profile Picture
+                    </h3>
+
+                    <p>
+                        Your profile picture
+                    </p>
+
+                </div>
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <div class="input-container">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your full name"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-container">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email address"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <div class="input-container">
+
+                        <i class="fa-solid fa-phone"></i>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="Enter your phone number">
+
+                    </div>
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="form-group">
+
+                    <label for="address">
+                        Delivery Address
+                    </label>
+
+                    <div class="input-container textarea-container">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <textarea
+                            id="address"
+                            rows="3"
+                            placeholder="Enter your delivery address"></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CITY -->
+
+                <div class="form-group">
+
+                    <label for="city">
+                        City
+                    </label>
+
+                    <div class="input-container">
+
+                        <i class="fa-solid fa-city"></i>
+
+                        <input
+                            type="text"
+                            id="city"
+                            placeholder="Enter your city">
+
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <p id="profile-message"></p>
+
+
+                <!-- BUTTONS -->
+
+                <div class="profile-buttons">
+
+                    <a href="profile.html" class="cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="save-btn">
+                        <i class="fa-solid fa-check"></i>
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+     <footer class="admin-footer">
+
+        <div class="admin-footer-logo"> Quick Bites </div>
+
+        <p>
+            Customer Panel © 2026 Quick Bites
+        </p>
+
+    </footer>
+
+
+    <script defer src="common.js"></script>
+    <script defer src="edit_profile.js"></script>
+
+</body>
+
+</html>

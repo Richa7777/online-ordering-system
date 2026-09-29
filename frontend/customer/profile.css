@@ -1,0 +1,152 @@
+/* =========================================
+   PROFILE PAGE
+========================================= */
+
+.profile-section {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+}
+
+
+/* =========================================
+   PROFILE CARD
+========================================= */
+
+.profile-card {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    padding: 40px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+
+/* =========================================
+   PROFILE IMAGE
+========================================= */
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-image i {
+    font-size: 100px;
+}
+
+
+
+/* =========================================
+   PROFILE NAME
+========================================= */
+
+.profile-card h2 {
+    margin-bottom: 5px;
+}
+
+
+.profile-role {
+    margin-bottom: 30px;
+    opacity: 0.7;
+}
+
+
+/* =========================================
+   PROFILE DETAILS
+========================================= */
+
+.profile-details {
+    text-align: left;
+    margin-top: 20px;
+}
+
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    padding: 15px;
+
+    margin-bottom: 10px;
+
+    border-radius: 10px;
+
+    background: #f5f5f5;
+}
+
+
+.profile-info i {
+    font-size: 20px;
+}
+
+
+.profile-info small {
+    display: block;
+    opacity: 0.6;
+}
+
+
+.profile-info p {
+    margin-top: 5px;
+}
+
+
+/* =========================================
+   PROFILE BUTTONS
+========================================= */
+
+.profile-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+
+    margin-top: 30px;
+
+    flex-wrap: wrap;
+}
+
+
+/* =========================================
+   PROFILE NAVIGATION
+========================================= */
+
+.profile-nav {
+    align-items: center;
+}
+
+
+.profile-home {
+    text-decoration: none;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .profile-card {
+        padding: 25px 20px;
+    }
+
+
+    .profile-buttons {
+        flex-direction: column;
+    }
+
+
+    .profile-buttons .btn {
+        width: 100%;
+    }
+
+}

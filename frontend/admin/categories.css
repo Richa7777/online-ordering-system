@@ -1,0 +1,809 @@
+/* =========================================
+   QUICK BITES ADMIN - CATEGORIES
+========================================= */
+
+.categories-page {
+    padding-top: 4rem;
+    padding-bottom: 5rem;
+}
+
+
+/* =========================================
+   PAGE HEADING
+========================================= */
+
+.categories-heading {
+    margin-bottom: 3rem;
+}
+
+.categories-heading h5 {
+    margin-bottom: .5rem;
+}
+
+.categories-heading h2 {
+    margin-bottom: .5rem;
+}
+
+.categories-heading p {
+    max-width: 650px;
+    margin: auto;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.admin-profile {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.admin-profile i {
+    font-size: 35px;
+}
+
+.admin-profile:hover {
+    color: var(--gold-finger);
+}
+
+
+.logout-link {
+    display: flex;
+    align-items: center;
+
+    gap: .5rem;
+
+    font-size: 1rem;
+
+    color: var(--lead);
+
+    transition: .3s ease-in-out;
+}
+
+.logout-link i {
+    font-size: 1.1rem;
+}
+
+.logout-link:hover {
+    color: var(--gold-finger);
+}
+
+
+.navlist a.active {
+    color: var(--gold-finger);
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   CONTROLS
+========================================= */
+
+.category-controls {
+    display: flex;
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-bottom: 1.5rem;
+}
+
+
+/* Search */
+
+.category-search {
+    width: 380px;
+
+    display: flex;
+    align-items: center;
+
+    gap: .8rem;
+
+    padding: .8rem 1.2rem;
+
+    background: var(--pure-white);
+
+    border: .1rem solid #e5e5e5;
+
+    border-radius: 1rem;
+
+    transition: .3s ease-in-out;
+}
+
+.category-search:focus-within {
+    border-color: var(--gold-finger);
+
+    box-shadow:
+        rgba(255, 123, 0, .12) 0 4px 12px;
+}
+
+.category-search i {
+    color: var(--gold-finger);
+}
+
+.category-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: var(--lead);
+
+    font-size: 1rem;
+}
+
+.category-search input::placeholder {
+    color: #999;
+}
+
+
+/* Category count */
+
+.category-count {
+    padding: .7rem 1.2rem;
+
+    background: var(--pure-white);
+
+    border: .1rem solid var(--gold-finger);
+
+    border-radius: 1rem;
+
+    color: var(--lead);
+
+    font-size: .95rem;
+}
+
+.category-count span {
+    font-weight: 700;
+
+    color: var(--gold-finger);
+}
+
+
+/* Add button */
+
+.add-category-btn {
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: .5rem;
+
+    padding: .8rem 1.2rem;
+
+    border: none;
+
+    border-radius: 1rem;
+
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.add-category-btn:hover {
+    background: var(--lead);
+}
+
+
+/* =========================================
+   CATEGORY SECTION
+========================================= */
+
+.categories-section {
+    margin-top: 1rem;
+}
+
+.section-title {
+    margin-bottom: 2rem;
+}
+
+.section-title h3 {
+    margin-bottom: .3rem;
+}
+
+.section-title p {
+    font-size: 1rem;
+
+    color: grey;
+}
+
+
+/* =========================================
+   CATEGORY LIST
+========================================= */
+
+.category-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(260px, 1fr));
+
+    gap: 1.5rem;
+}
+
+
+/* =========================================
+   CATEGORY CARD
+========================================= */
+
+.category-card {
+    background: var(--pure-white);
+
+    border: .1rem solid var(--gold-finger);
+
+    border-radius: 2rem;
+
+    padding: 1.5rem;
+
+    box-shadow:
+        rgba(0, 0, 0, .05) 8px 8px 8px,
+        rgba(0, 0, 0, .04) 8px 8px 8px inset;
+
+    transition: .3s ease-in-out;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        rgba(0, 0, 0, .08) 10px 12px 15px;
+}
+
+
+/* =========================================
+   CATEGORY CARD TOP
+========================================= */
+
+.category-card-top {
+    display: flex;
+    align-items: center;
+
+    gap: 1rem;
+}
+
+.category-icon {
+    width: 60px;
+    height: 60px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--hint-yellow);
+
+    color: var(--gold-finger);
+
+    font-size: 1.5rem;
+}
+
+.category-name {
+    flex: 1;
+}
+
+.category-name h4 {
+    font-size: 1.3rem;
+
+    color: var(--lead);
+
+    margin-bottom: .2rem;
+}
+
+.category-name p {
+    font-size: .85rem;
+
+    color: #999;
+}
+
+
+/* =========================================
+   CATEGORY COUNT
+========================================= */
+
+.category-product-count {
+    margin-top: 1.3rem;
+
+    padding: .8rem 1rem;
+
+    border-radius: .8rem;
+
+    background: #fffaf0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+}
+
+.category-product-count span {
+    color: #888;
+
+    font-size: .9rem;
+}
+
+.category-product-count strong {
+    color: var(--gold-finger);
+
+    font-size: 1rem;
+}
+
+
+/* =========================================
+   CATEGORY ACTIONS
+========================================= */
+
+.category-actions {
+    display: flex;
+
+    gap: .7rem;
+
+    margin-top: 1rem;
+}
+
+.category-action-btn {
+    flex: 1;
+
+    padding: .65rem .8rem;
+
+    border: none;
+
+    border-radius: .8rem;
+
+    font-size: .85rem;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.edit-category-btn {
+    background: #f3f3f3;
+
+    color: var(--lead);
+}
+
+.edit-category-btn:hover {
+    background: var(--hint-yellow);
+}
+
+.delete-category-btn {
+    background: #fff0f0;
+
+    color: #c62828;
+}
+
+.delete-category-btn:hover {
+    background: #c62828;
+
+    color: var(--pure-white);
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-categories {
+    display: none;
+
+    text-align: center;
+
+    padding: 4rem 1rem;
+
+    background: var(--pure-white);
+
+    border: .1rem dashed var(--gold-finger);
+
+    border-radius: 2rem;
+}
+
+.empty-categories i {
+    font-size: 3rem;
+
+    color: var(--gold-finger);
+
+    margin-bottom: 1rem;
+}
+
+.empty-categories h3 {
+    margin-bottom: .5rem;
+}
+
+.empty-categories p {
+    font-size: 1rem;
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+.category-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 1.5rem;
+
+    background: rgba(0, 0, 0, .45);
+}
+
+.category-modal.active {
+    display: flex;
+}
+
+.category-modal-content {
+    width: min(500px, 100%);
+
+    background: var(--pure-white);
+
+    border: .1rem solid var(--gold-finger);
+
+    border-radius: 2rem;
+
+    padding: 1.8rem;
+
+    box-shadow:
+        rgba(0, 0, 0, .2) 0 10px 30px;
+}
+
+
+/* =========================================
+   MODAL HEADER
+========================================= */
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding-bottom: 1rem;
+
+    margin-bottom: 1.5rem;
+
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    font-size: 1.7rem;
+}
+
+.close-modal {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f3f3f3;
+
+    color: var(--lead);
+
+    font-size: 1.1rem;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.close-modal:hover {
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: .4rem;
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+    color: var(--lead);
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    padding: .8rem 1rem;
+
+    border: 1px solid #ddd;
+
+    border-radius: .8rem;
+
+    outline: none;
+
+    background: var(--pure-white);
+
+    color: var(--lead);
+
+    font-size: .95rem;
+
+    transition: .3s ease-in-out;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--gold-finger);
+
+    box-shadow:
+        rgba(255, 123, 0, .1) 0 3px 8px;
+}
+
+
+/* =========================================
+   FORM ACTIONS
+========================================= */
+
+.form-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: .8rem;
+
+    margin-top: 1.5rem;
+}
+
+.cancel-btn,
+.save-category-btn {
+    padding: .75rem 1.2rem;
+
+    border: none;
+
+    border-radius: .8rem;
+
+    font-size: .95rem;
+
+    cursor: pointer;
+
+    transition: .3s ease-in-out;
+}
+
+.cancel-btn {
+    background: #f3f3f3;
+
+    color: var(--lead);
+}
+
+.cancel-btn:hover {
+    background: #ddd;
+}
+
+.save-category-btn {
+    background: var(--gold-finger);
+
+    color: var(--pure-white);
+}
+
+.save-category-btn:hover {
+    background: var(--lead);
+}
+
+
+/* =========================
+   ADMIN FOOTER
+========================= */
+/* 
+.admin-footer {
+    margin-top: 5rem;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: var(--hint-yellow);
+    border-top: 1px solid var(--gold-finger);
+    border-radius: 0 0 1rem 1rem;
+}
+
+.admin-footer-logo {
+    font-family: "Playball", cursive;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--gold-finger);
+    margin-bottom: 0.8rem;
+}
+
+.admin-footer p {
+    margin: 0;
+    font-size: 1rem;
+    color: #777;
+} */
+
+.admin-footer {
+
+    padding: 45px 0;
+
+    background: var(--hint-yellow);
+
+    border-top:
+        1px solid rgba(255, 123, 0, 0.3);
+
+}
+
+
+.admin-footer .logo {
+
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+}
+
+
+.admin-footer p {
+
+    font-size: 1rem;
+
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 950px) {
+
+    .category-controls {
+        flex-wrap: wrap;
+    }
+
+    .category-search {
+        width: 100%;
+    }
+
+    .category-count {
+        order: 2;
+    }
+
+    .add-category-btn {
+        margin-left: 0;
+
+        order: 3;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 780px) {
+
+    .logout-link {
+        display: none;
+    }
+
+    .admin-profile {
+        width: 40px;
+        height: 40px;
+    }
+
+    .admin-profile i {
+        font-size: 30px;
+    }
+
+    .category-list {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .categories-page {
+        padding-top: 3rem;
+    }
+
+    .categories-heading h2 {
+        font-size: 2.7rem;
+    }
+
+    .categories-heading p {
+        font-size: 1rem;
+    }
+
+    .category-controls {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .category-search {
+        width: 100%;
+    }
+
+    .category-count {
+        width: fit-content;
+    }
+
+    .add-category-btn {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+    .category-card {
+        padding: 1.2rem;
+
+        border-radius: 1.5rem;
+    }
+
+    .category-name h4 {
+        font-size: 1.15rem;
+    }
+
+    .category-modal-content {
+        padding: 1.3rem;
+
+        border-radius: 1.5rem;
+    }
+
+    .modal-header h3 {
+        font-size: 1.4rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .cancel-btn,
+    .save-category-btn {
+        width: 100%;
+    }
+
+}

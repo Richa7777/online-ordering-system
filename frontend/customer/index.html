@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quick Bites - Customer</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+
+    <link rel="stylesheet" href="../public/style.css">
+
+    <script defer src="common.js"></script>
+    <script defer src="customer.js"></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+            <!-- LOGO -->
+            <a href="index.html" class="logo">
+                Quick Bites
+            </a>
+
+            <!-- DESKTOP MENU -->
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="#menu">Menu</a>
+                </li>
+
+                <li>
+                    <a href="#service">Service</a>
+                </li>
+
+                <li>
+                    <a href="#about">About Us</a>
+                </li>
+
+                <li>
+                    <a href="#contact">Contacts</a>
+                </li>
+
+            </ul>
+
+
+            <!-- DESKTOP ACTION -->
+            <div class="desktop-action flex gap-2">
+
+                <!-- CART -->
+                <a href="#" class="cart-icon">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-value">
+                        0
+                    </span>
+                </a>
+
+                <!-- CUSTOMER PROFILE -->
+                <a href="profile.html" class="customer-profile">
+                    <i class="fa-slab-press fa-regular fa-circle-user"></i>
+                </a>
+
+                <!-- HAMBURGER -->
+                <a href="#" class="hamburger">
+                    <i class="fa-solid fa-bars"></i>
+                </a>
+
+            </div>
+
+            <!-- MOBILE MENU -->
+            <ul class="mobile-menu">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="#menu">Menu</a>
+                </li>
+
+                <li>
+                    <a href="#service">Service</a>
+                </li>
+
+                <li>
+                    <a href="#about">About Us</a>
+                </li>
+
+                <li>
+                    <a href="#contact">Contacts</a>
+                </li>
+
+                <li>
+                    <a href="profile.html" class="btn">
+                        My Profile
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <!-- MAIN -->
+    <main>
+
+        <!-- HERO SECTION -->
+        <section>
+
+            <div class="hero-section flex wrapper gap-4">
+
+                <div class="content">
+
+                    <h1>
+                        Enjoy Your Delicious
+                        <span>Food</span>
+                    </h1>
+
+                    <p class="para"> We will fill your tummy with delicious <br> food with fast delivery.</p>
+
+                    <div>
+
+                        <a href="#" class="btn" id="order-now-btn"> Order now </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="image-container">
+
+                    <img src="../public/images/food.png" alt="Food">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MENU SECTION -->
+
+        <section id="menu">
+
+            <div class="wrapper p-top">
+
+
+                <!-- ========================================
+             MOST POPULAR
+        ========================================= -->
+
+                <div class="text-center">
+
+                    <h5>Our Menu</h5>
+
+                    <h2>The Most Popular</h2>
+
+                    <p class="menu-description">
+                        Enjoy our customers' favourite dishes.
+                    </p>
+
+                </div>
+
+
+                <!-- POPULAR PRODUCT CARDS -->
+
+                <div class="card-list popular-list text-center flex mt-4 gap-2" id="popular-list">
+
+                </div>
+
+
+
+                <!-- ========================================
+             EXPLORE MENU
+        ========================================= -->
+
+                <div class="text-center explore-menu-heading">
+
+                    <h5>Explore More</h5>
+
+                    <h2>Explore Our Menu</h2>
+
+                    <p class="menu-description">
+                        Discover delicious food for every taste.
+                    </p>
+
+                </div>
+
+
+                <!-- ========================================
+             CATEGORY BUTTONS
+        ========================================= -->
+
+                <div class="menu-categories">
+
+                    <button class="category-btn active" data-category="All">
+
+                        All
+
+                    </button>
+
+
+                    <button class="category-btn" data-category="Burgers">
+
+                        Burgers
+
+                    </button>
+
+
+                    <button class="category-btn" data-category="Pizza">
+
+                        Pizza
+
+                    </button>
+
+
+                    <button class="category-btn" data-category="Chicken">
+
+                        Chicken
+
+                    </button>
+
+
+                    <button class="category-btn" data-category="Sandwiches">
+
+                        Sandwiches
+
+                    </button>
+
+
+                    <button class="category-btn" data-category="Pasta">
+
+                        Pasta
+
+                    </button>
+
+
+                    <button class="category-btn" data-category="Snacks">
+
+                        Snacks
+
+                    </button>
+
+                </div>
+
+
+                <!-- ========================================
+             ALL PRODUCTS
+        ========================================= -->
+
+                <div class="card-list explore-list text-center flex mt-4 gap-2" id="explore-list">
+
+                </div>
+
+
+
+                <!-- ========================================
+             CART
+        ========================================= -->
+
+                <div class="cart-tab">
+
+                    <h3>Your Cart</h3>
+
+
+                    <!-- CART ITEMS -->
+
+                    <div class="cart-list">
+
+                    </div>
+
+
+                    <!-- TOTAL -->
+
+                    <div class="total-container">
+
+                        <h4>Total:</h4>
+
+                        <h4 class="cart-total">
+                            Rs.0.00
+                        </h4>
+
+                    </div>
+
+
+                    <!-- CART BUTTONS -->
+
+                    <div class="btn-container flex gap-2">
+
+                        <a href="#" class="btn close-btn">
+
+                            Close
+
+                        </a>
+
+
+                        <a href="#" class="btn checkout-btn">
+
+                            Check out
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SERVICES -->
+        <section id="service">
+
+            <div class="wrapper p-top">
+
+                <div class="text-center">
+
+                    <h5>Our Services</h5>
+
+                    <h2>How does it work?</h2>
+
+                </div>
+
+
+                <div class="flex text-center mt-4 gap-4">
+
+                    <div class="service-card">
+
+                        <div class="images-container">
+
+                            <img src="../public/images/easy-to-order.png" alt="Easy to Order">
+
+                        </div>
+
+                        <h3>Easy to Order</h3>
+
+                        <p>
+                            You only need a few steps
+                            in ordering food.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="images-container">
+
+                            <img src="../public/images/fast-delivery.png" alt="Fast Delivery">
+
+                        </div>
+
+                        <h3>Fast Delivery</h3>
+
+                        <p>
+                            Delivery that is always on time
+                            even faster.
+                        </p>
+
+                    </div>
+
+
+                    <div class="service-card">
+
+                        <div class="images-container">
+
+                            <img src="../public/images/best-quality.png" alt="Best Quality">
+
+                        </div>
+
+                        <h3>Best Quality</h3>
+
+                        <p>
+                            Not only fast,
+                            our quality is also number one.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="admin-footer">
+
+        <div class="admin-footer-logo"> Quick Bites </div>
+
+        <p>
+            Customer Panel © 2026 Quick Bites
+        </p>
+
+    </footer>
+
+
+    <!-- SWIPER -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+
+</body>
+
+</html>

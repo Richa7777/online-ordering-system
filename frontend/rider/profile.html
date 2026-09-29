@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Rider Profile - Quick Bites</title>
+
+
+    <!-- FONT AWESOME -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer">
+
+
+    <!-- PUBLIC CSS -->
+
+    <link
+        rel="stylesheet"
+        href="../public/style.css">
+
+
+    <!-- RIDER CSS -->
+
+    <link
+        rel="stylesheet"
+        href="rider.css">
+
+
+    <!-- PROFILE CSS -->
+
+    <link
+        rel="stylesheet"
+        href="profile.css">
+
+
+    <!-- RIDER JAVASCRIPT -->
+
+    <script
+        defer
+        src="rider.js">
+    </script>
+
+
+    <!-- PROFILE JAVASCRIPT -->
+
+    <script
+        defer
+        src="profile.js">
+    </script>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+
+            <!-- LOGO -->
+
+            <a
+                href="index.html"
+                class="logo">
+
+                Quick Bites
+
+            </a>
+
+
+
+            <!-- DESKTOP NAVIGATION -->
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+
+                    <a href="index.html">
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="deliveries.html">
+
+                        Deliveries
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="earnings.html">
+
+                        Earnings
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="profile.html"
+                        class="active">
+
+                        Profile
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+
+
+            <!-- DESKTOP ACTION -->
+
+            <div class="desktop-action flex gap-2">
+
+
+                <!-- PROFILE ICON -->
+
+                <a
+                    href="profile.html"
+                    class="rider-profile">
+
+                    <i class="fa-regular fa-circle-user"></i>
+
+                </a>
+
+
+
+                <!-- LOGOUT -->
+
+                <a
+                    href="#"
+                    class="logout-link"
+                    id="logout-btn">
+
+                    Logout
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </a>
+
+
+
+                <!-- HAMBURGER -->
+
+                <a
+                    href="#"
+                    class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+
+            <!-- MOBILE MENU -->
+
+            <ul class="mobile-menu">
+
+
+                <li>
+
+                    <a href="index.html">
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="deliveries.html">
+
+                        Deliveries
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="earnings.html">
+
+                        Earnings
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="profile.html"
+                        class="active">
+
+                        My Profile
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a
+                        href="#"
+                        id="mobile-logout-btn">
+
+                        Logout
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+        <section class="rider-profile-section">
+
+
+            <div class="rider-profile-container">
+
+
+                <!-- PAGE HEADING -->
+
+                <div class="profile-heading">
+
+                    <p class="section-subtitle">
+
+                        RIDER PANEL
+
+                    </p>
+
+
+                    <h1>
+
+                        My <span>Profile</span>
+
+                    </h1>
+
+
+                    <p>
+
+                        View your rider information
+                        and account details.
+
+                    </p>
+
+                </div>
+
+
+
+                <!-- ================================================== -->
+                <!-- PROFILE VIEW -->
+                <!-- ================================================== -->
+
+                <div
+                    class="rider-profile-card"
+                    id="profile-view">
+
+
+                    <!-- PROFILE IMAGE -->
+
+                    <div class="rider-profile-image">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+
+                    <!-- NAME -->
+
+                    <h2 id="rider-name">
+
+                        Rider Name
+
+                    </h2>
+
+
+                    <p class="rider-role">
+
+                        Delivery Rider
+
+                    </p>
+
+
+
+                    <!-- ================= INFORMATION ================= -->
+
+                    <div class="rider-details">
+
+
+                        <!-- RIDER ID -->
+
+                        <div class="rider-info">
+
+                            <div class="info-icon">
+
+                                <i class="fa-solid fa-id-card"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <small>
+
+                                    Rider ID
+
+                                </small>
+
+
+                                <p id="rider-id">
+
+                                    RD1001
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- EMAIL -->
+
+                        <div class="rider-info">
+
+                            <div class="info-icon">
+
+                                <i class="fa-solid fa-envelope"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <small>
+
+                                    Email
+
+                                </small>
+
+
+                                <p id="rider-email">
+
+                                    rider@quickbites.com
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- PHONE -->
+
+                        <div class="rider-info">
+
+                            <div class="info-icon">
+
+                                <i class="fa-solid fa-phone"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <small>
+
+                                    Phone Number
+
+                                </small>
+
+
+                                <p id="rider-phone">
+
+                                    9800000000
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- VEHICLE -->
+
+                        <div class="rider-info">
+
+                            <div class="info-icon">
+
+                                <i class="fa-solid fa-motorcycle"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <small>
+
+                                    Vehicle
+
+                                </small>
+
+
+                                <p id="rider-vehicle">
+
+                                    Motorcycle
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- JOIN DATE -->
+
+                        <div class="rider-info">
+
+                            <div class="info-icon">
+
+                                <i class="fa-solid fa-calendar"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <small>
+
+                                    Joined
+
+                                </small>
+
+
+                                <p id="rider-joined">
+
+                                    10 January 2026
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ================= BUTTONS ================= -->
+
+                    <div class="profile-buttons">
+
+
+                        <a
+                            href="index.html"
+                            class="secondary-btn">
+
+                            <i class="fa-solid fa-arrow-left"></i>
+
+                            Dashboard
+
+                        </a>
+
+
+                        <a
+                            href="#"
+                            class="btn"
+                            id="edit-profile-btn">
+
+                            <i class="fa-solid fa-pen-to-square"></i>
+
+                            Edit Profile
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ================================================== -->
+                <!-- EDIT PROFILE -->
+                <!-- ================================================== -->
+
+                <div
+                    class="rider-profile-card edit-profile-card"
+                    id="profile-edit"
+                    style="display: none;">
+
+
+                    <!-- EDIT PROFILE HEADER -->
+
+                    <div class="edit-profile-header">
+
+                        <div class="rider-profile-image">
+
+                            <i class="fa-solid fa-user-pen"></i>
+
+                        </div>
+
+
+                        <h2>
+
+                            Edit Profile
+
+                        </h2>
+
+
+                        <p>
+
+                            Update your rider account information.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- ================= EDIT FORM ================= -->
+
+                    <form id="edit-profile-form">
+
+
+                        <!-- FULL NAME -->
+
+                        <div class="form-group">
+
+                            <label for="edit-name">
+
+                                Full Name
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-user"></i>
+
+
+                                <input
+                                    type="text"
+                                    id="edit-name"
+                                    name="name"
+                                    placeholder="Enter your full name"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- EMAIL -->
+
+                        <div class="form-group">
+
+                            <label for="edit-email">
+
+                                Email Address
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-envelope"></i>
+
+
+                                <input
+                                    type="email"
+                                    id="edit-email"
+                                    name="email"
+                                    placeholder="Enter your email address"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- PHONE -->
+
+                        <div class="form-group">
+
+                            <label for="edit-phone">
+
+                                Phone Number
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-phone"></i>
+
+
+                                <input
+                                    type="tel"
+                                    id="edit-phone"
+                                    name="phone"
+                                    placeholder="Enter your phone number"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- VEHICLE -->
+
+                        <div class="form-group">
+
+                            <label for="edit-vehicle">
+
+                                Vehicle Type
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-motorcycle"></i>
+
+
+                                <select
+                                    id="edit-vehicle"
+                                    name="vehicle"
+                                    required>
+
+                                    <option value="Motorcycle">
+
+                                        Motorcycle
+
+                                    </option>
+
+                                    <option value="Scooter">
+
+                                        Scooter
+
+                                    </option>
+
+                                    <option value="Bicycle">
+
+                                        Bicycle
+
+                                    </option>
+
+                                    <option value="Car">
+
+                                        Car
+
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- RIDER ID -->
+
+                        <div class="form-group">
+
+                            <label for="edit-rider-id">
+
+                                Rider ID
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-id-card"></i>
+
+
+                                <input
+                                    type="text"
+                                    id="edit-rider-id"
+                                    name="rider-id"
+                                    value="RD1001"
+                                    readonly>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- JOIN DATE -->
+
+                        <div class="form-group">
+
+                            <label for="edit-joined">
+
+                                Joined Date
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-calendar"></i>
+
+
+                                <input
+                                    type="text"
+                                    id="edit-joined"
+                                    name="joined"
+                                    value="10 January 2026"
+                                    readonly>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label for="edit-password">
+
+                                New Password
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-lock"></i>
+
+
+                                <input
+                                    type="password"
+                                    id="edit-password"
+                                    name="password"
+                                    placeholder="Enter new password">
+
+                            </div>
+
+
+                            <small class="form-help">
+
+                                Leave blank if you do not want to change
+                                your password.
+
+                            </small>
+
+                        </div>
+
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="form-group">
+
+                            <label for="edit-confirm-password">
+
+                                Confirm New Password
+
+                            </label>
+
+
+                            <div class="input-wrapper">
+
+                                <i class="fa-solid fa-lock"></i>
+
+
+                                <input
+                                    type="password"
+                                    id="edit-confirm-password"
+                                    name="confirm-password"
+                                    placeholder="Confirm new password">
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ERROR / SUCCESS MESSAGE -->
+
+                        <p
+                            id="profile-message"
+                            class="profile-message">
+                        </p>
+
+
+
+                        <!-- ================= FORM BUTTONS ================= -->
+
+                        <div class="profile-buttons edit-buttons">
+
+
+                            <button
+                                type="button"
+                                class="secondary-btn"
+                                id="cancel-edit-btn">
+
+                                <i class="fa-solid fa-xmark"></i>
+
+                                Cancel
+
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                class="btn"
+                                id="save-profile-btn">
+
+                                <i class="fa-solid fa-check"></i>
+
+                                Save Changes
+
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="admin-footer">
+
+        <div class="admin-footer-logo">
+
+            Quick Bites
+
+        </div>
+
+
+        <p>
+
+            Rider Panel © 2026 Quick Bites
+
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>

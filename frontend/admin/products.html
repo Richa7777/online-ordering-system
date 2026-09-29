@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quick Bites - Products</title>
+
+
+    <!-- ================= FONT AWESOME ================= -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer">
+
+
+    <!-- ================= MAIN QUICK BITES CSS ================= -->
+
+    <link rel="stylesheet" href="../public/style.css">
+
+
+    <!-- ================= PRODUCTS CSS ================= -->
+
+    <link rel="stylesheet" href="products.css">
+
+
+    <!-- ================= PRODUCTS JAVASCRIPT ================= -->
+
+    <script defer src="products.js"></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header>
+
+        <nav class="navbar flex between wrapper">
+
+
+            <!-- ================= LOGO ================= -->
+
+            <a href="index.html" class="logo">
+                Quick Bites
+            </a>
+
+
+
+            <!-- ================= DESKTOP NAVIGATION ================= -->
+
+            <ul class="navlist flex gap-3">
+
+                <li>
+                    <a href="index.html">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li>
+                    <a href="orders.html">
+                        Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="products.html" class="active">
+                        Products
+                    </a>
+                </li>
+
+                <li>
+                    <a href="customers.html">
+                        Customers
+                    </a>
+                </li>
+
+                <li>
+                    <a href="riders.html">
+                        Riders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="categories.html">
+                        Categories
+                    </a>
+                </li>
+
+            </ul>
+
+
+
+            <!-- ================= RIGHT SIDE ================= -->
+
+            <div class="desktop-action flex gap-2">
+
+
+                <!-- Profile -->
+
+                <a href="#" class="admin-profile">
+
+                    <i class="fa-regular fa-circle-user"></i>
+
+                </a>
+
+
+                <!-- Logout -->
+
+                <a href="#" class="admin-logout">
+
+                    <span>
+                        Logout
+                    </span>
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                </a>
+
+
+                <!-- Hamburger -->
+
+                <a href="#" class="hamburger">
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </a>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MOBILE MENU
+                 ================================================= -->
+
+            <ul class="mobile-menu">
+
+
+                <li>
+
+                    <a href="index.html">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        Dashboard
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-solid fa-bag-shopping"></i>
+
+                        Orders
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="products.html">
+
+                        <i class="fa-solid fa-utensils"></i>
+
+                        Products
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        Customers
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-solid fa-motorcycle"></i>
+
+                        Riders
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-solid fa-layer-group"></i>
+
+                        Categories
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="#">
+
+                        <i class="fa-regular fa-circle-user"></i>
+
+                        Profile
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a href="#" class="mobile-logout">
+
+                        Logout
+
+                        <i class="fa-solid fa-right-from-bracket"></i>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main>
+
+
+        <section class="products-page wrapper p-top">
+
+
+            <!-- =================================================
+                 PAGE HEADING
+                 ================================================= -->
+
+            <div class="text-center">
+
+
+                <h5>
+                    Admin Panel
+                </h5>
+
+
+                <h2>
+                    Products
+                </h2>
+
+
+                <p class="products-description">
+
+                    Manage the food items available on Quick Bites.
+
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PRODUCT CONTROLS
+                 ================================================= -->
+
+            <section class="product-controls">
+
+
+                <!-- ================= SEARCH ================= -->
+
+                <div class="product-search">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        id="product-search"
+                        placeholder="Search products..."
+                    >
+
+                </div>
+
+
+
+                <!-- ================= ADD PRODUCT ================= -->
+
+                <button
+                    type="button"
+                    class="btn add-product-btn"
+                    id="open-add-product"
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add New Product
+
+                </button>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CATEGORY FILTER
+                 ================================================= -->
+
+            <div class="product-categories" id="product-categories">
+
+
+                <button
+                    type="button"
+                    class="product-category-btn active"
+                    data-category="All"
+                >
+                    All
+                </button>
+
+
+                <button
+                    type="button"
+                    class="product-category-btn"
+                    data-category="Burgers"
+                >
+                    Burgers
+                </button>
+
+
+                <button
+                    type="button"
+                    class="product-category-btn"
+                    data-category="Pizza"
+                >
+                    Pizza
+                </button>
+
+
+                <button
+                    type="button"
+                    class="product-category-btn"
+                    data-category="Chicken"
+                >
+                    Chicken
+                </button>
+
+
+                <button
+                    type="button"
+                    class="product-category-btn"
+                    data-category="Sandwiches"
+                >
+                    Sandwiches
+                </button>
+
+
+                <button
+                    type="button"
+                    class="product-category-btn"
+                    data-category="Pasta"
+                >
+                    Pasta
+                </button>
+
+
+                <button
+                    type="button"
+                    class="product-category-btn"
+                    data-category="Snacks"
+                >
+                    Snacks
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PRODUCT COUNT
+                 ================================================= -->
+
+            <div class="product-count-row">
+
+                <p id="product-count">
+                    0 products
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PRODUCTS GRID
+                 ================================================= -->
+
+            <section
+                class="admin-products-grid"
+                id="admin-products-grid"
+            >
+
+                <!-- Products are created by JavaScript -->
+
+            </section>
+
+
+
+            <!-- =================================================
+                 NO PRODUCTS MESSAGE
+                 ================================================= -->
+
+            <div
+                class="no-products"
+                id="no-products"
+            >
+
+                <i class="fa-solid fa-utensils"></i>
+
+                <h3>
+                    No Products Found
+                </h3>
+
+                <p>
+                    Try another search or add a new product.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         ADD / EDIT PRODUCT MODAL
+         ===================================================== -->
+
+    <div
+        class="product-modal"
+        id="product-modal"
+    >
+
+
+        <div class="product-modal-content">
+
+
+            <!-- ================= MODAL HEADER ================= -->
+
+            <div class="modal-header">
+
+
+                <div>
+
+                    <h3 id="modal-title">
+                        Add New Product
+                    </h3>
+
+                    <p>
+                        Enter the product details below.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="close-modal"
+                    id="close-product-modal"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- ================= FORM ================= -->
+
+            <form id="product-form">
+
+
+                <!-- Product ID -->
+
+                <input
+                    type="hidden"
+                    id="product-id"
+                >
+
+
+
+                <!-- ================= PRODUCT NAME ================= -->
+
+                <div class="form-group">
+
+                    <label for="product-name">
+                        Product Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="product-name"
+                        placeholder="Enter product name"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- ================= PRICE ================= -->
+
+                <div class="form-group">
+
+                    <label for="product-price">
+                        Price
+                    </label>
+
+                    <input
+                        type="number"
+                        id="product-price"
+                        placeholder="Enter price"
+                        min="0"
+                        step="1"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- ================= CATEGORY ================= -->
+
+                <div class="form-group">
+
+                    <label for="product-category">
+                        Category
+                    </label>
+
+                    <select
+                        id="product-category"
+                        required
+                    >
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="Burgers">
+                            Burgers
+                        </option>
+
+                        <option value="Pizza">
+                            Pizza
+                        </option>
+
+                        <option value="Chicken">
+                            Chicken
+                        </option>
+
+                        <option value="Sandwiches">
+                            Sandwiches
+                        </option>
+
+                        <option value="Pasta">
+                            Pasta
+                        </option>
+
+                        <option value="Snacks">
+                            Snacks
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- ================= IMAGE ================= -->
+
+                <div class="form-group">
+
+                    <label for="product-image">
+                        Image Path
+                    </label>
+
+                    <input
+                        type="text"
+                        id="product-image"
+                        placeholder="images/burger.png"
+                        required
+                    >
+
+                    <small>
+                        Example: images/burger.png
+                    </small>
+
+                </div>
+
+
+
+                <!-- ================= POPULAR ================= -->
+
+                <div class="popular-checkbox">
+
+                    <input
+                        type="checkbox"
+                        id="product-popular"
+                    >
+
+                    <label for="product-popular">
+                        Show this product in Most Popular
+                    </label>
+
+                </div>
+
+
+
+                <!-- ================= FORM BUTTONS ================= -->
+
+                <div class="form-buttons">
+
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        id="cancel-product"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn save-product-btn"
+                    >
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Save Product
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="admin-footer">
+
+
+        <div class="wrapper text-center">
+
+
+            <a href="index.html" class="logo">
+
+                Quick Bites
+
+            </a>
+
+
+            <p>
+
+                Admin Panel © 2026 Quick Bites
+
+            </p>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>
