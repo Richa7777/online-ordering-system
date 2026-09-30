@@ -1,553 +1,473 @@
-// /* =========================================
-//    RIDER PROFILE
-// ========================================= */
-
-
-// /* =========================================
-//    RIDER DATA
-// ========================================= */
-
-// const rider = {
-
-//     id: "RD1001",
-
-//     name: "Rider Name",
-
-//     email: "rider@quickbites.com",
-
-//     phone: "9800000000",
-
-//     vehicle: "Motorcycle",
-
-//     joined: "10 January 2026"
-
-// };
-
-
-
-// /* =========================================
-//    DISPLAY RIDER INFORMATION
-// ========================================= */
-
-// document.getElementById("rider-name").textContent =
-//     rider.name;
-
-// document.getElementById("rider-id").textContent =
-//     rider.id;
-
-// document.getElementById("rider-email").textContent =
-//     rider.email;
-
-// document.getElementById("rider-phone").textContent =
-//     rider.phone;
-
-// document.getElementById("rider-vehicle").textContent =
-//     rider.vehicle;
-
-// document.getElementById("rider-joined").textContent =
-//     rider.joined;
-
-
-
-// /* =========================================
-//    HAMBURGER MENU
-// ========================================= */
-
-// const profileHamburger =
-//     document.querySelector(".hamburger");
-
-// const profileMobileMenu =
-//     document.querySelector(".mobile-menu");
-
-
-// if (profileHamburger && profileMobileMenu) {
-
-//     profileHamburger.addEventListener(
-//         "click",
-//         function (event) {
-
-//             event.preventDefault();
-
-//             profileMobileMenu.classList.toggle(
-//                 "mobile-menu-active"
-//             );
-
-//             const icon =
-//                 profileHamburger.querySelector("i");
-
-//             icon.classList.toggle("fa-bars");
-//             icon.classList.toggle("fa-xmark");
-
-//         }
-//     );
-
-
-//     const mobileLinks =
-//         profileMobileMenu.querySelectorAll("a");
-
-
-//     mobileLinks.forEach(link => {
-
-//         link.addEventListener(
-//             "click",
-//             function () {
-
-//                 profileMobileMenu.classList.remove(
-//                     "mobile-menu-active"
-//                 );
-
-//             }
-//         );
-
-//     });
-
-// }
-
-
-// /* =========================================
-//    LOGOUT
-// ========================================= */
-
-// function logout() {
-
-//     window.location.href =
-//         "../public/index.html";
-
-// }
-
-
-// const logoutButton =
-//     document.getElementById("logout-btn");
-
-// const mobileLogoutButton =
-//     document.getElementById("mobile-logout-btn");
-
-// const footerLogout =
-//     document.getElementById("footer-logout");
-
-
-// if (logoutButton) {
-
-//     logoutButton.addEventListener(
-//         "click",
-//         function (event) {
-
-//             event.preventDefault();
-
-//             logout();
-
-//         }
-//     );
-
-// }
-
-
-// if (mobileLogoutButton) {
-
-//     mobileLogoutButton.addEventListener(
-//         "click",
-//         function (event) {
-
-//             event.preventDefault();
-
-//             logout();
-
-//         }
-//     );
-
-// }
-
-
-// if (footerLogout) {
-
-//     footerLogout.addEventListener(
-//         "click",
-//         function (event) {
-
-//             event.preventDefault();
-
-//             logout();
-
-//         }
-//     );
-
-// }
-
-
-
-// /* =========================================
-//    EDIT PROFILE
-// ========================================= */
-// /* =========================================
-//    EDIT PROFILE
-// ========================================= */
-
-// document.addEventListener("DOMContentLoaded", function () {
-
-//     const editProfileButton = document.getElementById("edit-profile-btn");
-//     const cancelEditButton = document.getElementById("cancel-edit-btn");
-
-//     const profileView = document.getElementById("profile-view");
-//     const profileEdit = document.getElementById("profile-edit");
-
-
-//     // EDIT PROFILE BUTTON
-//     editProfileButton.onclick = function (event) {
-
-//         event.preventDefault();
-
-//         console.log("Edit button clicked");
-
-//         profileView.style.display = "none";
-//         profileEdit.style.display = "block";
-
-//     };
-
-
-//     // CANCEL BUTTON
-//     cancelEditButton.onclick = function () {
-
-//         profileEdit.style.display = "none";
-//         profileView.style.display = "block";
-
-//     };
-
-// });
-
 /* =========================================
    RIDER PROFILE
+   Backend connected
 ========================================= */
+
+let currentRider = null;
+let currentAddress = null;
 
 
 /* =========================================
-   RIDER DATA
+   LOAD PROFILE
 ========================================= */
 
-const rider = {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    id: "RD1001",
+        loadRiderProfile();
 
-    name: "Rider Name",
+        setupProfileActions();
 
-    email: "rider@quickbites.com",
-
-    phone: "9800000000",
-
-    vehicle: "Motorcycle",
-
-    joined: "10 January 2026"
-
-};
+    }
+);
 
 
 /* =========================================
-   DISPLAY RIDER INFORMATION
+   LOAD RIDER PROFILE
 ========================================= */
 
-document.getElementById("rider-name").textContent =
-    rider.name;
+async function loadRiderProfile() {
 
-document.getElementById("rider-id").textContent =
-    rider.id;
+    try {
 
-document.getElementById("rider-email").textContent =
-    rider.email;
+        /* -----------------------------------------
+           LOAD CURRENT USER
+        ----------------------------------------- */
 
-document.getElementById("rider-phone").textContent =
-    rider.phone;
-
-document.getElementById("rider-vehicle").textContent =
-    rider.vehicle;
-
-document.getElementById("rider-joined").textContent =
-    rider.joined;
-
-
-/* =========================================
-   HAMBURGER MENU
-========================================= */
-
-const profileHamburger =
-    document.querySelector(".hamburger");
-
-const profileMobileMenu =
-    document.querySelector(".mobile-menu");
-
-
-if (profileHamburger && profileMobileMenu) {
-
-    profileHamburger.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            profileMobileMenu.classList.toggle(
-                "mobile-menu-active"
+        const userResponse =
+            await fetch(
+                `${API_BASE_URL}/api/auth/me`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
             );
 
-            const profileMenuIcon =
-                profileHamburger.querySelector("i");
 
-            if (profileMenuIcon) {
+        if (!userResponse.ok) {
 
-                profileMenuIcon.classList.toggle(
-                    "fa-bars"
+            throw new Error(
+                `Failed to load rider: ${userResponse.status}`
+            );
+
+        }
+
+
+        currentRider =
+            await userResponse.json();
+
+
+        /* -----------------------------------------
+           LOAD RIDER ADDRESS / PHONE
+        ----------------------------------------- */
+
+        try {
+
+            const addressResponse =
+                await fetch(
+                    `${API_BASE_URL}/api/addresses/user/${currentRider.id}`,
+                    {
+                        method: "GET",
+                        credentials: "include"
+                    }
                 );
 
-                profileMenuIcon.classList.toggle(
-                    "fa-xmark"
-                );
+
+            if (addressResponse.ok) {
+
+                const addresses =
+                    await addressResponse.json();
+
+
+                /*
+                 * Use the first address for the
+                 * rider's phone number.
+                 */
+
+                if (
+                    Array.isArray(addresses) &&
+                    addresses.length > 0
+                ) {
+
+                    currentAddress =
+                        addresses[0];
+
+                }
 
             }
 
+        } catch (addressError) {
+
+            console.warn(
+                "Could not load rider address:",
+                addressError
+            );
+
         }
-    );
 
 
-    const profileMobileLinks =
-        profileMobileMenu.querySelectorAll("a");
+        displayRiderProfile();
+
+    } catch (error) {
+
+        console.error(
+            "Error loading rider profile:",
+            error
+        );
 
 
-    profileMobileLinks.forEach(link => {
+        showProfileMessage(
+            "Could not load profile.",
+            "error"
+        );
 
-        link.addEventListener(
+    }
+
+}
+
+
+/* =========================================
+   DISPLAY RIDER PROFILE
+========================================= */
+
+function displayRiderProfile() {
+
+    if (!currentRider) {
+        return;
+    }
+
+
+    const riderName =
+        document.getElementById(
+            "rider-name"
+        );
+
+    const riderId =
+        document.getElementById(
+            "rider-id"
+        );
+
+    const riderEmail =
+        document.getElementById(
+            "rider-email"
+        );
+
+    const riderPhone =
+        document.getElementById(
+            "rider-phone"
+        );
+
+
+    if (riderName) {
+
+        riderName.textContent =
+            currentRider.name || "Rider";
+
+    }
+
+
+    if (riderId) {
+
+        riderId.textContent =
+            currentRider.id
+                ? `RD${String(currentRider.id).padStart(4, "0")}`
+                : "N/A";
+
+    }
+
+
+    if (riderEmail) {
+
+        riderEmail.textContent =
+            currentRider.email || "N/A";
+
+    }
+
+
+    if (riderPhone) {
+
+        riderPhone.textContent =
+            currentAddress?.phone || "Not provided";
+
+    }
+
+
+    /*
+     * Vehicle and joined date are not stored
+     * in the current database schema.
+     *
+     * Keep the existing HTML values for now.
+     */
+
+}
+
+
+/* =========================================
+   SETUP PROFILE ACTIONS
+========================================= */
+
+function setupProfileActions() {
+
+    const editProfileButton =
+        document.getElementById(
+            "edit-profile-btn"
+        );
+
+    const cancelEditButton =
+        document.getElementById(
+            "cancel-edit-btn"
+        );
+
+    const editProfileForm =
+        document.getElementById(
+            "edit-profile-form"
+        );
+
+
+    /* -----------------------------------------
+       OPEN EDIT PROFILE
+    ----------------------------------------- */
+
+    if (editProfileButton) {
+
+        editProfileButton.addEventListener(
             "click",
-            function () {
+            function (event) {
 
-                profileMobileMenu.classList.remove(
-                    "mobile-menu-active"
-                );
+                event.preventDefault();
+
+                openEditProfile();
 
             }
         );
 
-    });
+    }
+
+
+    /* -----------------------------------------
+       CANCEL EDIT
+    ----------------------------------------- */
+
+    if (cancelEditButton) {
+
+        cancelEditButton.addEventListener(
+            "click",
+            function () {
+
+                closeEditProfile();
+
+            }
+        );
+
+    }
+
+
+    /* -----------------------------------------
+       SAVE PROFILE
+    ----------------------------------------- */
+
+    if (editProfileForm) {
+
+        editProfileForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+                await saveProfile();
+
+            }
+        );
+
+    }
 
 }
-
-
-/* =========================================
-   LOGOUT
-========================================= */
-
-function logout() {
-
-    window.location.href =
-        "../public/index.html";
-
-}
-
-
-const profileLogoutButton =
-    document.getElementById("logout-btn");
-
-const profileMobileLogoutButton =
-    document.getElementById("mobile-logout-btn");
-
-const profileFooterLogout =
-    document.getElementById("footer-logout");
-
-
-if (profileLogoutButton) {
-
-    profileLogoutButton.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            logout();
-
-        }
-    );
-
-}
-
-
-if (profileMobileLogoutButton) {
-
-    profileMobileLogoutButton.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            logout();
-
-        }
-    );
-
-}
-
-
-if (profileFooterLogout) {
-
-    profileFooterLogout.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            logout();
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   EDIT PROFILE
-========================================= */
-
-const editProfileButton =
-    document.getElementById("edit-profile-btn");
-
-const cancelEditButton =
-    document.getElementById("cancel-edit-btn");
-
-const profileView =
-    document.getElementById("profile-view");
-
-const profileEdit =
-    document.getElementById("profile-edit");
-
-const editProfileForm =
-    document.getElementById("edit-profile-form");
-
-const profileMessage =
-    document.getElementById("profile-message");
 
 
 /* =========================================
    OPEN EDIT PROFILE
 ========================================= */
 
-if (editProfileButton) {
+function openEditProfile() {
 
-    editProfileButton.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
+    if (!currentRider) {
+        return;
+    }
 
 
-            /* Hide profile view */
+    const profileView =
+        document.getElementById(
+            "profile-view"
+        );
 
-            if (profileView) {
-
-                profileView.style.display =
-                    "none";
-
-            }
-
-
-            /* Show edit form */
-
-            if (profileEdit) {
-
-                profileEdit.style.display =
-                    "block";
-
-            }
+    const profileEdit =
+        document.getElementById(
+            "profile-edit"
+        );
 
 
-            /* Fill form with current data */
+    if (profileView) {
 
-            const editName =
-                document.getElementById("edit-name");
+        profileView.style.display =
+            "none";
 
-            const editEmail =
-                document.getElementById("edit-email");
-
-            const editPhone =
-                document.getElementById("edit-phone");
-
-            const editVehicle =
-                document.getElementById("edit-vehicle");
+    }
 
 
-            if (editName) {
+    if (profileEdit) {
 
-                editName.value =
-                    rider.name;
+        profileEdit.style.display =
+            "block";
 
-            }
-
-
-            if (editEmail) {
-
-                editEmail.value =
-                    rider.email;
-
-            }
+    }
 
 
-            if (editPhone) {
+    const editName =
+        document.getElementById(
+            "edit-name"
+        );
 
-                editPhone.value =
-                    rider.phone;
+    const editEmail =
+        document.getElementById(
+            "edit-email"
+        );
 
-            }
+    const editPhone =
+        document.getElementById(
+            "edit-phone"
+        );
+
+    const editVehicle =
+        document.getElementById(
+            "edit-vehicle"
+        );
+
+    const editRiderId =
+        document.getElementById(
+            "edit-rider-id"
+        );
 
 
-            if (editVehicle) {
+    if (editName) {
 
-                editVehicle.value =
-                    rider.vehicle;
+        editName.value =
+            currentRider.name || "";
 
-            }
+    }
 
 
-            /* Clear previous message */
+    if (editEmail) {
 
-            if (profileMessage) {
+        editEmail.value =
+            currentRider.email || "";
 
-                profileMessage.textContent = "";
+    }
 
-                profileMessage.className =
-                    "profile-message";
 
-            }
+    if (editPhone) {
 
-        }
-    );
+        editPhone.value =
+            currentAddress?.phone || "";
+
+    }
+
+
+    if (editVehicle) {
+
+        /*
+         * Vehicle is not currently stored
+         * in the database.
+         *
+         * Keep whatever is already selected.
+         */
+
+        editVehicle.value =
+            editVehicle.value || "Motorcycle";
+
+    }
+
+
+    if (editRiderId) {
+
+        editRiderId.value =
+            currentRider.id
+                ? `RD${String(currentRider.id).padStart(4, "0")}`
+                : "";
+
+    }
+
+
+    const password =
+        document.getElementById(
+            "edit-password"
+        );
+
+    const confirmPassword =
+        document.getElementById(
+            "edit-confirm-password"
+        );
+
+
+    if (password) {
+        password.value = "";
+    }
+
+
+    if (confirmPassword) {
+        confirmPassword.value = "";
+    }
+
+
+    const message =
+        document.getElementById(
+            "profile-message"
+        );
+
+
+    if (message) {
+
+        message.textContent = "";
+
+        message.className =
+            "profile-message";
+
+    }
 
 }
 
 
 /* =========================================
-   CANCEL EDIT
+   CLOSE EDIT PROFILE
 ========================================= */
 
-if (cancelEditButton) {
+function closeEditProfile() {
 
-    cancelEditButton.addEventListener(
-        "click",
-        function () {
+    const profileView =
+        document.getElementById(
+            "profile-view"
+        );
 
-            /* Hide edit form */
-
-            if (profileEdit) {
-
-                profileEdit.style.display =
-                    "none";
-
-            }
+    const profileEdit =
+        document.getElementById(
+            "profile-edit"
+        );
 
 
-            /* Show profile view */
+    if (profileEdit) {
 
-            if (profileView) {
+        profileEdit.style.display =
+            "none";
 
-                profileView.style.display =
-                    "block";
+    }
 
-            }
 
-        }
-    );
+    if (profileView) {
+
+        profileView.style.display =
+            "block";
+
+    }
 
 }
 
@@ -556,167 +476,303 @@ if (cancelEditButton) {
    SAVE PROFILE
 ========================================= */
 
-if (editProfileForm) {
+async function saveProfile() {
 
-    editProfileForm.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
+    if (!currentRider) {
+        return;
+    }
 
 
-            /* Get form values */
-
-            const newName =
-                document.getElementById("edit-name").value.trim();
-
-            const newEmail =
-                document.getElementById("edit-email").value.trim();
-
-            const newPhone =
-                document.getElementById("edit-phone").value.trim();
-
-            const newVehicle =
-                document.getElementById("edit-vehicle").value;
+    const newName =
+        document.getElementById(
+            "edit-name"
+        ).value.trim();
 
 
-            /* Get passwords */
-
-            const newPassword =
-                document.getElementById("edit-password").value;
-
-            const confirmPassword =
-                document.getElementById(
-                    "edit-confirm-password"
-                ).value;
+    const newEmail =
+        document.getElementById(
+            "edit-email"
+        ).value.trim();
 
 
-            /* =====================================
-               VALIDATION
-            ===================================== */
-
-            if (
-                newName === "" ||
-                newEmail === "" ||
-                newPhone === "" ||
-                newVehicle === ""
-            ) {
-
-                showProfileMessage(
-                    "Please fill in all required fields.",
-                    "error"
-                );
-
-                return;
-
-            }
+    const newPhone =
+        document.getElementById(
+            "edit-phone"
+        ).value.trim();
 
 
-            /* Check password */
-
-            if (
-                newPassword !== "" &&
-                newPassword !== confirmPassword
-            ) {
-
-                showProfileMessage(
-                    "Passwords do not match.",
-                    "error"
-                );
-
-                return;
-
-            }
+    const newPassword =
+        document.getElementById(
+            "edit-password"
+        ).value;
 
 
-            /* =====================================
-               UPDATE RIDER DATA
-            ===================================== */
-
-            rider.name =
-                newName;
-
-            rider.email =
-                newEmail;
-
-            rider.phone =
-                newPhone;
-
-            rider.vehicle =
-                newVehicle;
+    const confirmPassword =
+        document.getElementById(
+            "edit-confirm-password"
+        ).value;
 
 
-            /* =====================================
-               UPDATE PROFILE VIEW
-            ===================================== */
+    /* -----------------------------------------
+       VALIDATION
+    ----------------------------------------- */
 
-            document.getElementById(
-                "rider-name"
-            ).textContent =
-                rider.name;
+    if (
+        newName === "" ||
+        newEmail === "" ||
+        newPhone === ""
+    ) {
 
+        showProfileMessage(
+            "Please fill in all required fields.",
+            "error"
+        );
 
-            document.getElementById(
-                "rider-email"
-            ).textContent =
-                rider.email;
+        return;
 
-
-            document.getElementById(
-                "rider-phone"
-            ).textContent =
-                rider.phone;
+    }
 
 
-            document.getElementById(
-                "rider-vehicle"
-            ).textContent =
-                rider.vehicle;
+    if (
+        newPassword !== "" &&
+        newPassword !== confirmPassword
+    ) {
+
+        showProfileMessage(
+            "Passwords do not match.",
+            "error"
+        );
+
+        return;
+
+    }
 
 
-            /* =====================================
-               SUCCESS MESSAGE
-            ===================================== */
+    const saveButton =
+        document.getElementById(
+            "save-profile-btn"
+        );
 
-            showProfileMessage(
-                "Profile updated successfully!",
-                "success"
+
+    if (saveButton) {
+
+        saveButton.disabled = true;
+
+        saveButton.textContent =
+            "Saving...";
+
+    }
+
+
+    try {
+
+        /* =====================================
+           UPDATE USER
+        ===================================== */
+
+        const updatedUser =
+            {
+                ...currentRider,
+                name: newName,
+                email: newEmail
+            };
+
+
+        /*
+         * Only send password when the user
+         * actually entered a new one.
+         */
+
+        if (newPassword !== "") {
+
+            updatedUser.password =
+                newPassword;
+
+        }
+
+
+        const userResponse =
+            await fetch(
+                `${API_BASE_URL}/api/auth/me`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body:
+                        JSON.stringify(
+                            updatedUser
+                        )
+                }
             );
 
 
-            /* =====================================
-               RETURN TO PROFILE AFTER SHORT DELAY
-            ===================================== */
+        if (!userResponse.ok) {
 
-            setTimeout(
-                function () {
+            const errorText =
+                await userResponse.text();
 
-                    if (profileEdit) {
 
-                        profileEdit.style.display =
-                            "none";
-
-                    }
-
-                    if (profileView) {
-
-                        profileView.style.display =
-                            "block";
-
-                    }
-
-                },
-                1000
+            throw new Error(
+                `Profile update failed: ${userResponse.status} ${errorText}`
             );
 
         }
-    );
+
+
+        currentRider =
+            await userResponse.json();
+
+
+        /* =====================================
+   UPDATE PHONE
+===================================== */
+
+if (currentAddress) {
+
+    const addressResponse =
+        await fetch(
+            `${API_BASE_URL}/api/addresses/${currentAddress.addressId}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                credentials: "include",
+
+                body:
+                    JSON.stringify({
+                        ...currentAddress,
+                        phone: newPhone
+                    })
+            }
+        );
+
+
+    if (!addressResponse.ok) {
+
+        throw new Error(
+            `Phone update failed: ${addressResponse.status}`
+        );
+
+    }
+
+
+    currentAddress =
+        await addressResponse.json();
+
+} else {
+
+    /*
+     * No address exists yet, so create
+     * the first address for this rider.
+     */
+
+    const addressResponse =
+        await fetch(
+            `${API_BASE_URL}/api/addresses`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                credentials: "include",
+
+                body:
+                    JSON.stringify({
+                        userId: currentRider.id,
+                        addressLine: "Not provided",
+                        city: "",
+                        phone: newPhone
+                    })
+            }
+        );
+
+
+    if (!addressResponse.ok) {
+
+        const errorText =
+            await addressResponse.text();
+
+        throw new Error(
+            `Phone creation failed: ${addressResponse.status} ${errorText}`
+        );
+
+    }
+
+
+    currentAddress =
+        await addressResponse.json();
+
+}
+
+        /* =====================================
+           REFRESH DISPLAY
+        ===================================== */
+
+        displayRiderProfile();
+
+
+        showProfileMessage(
+            "Profile updated successfully!",
+            "success"
+        );
+
+
+        setTimeout(
+            function () {
+
+                closeEditProfile();
+
+            },
+            1000
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error updating rider profile:",
+            error
+        );
+
+
+        showProfileMessage(
+            "Could not update profile.",
+            "error"
+        );
+
+
+    } finally {
+
+        if (saveButton) {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.innerHTML =
+                `<i class="fa-solid fa-check"></i> Save Changes`;
+
+        }
+
+    }
 
 }
 
 
 /* =========================================
-   PROFILE MESSAGE FUNCTION
+   PROFILE MESSAGE
 ========================================= */
 
 function showProfileMessage(
@@ -724,10 +780,14 @@ function showProfileMessage(
     type
 ) {
 
+    const profileMessage =
+        document.getElementById(
+            "profile-message"
+        );
+
+
     if (!profileMessage) {
-
         return;
-
     }
 
 
@@ -736,6 +796,6 @@ function showProfileMessage(
 
 
     profileMessage.className =
-        "profile-message " + type;
+        `profile-message ${type}`;
 
 }

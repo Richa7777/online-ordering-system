@@ -192,11 +192,131 @@
     overflow-x: auto;
 }
 
+/* =========================================
+   DELIVERY TABLE
+========================================= */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
 
 table {
     width: 100%;
-    border-collapse: collapse;
     min-width: 950px;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* -----------------------------------------
+   COLUMN WIDTHS
+----------------------------------------- */
+
+table th:nth-child(1),
+table td:nth-child(1) {
+    width: 11%;
+}
+
+table th:nth-child(2),
+table td:nth-child(2) {
+    width: 12%;
+}
+
+table th:nth-child(3),
+table td:nth-child(3) {
+    width: 16%;
+}
+
+table th:nth-child(4),
+table td:nth-child(4) {
+    width: 27%;
+}
+
+table th:nth-child(5),
+table td:nth-child(5) {
+    width: 13%;
+}
+
+table th:nth-child(6),
+table td:nth-child(6) {
+    width: 11%;
+}
+
+table th:nth-child(7),
+table td:nth-child(7) {
+    width: 10%;
+}
+
+
+/* -----------------------------------------
+   TABLE HEADINGS
+----------------------------------------- */
+
+th {
+    padding: 16px 14px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--lead);
+    white-space: nowrap;
+}
+
+
+/* -----------------------------------------
+   TABLE CELLS
+----------------------------------------- */
+
+td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+    color: #555;
+    vertical-align: middle;
+}
+
+
+/* -----------------------------------------
+   ADDRESS
+----------------------------------------- */
+
+table th:nth-child(4),
+table td:nth-child(4) {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+
+/* -----------------------------------------
+   DATE
+----------------------------------------- */
+
+table th:nth-child(5),
+table td:nth-child(5) {
+    white-space: nowrap;
+}
+
+
+/* -----------------------------------------
+   STATUS
+----------------------------------------- */
+
+table th:nth-child(6),
+table td:nth-child(6) {
+    text-align: center;
+}
+
+
+/* -----------------------------------------
+   ACTION
+----------------------------------------- */
+
+table th:nth-child(7),
+table td:nth-child(7) {
+    text-align: center;
+}
+
+
+tbody tr:hover {
+    background: #fffaf0;
 }
 
 

@@ -28,6 +28,15 @@
                 <p class="para auth-subtitle">Sign in to order your favorite food.</p>
 
                 <form id="signin-form" class="auth-form">
+
+                    <div class="form-group">
+                        <label for="role">Account type</label>
+                        <select id="role" name="role" required>
+                            <option value="CUSTOMER">Customer</option>
+                            <option value="RIDER">Rider</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" placeholder="youremail@example.com" required>
@@ -36,7 +45,8 @@
                     <div class="form-group">
                         <label for="password">Password</label>
                         <div class="password-wrapper">
-                            <input type="password" id="password" name="password" placeholder="Enter your password" required minlength="6">
+                            <input type="password" id="password" name="password" placeholder="Enter your password"
+                                required minlength="6">
                             <a href="#" class="toggle-password" id="toggle-password">
                                 <i class="fa-solid fa-eye"></i>
                             </a>

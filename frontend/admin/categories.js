@@ -1,184 +1,155 @@
-/* =========================================
-   QUICK BITES ADMIN - CATEGORIES
-========================================= */
-
-const CATEGORIES_KEY = "quickBitesCategories";
-const PRODUCTS_KEY = "quickBitesProducts";
-
 let categories = [];
 let products = [];
-
 let editingCategoryId = null;
 
 
 /* =========================================
-   DEFAULT CATEGORIES
+   LOAD CATEGORIES FROM BACKEND
 ========================================= */
 
-const defaultCategories = [
-    {
-        id: 1,
-        name: "Burgers",
-        icon: "fa-burger"
-    },
-    {
-        id: 2,
-        name: "Pizza",
-        icon: "fa-pizza-slice"
-    },
-    {
-        id: 3,
-        name: "Chicken",
-        icon: "fa-drumstick-bite"
-    },
-    {
-        id: 4,
-        name: "Sandwiches",
-        icon: "fa-bread-slice"
-    },
-    {
-        id: 5,
-        name: "Pasta",
-        icon: "fa-bowl-food"
-    },
-    {
-        id: 6,
-        name: "Snacks",
-        icon: "fa-cookie-bite"
-    }
-];
+async function loadCategories() {
 
+    try {
 
-/* =========================================
-   LOAD CATEGORIES
-========================================= */
+        const response = await fetch(
+            "http://localhost:8080/api/categories"
+        );
 
-function loadCategories() {
+        if (!response.ok) {
 
-    const savedCategories =
-        localStorage.getItem(CATEGORIES_KEY);
-
-
-    if (!savedCategories) {
-
-        categories = defaultCategories;
-
-        saveCategories();
-
-    } else {
-
-        try {
-
-            categories = JSON.parse(savedCategories);
-
-            if (!Array.isArray(categories)) {
-                categories = [];
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Could not read categories:",
-                error
+            throw new Error(
+                `Could not load categories: ${response.status}`
             );
-
-            categories = [];
 
         }
 
+        const data = await response.json();
+
+        categories = data.map(category => ({
+
+            id: category.categoryId,
+
+            name: category.categoryName,
+
+            icon: getCategoryIcon(
+                category.categoryName
+            )
+
+        }));
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error loading categories from backend:",
+            error
+        );
+
+        categories = [];
+
     }
 
 }
 
 
 /* =========================================
-   SAVE CATEGORIES
+   CATEGORY ICONS
 ========================================= */
 
-function saveCategories() {
+function getCategoryIcon(categoryName) {
 
-    localStorage.setItem(
-        CATEGORIES_KEY,
-        JSON.stringify(categories)
-    );
+    const icons = {
+
+        "Burgers": "fa-burger",
+
+        "Pizza": "fa-pizza-slice",
+
+        "Chicken": "fa-drumstick-bite",
+
+        "Sandwiches": "fa-bread-slice",
+
+        "Pasta": "fa-bowl-food",
+
+        "Snacks": "fa-cookie-bite"
+
+    };
+
+    return icons[categoryName] || "fa-utensils";
 
 }
 
 
 /* =========================================
-   LOAD PRODUCTS
+   LOAD PRODUCTS FROM BACKEND
 ========================================= */
 
 async function loadProducts() {
 
-    const savedProducts =
-        localStorage.getItem(PRODUCTS_KEY);
+    try {
 
+        const response = await fetch(
+            "http://localhost:8080/api/food-items"
+        );
 
-    if (savedProducts) {
+        if (!response.ok) {
 
-        try {
-
-            products = JSON.parse(savedProducts);
-
-            if (!Array.isArray(products)) {
-                products = [];
-            }
-
-            return;
-
-        } catch (error) {
-
-            console.error(
-                "Could not read saved products:",
-                error
+            throw new Error(
+                `Could not load products: ${response.status}`
             );
 
         }
 
+        const data = await response.json();
+
+        products = data.map(product => ({
+
+            id: product.foodId,
+
+            name: product.foodName,
+
+            categoryId: product.categoryId,
+
+            category: getCategoryName(
+                product.categoryId
+            ),
+
+            isAvailable: product.isAvailable
+
+        }));
+
     }
 
-
-    /*
-     * If products have not yet been saved to
-     * localStorage, use products.json.
-     */
-
-    try {
-
-        const response =
-            await fetch("../public/products.json");
-
-
-        if (!response.ok) {
-            throw new Error("Could not load products");
-        }
-
-
-        products = await response.json();
-
-
-        if (!Array.isArray(products)) {
-            products = [];
-        }
-
-
-        localStorage.setItem(
-            PRODUCTS_KEY,
-            JSON.stringify(products)
-        );
-
-
-    } catch (error) {
+    catch (error) {
 
         console.error(
-            "Could not load products:",
+            "Error loading products:",
             error
         );
 
         products = [];
 
     }
+
+}
+
+
+/* =========================================
+   GET CATEGORY NAME
+========================================= */
+
+function getCategoryName(categoryId) {
+
+    const category =
+        categories.find(
+            item =>
+                Number(item.id) ===
+                Number(categoryId)
+        );
+
+    return category
+        ? category.name
+        : "";
 
 }
 
@@ -205,20 +176,30 @@ function getProductCount(categoryName) {
    RENDER CATEGORIES
 ========================================= */
 
-function renderCategories(categoryData = categories) {
+function renderCategories(
+    categoryData = categories
+) {
 
     const categoryList =
-        document.getElementById("category-list");
+        document.getElementById(
+            "category-list"
+        );
 
     const emptyCategories =
-        document.getElementById("empty-categories");
+        document.getElementById(
+            "empty-categories"
+        );
 
     const categoryCount =
-        document.getElementById("category-count");
+        document.getElementById(
+            "category-count"
+        );
 
 
     if (!categoryList) {
+
         return;
+
     }
 
 
@@ -239,10 +220,14 @@ function renderCategories(categoryData = categories) {
 
     if (categoryData.length === 0) {
 
-        categoryList.style.display = "none";
+        categoryList.style.display =
+            "none";
 
         if (emptyCategories) {
-            emptyCategories.style.display = "block";
+
+            emptyCategories.style.display =
+                "block";
+
         }
 
         return;
@@ -250,10 +235,15 @@ function renderCategories(categoryData = categories) {
     }
 
 
-    categoryList.style.display = "grid";
+    categoryList.style.display =
+        "grid";
+
 
     if (emptyCategories) {
-        emptyCategories.style.display = "none";
+
+        emptyCategories.style.display =
+            "none";
+
     }
 
 
@@ -277,13 +267,18 @@ function renderCategories(categoryData = categories) {
 function createCategoryCard(category) {
 
     const card =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
 
-    card.className = "category-card";
+    card.className =
+        "category-card";
 
 
     const productCount =
-        getProductCount(category.name);
+        getProductCount(
+            category.name
+        );
 
 
     card.innerHTML = `
@@ -377,7 +372,9 @@ function createCategoryCard(category) {
         "click",
         function() {
 
-            deleteCategory(category.id);
+            deleteCategory(
+                category.id
+            );
 
         }
     );
@@ -402,13 +399,17 @@ function filterCategories() {
 
     const searchTerm =
         searchInput
-            ? searchInput.value.trim().toLowerCase()
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
             : "";
 
 
     if (!searchTerm) {
 
-        renderCategories(categories);
+        renderCategories(
+            categories
+        );
 
         return;
 
@@ -416,16 +417,22 @@ function filterCategories() {
 
 
     const filteredCategories =
-        categories.filter(category => {
+        categories.filter(
+            category => {
 
-            return String(category.name || "")
-                .toLowerCase()
-                .includes(searchTerm);
+                return String(
+                    category.name || ""
+                )
+                    .toLowerCase()
+                    .includes(searchTerm);
 
-        });
+            }
+        );
 
 
-    renderCategories(filteredCategories);
+    renderCategories(
+        filteredCategories
+    );
 
 }
 
@@ -444,10 +451,12 @@ function openAddModal() {
             "category-modal"
         );
 
+
     const title =
         document.getElementById(
             "modal-title"
         );
+
 
     const form =
         document.getElementById(
@@ -464,12 +473,17 @@ function openAddModal() {
 
     document.getElementById(
         "category-icon"
-    ).value = "fa-utensils";
+    ).value =
+        "fa-utensils";
 
 
-    modal.classList.add("active");
+    modal.classList.add(
+        "active"
+    );
 
-    document.body.style.overflow = "hidden";
+
+    document.body.style.overflow =
+        "hidden";
 
 }
 
@@ -486,17 +500,20 @@ function openEditModal(category) {
 
     document.getElementById(
         "category-id"
-    ).value = category.id;
+    ).value =
+        category.id;
 
 
     document.getElementById(
         "category-name"
-    ).value = category.name;
+    ).value =
+        category.name;
 
 
     document.getElementById(
         "category-icon"
-    ).value = category.icon;
+    ).value =
+        category.icon;
 
 
     document.getElementById(
@@ -507,10 +524,13 @@ function openEditModal(category) {
 
     document.getElementById(
         "category-modal"
-    ).classList.add("active");
+    ).classList.add(
+        "active"
+    );
 
 
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow =
+        "hidden";
 
 }
 
@@ -528,38 +548,37 @@ function closeCategoryModal() {
 
 
     if (!modal) {
+
         return;
+
     }
 
 
-    modal.classList.remove("active");
+    modal.classList.remove(
+        "active"
+    );
 
-    document.body.style.overflow = "";
 
-    editingCategoryId = null;
+    document.body.style.overflow =
+        "";
+
+
+    editingCategoryId =
+        null;
 
 }
 
 
 /* =========================================
-   SAVE CATEGORY
+   ADD / EDIT CATEGORY
 ========================================= */
 
-function saveCategory(event) {
-
-    event.preventDefault();
-
+async function saveCategory() {
 
     const name =
         document.getElementById(
             "category-name"
         ).value.trim();
-
-
-    const icon =
-        document.getElementById(
-            "category-icon"
-        ).value;
 
 
     if (!name) {
@@ -573,147 +592,159 @@ function saveCategory(event) {
     }
 
 
-    /*
-     * Check for duplicate category names.
-     */
+    try {
 
-    const duplicate =
-        categories.some(category => {
+        let response;
 
-            return (
-                category.name.toLowerCase() ===
-                name.toLowerCase() &&
-                category.id !== editingCategoryId
+
+        /* =================================
+           EDIT EXISTING CATEGORY
+        ================================= */
+
+        if (
+            editingCategoryId !== null
+        ) {
+
+            response = await fetch(
+
+                `http://localhost:8080/api/categories/${editingCategoryId}`,
+
+                {
+
+                    method: "PUT",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            categoryName:
+                                name
+
+                        })
+
+                }
+
             );
-
-        });
-
-
-    if (duplicate) {
-
-        alert(
-            "A category with this name already exists."
-        );
-
-        return;
-
-    }
-
-
-    /*
-     * EDIT
-     */
-
-    if (editingCategoryId !== null) {
-
-        const category =
-            categories.find(
-                item =>
-                    item.id ===
-                    editingCategoryId
-            );
-
-
-        if (category) {
-
-            /*
-             * If the category name changes,
-             * update matching products too.
-             */
-
-            const oldName =
-                category.name;
-
-
-            category.name = name;
-
-            category.icon = icon;
-
-
-            if (
-                oldName.toLowerCase() !==
-                name.toLowerCase()
-            ) {
-
-                products.forEach(product => {
-
-                    if (
-                        String(product.category || "")
-                            .toLowerCase() ===
-                        oldName.toLowerCase()
-                    ) {
-
-                        product.category = name;
-
-                    }
-
-                });
-
-
-                localStorage.setItem(
-                    PRODUCTS_KEY,
-                    JSON.stringify(products)
-                );
-
-            }
 
         }
 
 
-        saveCategories();
+        /* =================================
+           ADD NEW CATEGORY
+        ================================= */
+
+        else {
+
+            response = await fetch(
+
+                "http://localhost:8080/api/categories",
+
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            categoryName:
+                                name
+
+                        })
+
+                }
+
+            );
+
+        }
+
+
+        /* =================================
+           CHECK BACKEND RESPONSE
+        ================================= */
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+
+            console.error(
+                "Backend error:",
+                errorText
+            );
+
+
+            throw new Error(
+                `Server returned ${response.status}`
+            );
+
+        }
+
+
+        const savedCategory =
+            await response.json();
+
+
+        console.log(
+            "Category saved to database:",
+            savedCategory
+        );
+
+
+        /* =================================
+           RELOAD FROM MYSQL
+        ================================= */
+
+        await loadCategories();
+
+        await loadProducts();
+
+
+        renderCategories();
+
 
         closeCategoryModal();
 
-        filterCategories();
 
         alert(
-            "Category updated successfully."
-        );
 
-        return;
+            editingCategoryId !== null
+
+                ? "Category updated successfully."
+
+                : "Category added successfully."
+
+        );
 
     }
 
 
-    /*
-     * ADD
-     */
+    catch (error) {
 
-    const newId =
-        categories.length > 0
-            ? Math.max(
-                ...categories.map(
-                    category =>
-                        Number(category.id) || 0
-                )
-            ) + 1
-            : 1;
+        console.error(
+            "Error saving category:",
+            error
+        );
 
 
-    const newCategory = {
+        alert(
+            "Could not save the category to the database."
+        );
 
-        id: newId,
-
-        name: name,
-
-        icon: icon
-
-    };
-
-
-    categories.push(newCategory);
-
-
-    saveCategories();
-
-    closeCategoryModal();
-
-    filterCategories();
-
-
-    alert(
-        "Category added successfully."
-    );
+    }
 
 }
 
@@ -722,21 +753,31 @@ function saveCategory(event) {
    DELETE CATEGORY
 ========================================= */
 
-function deleteCategory(id) {
+async function deleteCategory(id) {
 
     const category =
         categories.find(
-            item => item.id === id
+            item =>
+                Number(item.id) ===
+                Number(id)
         );
 
 
     if (!category) {
+
         return;
+
     }
 
 
+    /* =================================
+       CHECK PRODUCTS
+    ================================= */
+
     const productCount =
-        getProductCount(category.name);
+        getProductCount(
+            category.name
+        );
 
 
     /*
@@ -747,7 +788,9 @@ function deleteCategory(id) {
     if (productCount > 0) {
 
         alert(
+
             `"${category.name}" contains ${productCount} product${productCount === 1 ? "" : "s"}. Move or edit those products before deleting this category.`
+
         );
 
         return;
@@ -755,31 +798,104 @@ function deleteCategory(id) {
     }
 
 
+    /* =================================
+       CONFIRM DELETE
+    ================================= */
+
     const confirmed =
         confirm(
+
             `Are you sure you want to delete "${category.name}"?`
+
         );
 
 
     if (!confirmed) {
+
         return;
+
     }
 
 
-    categories =
-        categories.filter(
-            item => item.id !== id
+    try {
+
+        /* =================================
+           DELETE FROM MYSQL
+        ================================= */
+
+        const response =
+            await fetch(
+
+                `http://localhost:8080/api/categories/${id}`,
+
+                {
+
+                    method: "DELETE"
+
+                }
+
+            );
+
+
+        /* =================================
+           CHECK RESPONSE
+        ================================= */
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+
+            console.error(
+                "Backend delete error:",
+                errorText
+            );
+
+
+            throw new Error(
+                `Server returned ${response.status}`
+            );
+
+        }
+
+
+        /* =================================
+           RELOAD FROM MYSQL
+        ================================= */
+
+        await loadCategories();
+
+        await loadProducts();
+
+
+        /* =================================
+           KEEP SEARCH FILTER
+        ================================= */
+
+        filterCategories();
+
+
+        alert(
+            "Category deleted successfully."
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Error deleting category:",
+            error
         );
 
 
-    saveCategories();
+        alert(
+            "Could not delete the category from the database."
+        );
 
-    filterCategories();
-
-
-    alert(
-        "Category deleted successfully."
-    );
+    }
 
 }
 
@@ -791,11 +907,31 @@ function deleteCategory(id) {
 function escapeHTML(value) {
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -811,14 +947,20 @@ function setupMobileMenu() {
             ".hamburger"
         );
 
+
     const mobileMenu =
         document.querySelector(
             ".mobile-menu"
         );
 
 
-    if (!hamburger || !mobileMenu) {
+    if (
+        !hamburger ||
+        !mobileMenu
+    ) {
+
         return;
+
     }
 
 
@@ -835,7 +977,9 @@ function setupMobileMenu() {
 
 
             const icon =
-                hamburger.querySelector("i");
+                hamburger.querySelector(
+                    "i"
+                );
 
 
             if (icon) {
@@ -856,20 +1000,22 @@ function setupMobileMenu() {
 
     mobileMenu
         .querySelectorAll("a")
-        .forEach(link => {
+        .forEach(
+            link => {
 
-            link.addEventListener(
-                "click",
-                function() {
+                link.addEventListener(
+                    "click",
+                    function() {
 
-                    mobileMenu.classList.remove(
-                        "mobile-menu-active"
-                    );
+                        mobileMenu.classList.remove(
+                            "mobile-menu-active"
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
 
 }
 
@@ -956,7 +1102,9 @@ function setupModalEvents() {
             "click",
             function(event) {
 
-                if (event.target === modal) {
+                if (
+                    event.target === modal
+                ) {
 
                     closeCategoryModal();
 
@@ -978,13 +1126,17 @@ document.addEventListener(
     "DOMContentLoaded",
     async function() {
 
-        loadCategories();
+        await loadCategories();
+
 
         await loadProducts();
 
+
         renderCategories();
 
+
         setupModalEvents();
+
 
         setupMobileMenu();
 
@@ -1013,7 +1165,9 @@ document.addEventListener(
             "keydown",
             function(event) {
 
-                if (event.key === "Escape") {
+                if (
+                    event.key === "Escape"
+                ) {
 
                     closeCategoryModal();
 

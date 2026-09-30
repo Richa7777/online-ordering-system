@@ -1,346 +1,700 @@
 // ========================================
-// DATA AND ELEMENTS
+// API
 // ========================================
 
-let cart = quickBites.getCart();
-
-const checkoutItems = document.querySelector("#checkout-items");
-const subtotalElement = document.querySelector("#checkout-subtotal");
-const deliveryElement = document.querySelector("#checkout-delivery");
-const totalElement = document.querySelector("#checkout-total");
-const cartValue = document.querySelector(".cart-value");
-
-const nameInput = document.querySelector("#customer-name");
-const phoneInput = document.querySelector("#customer-phone");
-const addressInput = document.querySelector("#customer-address");
-const cityInput = document.querySelector("#customer-city");
-
-const checkoutForm = document.querySelector("#checkout-form");
-const checkoutMessage = document.querySelector("#checkout-message");
+const API_BASE_URL =
+    "http://127.0.0.1:8080";
 
 
 // ========================================
-// LOAD CUSTOMER INFORMATION
+// DATA
 // ========================================
 
-nameInput.value = quickBites.getCustomer(
-    "customerName",
-    "Susmita Tamang"
-);
+let cart = [];
 
-phoneInput.value = quickBites.getCustomer("customerPhone");
-addressInput.value = quickBites.getCustomer("customerAddress");
-cityInput.value = quickBites.getCustomer("customerCity");
+let currentUser = null;
+
+let currentCart = null;
 
 
 // ========================================
-// DISPLAY CHECKOUT ITEMS
+// ELEMENTS
 // ========================================
 
-function displayCheckoutItems() {
-    checkoutItems.innerHTML = "";
+const checkoutItems =
+    document.querySelector("#checkout-items");
 
-    let subtotal = 0;
-    let totalItems = 0;
+const subtotalElement =
+    document.querySelector("#checkout-subtotal");
 
-    if (cart.length === 0) {
-        checkoutItems.innerHTML = `
-            <div class="empty-checkout">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <p>Your cart is empty.</p>
-            </div>
-        `;
+const deliveryElement =
+    document.querySelector("#checkout-delivery");
 
-        subtotalElement.textContent = "Rs.0.00";
-        deliveryElement.textContent = "Rs.0.00";
-        totalElement.textContent = "Rs.0.00";
-        cartValue.textContent = "0";
-        return;
-    }
+const totalElement =
+    document.querySelector("#checkout-total");
 
-    cart.forEach(product => {
-        const price = Number(
-            String(product.price)
-                .replace("Rs.", "")
-                .replace(/,/g, "")
+const cartValue =
+    document.querySelector(".cart-value");
+
+const nameInput =
+    document.querySelector("#customer-name");
+
+const phoneInput =
+    document.querySelector("#customer-phone");
+
+const addressInput =
+    document.querySelector("#customer-address");
+
+const cityInput =
+    document.querySelector("#customer-city");
+
+const checkoutForm =
+    document.querySelector("#checkout-form");
+
+const checkoutMessage =
+    document.querySelector("#checkout-message");
+
+
+// ========================================
+// GET CURRENT USER
+// ========================================
+
+async function getCurrentUser() {
+
+    const response =
+        await fetch(
+            `${API_BASE_URL}/api/auth/me`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
         );
 
-        const itemTotal = price * product.quantity;
 
-        subtotal += itemTotal;
-        totalItems += product.quantity;
+    if (!response.ok) {
+        return null;
+    }
 
-        const item = document.createElement("div");
-        item.classList.add("checkout-item");
 
-        item.innerHTML = `
-            <div class="checkout-item-image">
-                <img
-                    src="${quickBites.getImagePath(product.image)}"
-                    alt="${product.name}">
-            </div>
-
-            <div class="checkout-item-info">
-                <h4>${product.name}</h4>
-                <p>Quantity: ${product.quantity}</p>
-            </div>
-
-            <div class="checkout-item-price">
-                Rs.${itemTotal.toFixed(2)}
-            </div>
-        `;
-
-        checkoutItems.appendChild(item);
-    });
-
-    const deliveryFee = 50;
-    const total = subtotal + deliveryFee;
-
-    subtotalElement.textContent = `Rs.${subtotal.toFixed(2)}`;
-    deliveryElement.textContent = `Rs.${deliveryFee.toFixed(2)}`;
-    totalElement.textContent = `Rs.${total.toFixed(2)}`;
-    cartValue.textContent = totalItems;
+    return await response.json();
 }
 
 
 // ========================================
-// FORM SUBMISSION
+// LOAD DATABASE CART
 // ========================================
 
-checkoutForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
+async function loadCart() {
 
-    // ----------------------------------------
-    // CHECK CART
-    // ----------------------------------------
-
-    if (cart.length === 0) {
-        quickBites.showMessage(
-            checkoutMessage,
-            "Your cart is empty.",
-            "red"
+    const cartResponse =
+        await fetch(
+            `${API_BASE_URL}/api/carts/me`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
         );
-        return;
+
+
+    if (!cartResponse.ok) {
+
+        throw new Error(
+            "Could not load your cart."
+        );
     }
 
 
-    // ----------------------------------------
-    // GET FORM VALUES
-    // ----------------------------------------
-
-    const name = nameInput.value.trim();
-    const phone = phoneInput.value.trim();
-    const address = addressInput.value.trim();
-    const city = cityInput.value.trim();
+    currentCart =
+        await cartResponse.json();
 
 
-    // ----------------------------------------
-    // VALIDATE DELIVERY DETAILS
-    // ----------------------------------------
+    const cartId =
+        currentCart.cartId;
 
-    if (!name || !phone || !address || !city) {
-        quickBites.showMessage(
-            checkoutMessage,
-            "Please complete all delivery details.",
-            "red"
+
+    const itemsResponse =
+        await fetch(
+            `${API_BASE_URL}/api/cart-items/cart/${cartId}`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
         );
-        return;
+
+
+    if (!itemsResponse.ok) {
+
+        throw new Error(
+            "Could not load cart items."
+        );
     }
 
 
-    // ----------------------------------------
-    // GET PAYMENT METHOD
-    // ----------------------------------------
+    const databaseItems =
+        await itemsResponse.json();
 
-    const selectedPayment = document.querySelector(
-        'input[name="payment"]:checked'
-    );
 
-    if (!selectedPayment) {
-        quickBites.showMessage(
-            checkoutMessage,
-            "Please select a payment method.",
-            "red"
-        );
-        return;
+    cart = [];
+
+
+    // ========================================
+    // GET FOOD INFORMATION
+    // ========================================
+
+    for (const item of databaseItems) {
+
+        const foodResponse =
+            await fetch(
+                `${API_BASE_URL}/api/food-items/${item.food_id}`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
+
+
+        if (!foodResponse.ok) {
+            continue;
+        }
+
+
+        const food =
+            await foodResponse.json();
+
+
+        cart.push({
+
+            id:
+                food.foodId,
+
+            name:
+                food.foodName,
+
+            price:
+                Number(food.price),
+
+            image:
+                food.imageUrl,
+
+            quantity:
+                Number(item.quantity),
+
+            cartItemId:
+                item.cart_item_id
+
+        });
     }
-
-    const paymentMethod = selectedPayment.value;
-
-
-    // ----------------------------------------
-    // GET LOGGED-IN USER ID
-    // ----------------------------------------
-
-    const userId = Number(
-        localStorage.getItem("userId")
-    );
-
-    if (!userId) {
-        quickBites.showMessage(
-            checkoutMessage,
-            "Please login before placing an order.",
-            "red"
-        );
-        return;
-    }
+}
 
 
-    // ----------------------------------------
-    // SAVE CUSTOMER INFORMATION LOCALLY
-    // ----------------------------------------
+// ========================================
+// LOAD CUSTOMER
+// ========================================
 
-    quickBites.setCustomer({
-        customerName: name,
-        customerPhone: phone,
-        customerAddress: address,
-        customerCity: city
-    });
-
+async function loadCustomerInformation() {
 
     try {
 
-        // ========================================
-        // CALCULATE ORDER TOTALS
-        // ========================================
+        currentUser =
+            await getCurrentUser();
 
-        const subtotal = cart.reduce((total, item) => {
 
-            const price = quickBites.parsePrice(
-                item.price
+        if (!currentUser) {
+
+            throw new Error(
+                "Not logged in"
             );
+        }
 
-            return total +
-                price * Number(item.quantity || 0);
 
-        }, 0);
+        if (
+            currentUser.role !==
+            "CUSTOMER"
+        ) {
 
-        const deliveryFee = subtotal > 0 ? 50 : 0;
-
-        const totalAmount =
-            subtotal + deliveryFee;
+            throw new Error(
+                "Only customers can checkout"
+            );
+        }
 
 
         // ========================================
-        // STEP 1: CREATE ADDRESS
+        // CUSTOMER NAME
         // ========================================
 
-        const addressResponse = await fetch(
-            "http://localhost:8080/api/addresses",
-            {
-                method: "POST",
+        nameInput.value =
+            currentUser.name || "";
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
 
-                body: JSON.stringify({
-                    userId: userId,
-                    addressLine: address,
-                    city: city,
-                    phone: phone
-                })
-            }
-        );
+        // ========================================
+        // GET SAVED ADDRESSES
+        // ========================================
+
+        const addressResponse =
+            await fetch(
+                `${API_BASE_URL}/api/addresses/user/${currentUser.id}`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
 
 
         if (!addressResponse.ok) {
+
             throw new Error(
-                "Failed to create address"
+                "Could not load address."
             );
         }
 
 
-        const savedAddress =
+        const addresses =
             await addressResponse.json();
 
 
-        // ========================================
-        // STEP 2: CREATE ORDER
-        // ========================================
+        if (addresses.length > 0) {
 
-        const orderResponse = await fetch(
-            "http://localhost:8080/api/orders",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    user_id: userId,
-                    address_id: savedAddress.addressId,
-                    order_status: "PLACED",
-                    subtotal: subtotal,
-                    delivery_fee: deliveryFee,
-                    total_amount: totalAmount
-                })
-            }
-        );
+            const address =
+                addresses[0];
 
 
-        if (!orderResponse.ok) {
-            throw new Error(
-                "Failed to create order"
-            );
+            phoneInput.value =
+                address.phone || "";
+
+            addressInput.value =
+                address.addressLine || "";
+
+            cityInput.value =
+                address.city || "";
         }
-
-
-        const savedOrder =
-            await orderResponse.json();
-
-
-        // ========================================
-        // CLEAR CART
-        // ========================================
-
-        quickBites.clearCart();
-
-        cart = [];
-
-
-        // ========================================
-        // SUCCESS MESSAGE
-        // ========================================
-
-        quickBites.showMessage(
-            checkoutMessage,
-            "Order created successfully!",
-            "green"
-        );
-
-
-        // ========================================
-        // GO TO ORDER DETAILS
-        // ========================================
-
-        setTimeout(function () {
-
-            window.location.href =
-                `order_details.html?id=${savedOrder.order_id}`;
-
-        }, 1000);
 
 
     } catch (error) {
 
         console.error(
-            "Checkout error:",
+            "Customer loading error:",
+            error
+        );
+
+
+        quickBites.showMessage(
+            checkoutMessage,
+            "Please login before checkout.",
+            "red"
+        );
+    }
+}
+
+
+// ========================================
+// DISPLAY CART
+// ========================================
+
+function displayCheckoutItems() {
+
+    checkoutItems.innerHTML = "";
+
+
+    let subtotal = 0;
+
+    let totalItems = 0;
+
+
+    if (cart.length === 0) {
+
+        checkoutItems.innerHTML = `
+            <div class="empty-checkout">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                <p>Your cart is empty.</p>
+
+            </div>
+        `;
+
+
+        subtotalElement.textContent =
+            "Rs.0.00";
+
+        deliveryElement.textContent =
+            "Rs.0.00";
+
+        totalElement.textContent =
+            "Rs.0.00";
+
+        cartValue.textContent =
+            "0";
+
+        return;
+    }
+
+
+    // ========================================
+    // DISPLAY ITEMS
+    // ========================================
+
+    cart.forEach(product => {
+
+        const price =
+            Number(product.price) || 0;
+
+
+        const quantity =
+            Number(product.quantity) || 0;
+
+
+        const itemTotal =
+            price * quantity;
+
+
+        subtotal += itemTotal;
+
+        totalItems += quantity;
+
+
+        const item =
+            document.createElement("div");
+
+
+        item.classList.add(
+            "checkout-item"
+        );
+
+
+        item.innerHTML = `
+
+            <div class="checkout-item-image">
+
+                <img
+                    src="${quickBites.getImagePath(
+                        product.image
+                    )}"
+                    alt="${product.name}">
+
+            </div>
+
+            <div class="checkout-item-info">
+
+                <h4>
+                    ${product.name}
+                </h4>
+
+                <p>
+                    Quantity: ${quantity}
+                </p>
+
+            </div>
+
+            <div class="checkout-item-price">
+
+                Rs.${itemTotal.toFixed(2)}
+
+            </div>
+        `;
+
+
+        checkoutItems.appendChild(
+            item
+        );
+    });
+
+
+    // ========================================
+    // TOTALS
+    // ========================================
+
+    const deliveryFee =
+        subtotal > 0 ? 50 : 0;
+
+
+    const total =
+        subtotal + deliveryFee;
+
+
+    subtotalElement.textContent =
+        `Rs.${subtotal.toFixed(2)}`;
+
+
+    deliveryElement.textContent =
+        `Rs.${deliveryFee.toFixed(2)}`;
+
+
+    totalElement.textContent =
+        `Rs.${total.toFixed(2)}`;
+
+
+    cartValue.textContent =
+        totalItems;
+}
+
+
+// ========================================
+// PLACE ORDER
+// ========================================
+
+checkoutForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        // ========================================
+        // CHECK LOGIN
+        // ========================================
+
+        if (!currentUser) {
+
+            quickBites.showMessage(
+                checkoutMessage,
+                "Please login before placing an order.",
+                "red"
+            );
+
+            return;
+        }
+
+
+        // ========================================
+        // CHECK CART
+        // ========================================
+
+        if (cart.length === 0) {
+
+            quickBites.showMessage(
+                checkoutMessage,
+                "Your cart is empty.",
+                "red"
+            );
+
+            return;
+        }
+
+
+        // ========================================
+        // GET FORM VALUES
+        // ========================================
+
+        const phone =
+            phoneInput.value.trim();
+
+        const address =
+            addressInput.value.trim();
+
+        const city =
+            cityInput.value.trim();
+
+
+        if (
+            !phone ||
+            !address ||
+            !city
+        ) {
+
+            quickBites.showMessage(
+                checkoutMessage,
+                "Please complete all delivery details.",
+                "red"
+            );
+
+            return;
+        }
+
+
+        // ========================================
+        // PAYMENT
+        // ========================================
+
+        const selectedPayment =
+            document.querySelector(
+                'input[name="payment"]:checked'
+            );
+
+
+        if (!selectedPayment) {
+
+            quickBites.showMessage(
+                checkoutMessage,
+                "Please select a payment method.",
+                "red"
+            );
+
+            return;
+        }
+
+
+        const paymentMethod =
+            selectedPayment.value;
+
+
+        try {
+
+            // ========================================
+            // DISABLE BUTTON
+            // ========================================
+
+            const button =
+                checkoutForm.querySelector(
+                    ".place-order-btn"
+                );
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "Placing Order...";
+
+
+            // ========================================
+            // SEND CHECKOUT REQUEST
+            // ========================================
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/api/checkout`,
+                    {
+                        method: "POST",
+
+                        credentials: "include",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            addressLine:
+                                address,
+
+                            city:
+                                city,
+
+                            phone:
+                                phone,
+
+                            paymentMethod:
+                                paymentMethod
+
+                        })
+                    }
+                );
+
+
+            const responseText =
+                await response.text();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    responseText ||
+                    "Could not place order."
+                );
+            }
+
+
+            const savedOrder =
+                JSON.parse(
+                    responseText
+                );
+
+
+            console.log(
+                "Order created:",
+                savedOrder
+            );
+
+
+            // ========================================
+            // SUCCESS
+            // ========================================
+
+            quickBites.showMessage(
+                checkoutMessage,
+                "Order placed successfully!",
+                "green"
+            );
+
+
+            // ========================================
+            // GO TO ORDER DETAILS
+            // ========================================
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        `order_details.html?id=${
+                            savedOrder.order_id
+                        }`;
+
+                },
+                800
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Checkout error:",
+                error
+            );
+
+
+            quickBites.showMessage(
+                checkoutMessage,
+                error.message ||
+                "Could not place the order. Please try again.",
+                "red"
+            );
+
+
+            const button =
+                checkoutForm.querySelector(
+                    ".place-order-btn"
+                );
+
+
+            button.disabled = false;
+
+            button.innerHTML = `
+                <i class="fa-solid fa-check"></i>
+                Place Order
+            `;
+        }
+    }
+);
+
+
+// ========================================
+// INITIALIZE
+// ========================================
+
+async function initializeCheckout() {
+
+    try {
+
+        await loadCustomerInformation();
+
+        await loadCart();
+
+        displayCheckoutItems();
+
+    } catch (error) {
+
+        console.error(
+            "Checkout initialization error:",
             error
         );
 
         quickBites.showMessage(
             checkoutMessage,
-            "Could not place the order. Please try again.",
+            "Could not load checkout.",
             "red"
         );
     }
-});
+}
 
 
-// ========================================
-// INITIAL DISPLAY
-// ========================================
-
-displayCheckoutItems();
+initializeCheckout();

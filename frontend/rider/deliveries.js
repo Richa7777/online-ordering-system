@@ -1,76 +1,295 @@
-/* =========================================
-   RIDER DELIVERIES
-========================================= */
+(function () {
+
+let deliveries = [];
+
+const tableBody = document.getElementById("delivery-table-body");
+const statusFilter = document.getElementById("status-filter");
 
 
-/* =========================================
-   DELIVERY DATA
-========================================= */
+// ======================================================
+// LOAD CURRENT RIDER
+// ======================================================
 
-const deliveries = [
+async function loadCurrentRider() {
 
-    {
-        id: "DL1001",
-        order: "QB1001",
-        customer: "John Smith",
-        address: "Thamel, Kathmandu",
-        date: "16 September 2026",
-        status: "Pending"
-    },
+    const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+        method: "GET",
+        credentials: "include"
+    });
 
-    {
-        id: "DL1002",
-        order: "QB1002",
-        customer: "Priya Rai",
-        address: "Baneshwor, Kathmandu",
-        date: "16 September 2026",
-        status: "In Delivery"
-    },
-
-    {
-        id: "DL1003",
-        order: "QB1003",
-        customer: "Anita Sharma",
-        address: "Lalitpur, Kathmandu",
-        date: "15 September 2026",
-        status: "Delivered"
-    },
-
-    {
-        id: "DL1004",
-        order: "QB1004",
-        customer: "Ram Gurung",
-        address: "Balaju, Kathmandu",
-        date: "15 September 2026",
-        status: "Delivered"
+    if (!response.ok) {
+        throw new Error(`Failed to load current rider: ${response.status}`);
     }
 
-];
+    return await response.json();
+}
 
 
+// ======================================================
+// LOAD DELIVERIES
+// ======================================================
 
-/* =========================================
-   ELEMENTS
-========================================= */
+async function loadDeliveries() {
 
-const tableBody =
-    document.getElementById("delivery-table-body");
+    try {
 
-const statusFilter =
-    document.getElementById("status-filter");
+        // Get currently logged-in rider
+        const currentRider = await loadCurrentRider();
+
+        // Get all deliveries from backend
+        const response = await fetch(`${API_BASE_URL}/api/deliveries`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `Failed to load deliveries: ${response.status}`
+            );
+        }
+
+        const allDeliveries = await response.json();
+
+        console.log("Current rider:", currentRider);
+        console.log("All deliveries:", allDeliveries);
 
 
+        // Only show deliveries assigned to the logged-in rider
+        const riderDeliveries = allDeliveries.filter(
+            delivery =>
+                Number(delivery.rider_id) === Number(currentRider.id)
+        );
 
-/* =========================================
-   DISPLAY DELIVERIES
-========================================= */
 
-function displayDeliveries(data) {
+        // Convert backend data into the format used by the page
+        deliveries = await Promise.all(
+            riderDeliveries.map(delivery =>
+                convertDelivery(delivery)
+            )
+        );
+
+
+        console.log(
+            "Rider deliveries from backend:",
+            deliveries
+        );
+
+
+        // Display deliveries
+        displayDeliveries(
+            getFilteredDeliveries()
+        );
+
+
+        // Update summary cards
+        updateSummary();
+
+    } catch (error) {
+
+        console.error(
+            "Error loading deliveries:",
+            error
+        );
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7" class="empty-message">
+                    Unable to load deliveries.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
+// ======================================================
+// CONVERT BACKEND DELIVERY DATA
+// ======================================================
+
+async function convertDelivery(delivery) {
+
+    let order = null;
+    let address = null;
+
+
+    // --------------------------------------------------
+    // Load order
+    // --------------------------------------------------
+
+    try {
+
+        const orderResponse = await fetch(
+            `${API_BASE_URL}/api/orders/${delivery.order_id}`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+
+        if (orderResponse.ok) {
+            order = await orderResponse.json();
+        }
+
+    } catch (error) {
+
+        console.error(
+            `Could not load order ${delivery.order_id}:`,
+            error
+        );
+    }
+
+
+    // --------------------------------------------------
+    // Load address
+    // --------------------------------------------------
+
+    if (order && order.address_id) {
+
+        try {
+
+            const addressResponse = await fetch(
+                `${API_BASE_URL}/api/addresses/${order.address_id}`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
+
+
+            if (addressResponse.ok) {
+                address = await addressResponse.json();
+            }
+
+        } catch (error) {
+
+            console.error(
+                `Could not load address ${order.address_id}:`,
+                error
+            );
+        }
+    }
+
+
+    // --------------------------------------------------
+    // Return data used by the frontend
+    // --------------------------------------------------
+
+    return {
+
+        id: delivery.delivery_id,
+
+        order: delivery.order_id,
+
+        customer: order
+            ? `Customer #${order.user_id}`
+            : "Unknown Customer",
+
+        address: address
+            ? formatAddress(address)
+            : "Address unavailable",
+
+        date: formatDate(
+            delivery.assigned_at
+        ),
+
+        status: formatDeliveryStatus(
+            delivery.delivery_status
+        )
+    };
+}
+
+
+// ======================================================
+// FORMAT ADDRESS
+// ======================================================
+
+function formatAddress(address) {
+
+    return [
+        address.addressLine,
+        address.city,
+        address.phone
+    ]
+        .filter(
+            value =>
+                value &&
+                String(value).trim() !== ""
+        )
+        .join(", ");
+}
+
+
+// ======================================================
+// FORMAT DATE
+// ======================================================
+
+function formatDate(dateValue) {
+
+    if (!dateValue) {
+        return "N/A";
+    }
+
+
+    const date = new Date(dateValue);
+
+
+    if (Number.isNaN(date.getTime())) {
+        return "N/A";
+    }
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        }
+    );
+}
+
+
+// ======================================================
+// FORMAT DELIVERY STATUS
+// ======================================================
+
+function formatDeliveryStatus(status) {
+
+    switch (
+        String(status).toUpperCase()
+    ) {
+
+        case "ASSIGNED":
+            return "Pending";
+
+
+        case "PICKED_UP":
+        case "OUT_FOR_DELIVERY":
+            return "In Delivery";
+
+
+        case "DELIVERED":
+            return "Delivered";
+
+
+        default:
+            return "Pending";
+    }
+}
+
+
+// ======================================================
+// DISPLAY DELIVERIES
+// ======================================================
+
+function displayDeliveries(deliveriesToDisplay) {
 
     tableBody.innerHTML = "";
 
 
-    if (data.length === 0) {
+    // No deliveries
+    if (deliveriesToDisplay.length === 0) {
 
         tableBody.innerHTML = `
             <tr>
@@ -84,401 +303,354 @@ function displayDeliveries(data) {
     }
 
 
-    data.forEach(delivery => {
+    deliveriesToDisplay.forEach(
+        delivery => {
 
-        let statusClass = "";
-
-        if (delivery.status === "Pending") {
-
-            statusClass = "status-pending";
-
-        }
-
-        else if (delivery.status === "In Delivery") {
-
-            statusClass = "status-delivery";
-
-        }
-
-        else if (delivery.status === "Delivered") {
-
-            statusClass = "status-delivered";
-
-        }
+            const row = document.createElement("tr");
 
 
-        const isCompleted =
-            delivery.status === "Delivered";
-
-
-        tableBody.innerHTML += `
-
-            <tr>
+            row.innerHTML = `
 
                 <td>
-                    <span class="delivery-id">
-                        ${delivery.id}
-                    </span>
+                    ${delivery.id}
                 </td>
-
 
                 <td>
                     ${delivery.order}
                 </td>
 
-
                 <td>
-                    <span class="customer-name">
-                        ${delivery.customer}
-                    </span>
+                    ${delivery.customer}
                 </td>
 
-
                 <td>
-                    <span class="delivery-address">
-                        ${delivery.address}
-                    </span>
+                    ${delivery.address}
                 </td>
-
 
                 <td>
                     ${delivery.date}
                 </td>
 
-
                 <td>
-
-                    <span class="delivery-status ${statusClass}">
+                    <span class="status ${getStatusClass(delivery.status)}">
                         ${delivery.status}
                     </span>
-
                 </td>
-
 
                 <td>
-
                     <button
-                        class="delivery-action ${isCompleted ? "completed" : ""}"
+                        class="action-btn"
                         data-id="${delivery.id}"
-                        ${isCompleted ? "disabled" : ""}>
-
-                        ${
-                            isCompleted
-                                ? "Completed"
-                                : "Update Status"
-                        }
-
+                    >
+                        Update Status
                     </button>
-
                 </td>
 
-            </tr>
+            `;
 
-        `;
 
-    });
+            tableBody.appendChild(row);
+        }
+    );
 
+
+    // Add temporary status button handlers
+    addStatusButtonListeners();
 }
 
 
+// ======================================================
+// STATUS CSS CLASS
+// ======================================================
 
-/* =========================================
-   UPDATE SUMMARY
-========================================= */
+function getStatusClass(status) {
 
-function updateSummary() {
+    switch (status) {
 
-    const total =
-        deliveries.length;
+        case "Pending":
+            return "pending";
 
+        case "In Delivery":
+            return "in-delivery";
 
-    const pending =
-        deliveries.filter(
-            delivery => delivery.status === "Pending"
-        ).length;
+        case "Delivered":
+            return "delivered";
 
-
-    const active =
-        deliveries.filter(
-            delivery => delivery.status === "In Delivery"
-        ).length;
-
-
-    const completed =
-        deliveries.filter(
-            delivery => delivery.status === "Delivered"
-        ).length;
-
-
-    document.getElementById(
-        "total-deliveries"
-    ).textContent = total;
-
-
-    document.getElementById(
-        "pending-deliveries"
-    ).textContent = pending;
-
-
-    document.getElementById(
-        "active-deliveries"
-    ).textContent = active;
-
-
-    document.getElementById(
-        "completed-deliveries"
-    ).textContent = completed;
-
+        default:
+            return "";
+    }
 }
 
 
+// ======================================================
+// FILTER DELIVERIES
+// ======================================================
 
-/* =========================================
-   FILTER
-========================================= */
+function getFilteredDeliveries() {
+
+    const selectedStatus =
+        statusFilter.value;
+
+
+    if (
+        selectedStatus === "all"
+    ) {
+        return deliveries;
+    }
+
+
+    return deliveries.filter(
+        delivery =>
+            delivery.status === selectedStatus
+    );
+}
+
+
+// ======================================================
+// STATUS FILTER EVENT
+// ======================================================
 
 statusFilter.addEventListener(
     "change",
     function () {
 
-        const selectedStatus =
-            this.value;
-
-
-        if (selectedStatus === "all") {
-
-            displayDeliveries(deliveries);
-
-        }
-
-        else {
-
-            const filtered =
-                deliveries.filter(
-                    delivery =>
-                        delivery.status === selectedStatus
-                );
-
-
-            displayDeliveries(filtered);
-
-        }
-
-    }
-);
-
-
-
-/* =========================================
-   UPDATE DELIVERY STATUS
-========================================= */
-
-tableBody.addEventListener(
-    "click",
-    function (event) {
-
-        const button =
-            event.target.closest(".delivery-action");
-
-
-        if (!button || button.disabled) {
-            return;
-        }
-
-
-        const deliveryId =
-            button.dataset.id;
-
-
-        const delivery =
-            deliveries.find(
-                item => item.id === deliveryId
-            );
-
-
-        if (!delivery) {
-            return;
-        }
-
-
-        if (delivery.status === "Pending") {
-
-            delivery.status = "In Delivery";
-
-        }
-
-        else if (delivery.status === "In Delivery") {
-
-            delivery.status = "Delivered";
-
-        }
-
-
-        updateSummary();
-
-
-        const selectedStatus =
-            statusFilter.value;
-
-
-        if (selectedStatus === "all") {
-
-            displayDeliveries(deliveries);
-
-        }
-
-        else {
-
-            displayDeliveries(
-                deliveries.filter(
-                    item =>
-                        item.status === selectedStatus
-                )
-            );
-
-        }
-
-    }
-);
-
-
-
-/* =========================================
-   HAMBURGER MENU
-========================================= */
-
-const hamburger =
-    document.querySelector(".hamburger");
-
-const mobileMenu =
-    document.querySelector(".mobile-menu");
-
-
-if (hamburger && mobileMenu) {
-
-    hamburger.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            mobileMenu.classList.toggle(
-                "mobile-menu-active"
-            );
-
-
-            const icon =
-                hamburger.querySelector("i");
-
-
-            icon.classList.toggle("fa-bars");
-
-            icon.classList.toggle("fa-xmark");
-
-        }
-    );
-
-
-    const mobileLinks =
-        mobileMenu.querySelectorAll("a");
-
-
-    mobileLinks.forEach(link => {
-
-        link.addEventListener(
-            "click",
-            function () {
-
-                mobileMenu.classList.remove(
-                    "mobile-menu-active"
-                );
-
-            }
+        displayDeliveries(
+            getFilteredDeliveries()
         );
 
+    }
+);
+
+
+// ======================================================
+// UPDATE SUMMARY CARDS
+// ======================================================
+
+function updateSummary() {
+
+    const totalDeliveries =
+        deliveries.length;
+
+
+    const pendingDeliveries =
+        deliveries.filter(
+            delivery =>
+                delivery.status === "Pending"
+        ).length;
+
+
+    const activeDeliveries =
+        deliveries.filter(
+            delivery =>
+                delivery.status === "In Delivery"
+        ).length;
+
+
+    const completedDeliveries =
+        deliveries.filter(
+            delivery =>
+                delivery.status === "Delivered"
+        ).length;
+
+
+    const totalElement =
+        document.getElementById(
+            "total-deliveries"
+        );
+
+
+    const pendingElement =
+        document.getElementById(
+            "pending-deliveries"
+        );
+
+
+    const activeElement =
+        document.getElementById(
+            "active-deliveries"
+        );
+
+
+    const completedElement =
+        document.getElementById(
+            "completed-deliveries"
+        );
+
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            totalDeliveries;
+    }
+
+
+    if (pendingElement) {
+
+        pendingElement.textContent =
+            pendingDeliveries;
+    }
+
+
+    if (activeElement) {
+
+        activeElement.textContent =
+            activeDeliveries;
+    }
+
+
+    if (completedElement) {
+
+        completedElement.textContent =
+            completedDeliveries;
+    }
+}
+
+function addStatusButtonListeners() {
+
+    const buttons = document.querySelectorAll(".action-btn");
+
+    buttons.forEach(button => {
+
+        button.addEventListener("click", async function () {
+
+            const deliveryId = this.dataset.id;
+
+            const delivery = deliveries.find(
+                item => String(item.id) === String(deliveryId)
+            );
+
+            if (!delivery) {
+                return;
+            }
+
+
+            // Determine the next status
+            let nextStatus;
+
+            if (delivery.status === "Pending") {
+
+                nextStatus = "PICKED_UP";
+
+            } else if (delivery.status === "In Delivery") {
+
+                nextStatus = "DELIVERED";
+
+            } else {
+
+                return;
+            }
+
+
+            // Prevent multiple clicks while updating
+            this.disabled = true;
+            this.textContent = "Updating...";
+
+
+            try {
+
+                // Get the current backend delivery
+                const response = await fetch(
+                    `${API_BASE_URL}/api/deliveries/${deliveryId}`,
+                    {
+                        method: "GET",
+                        credentials: "include"
+                    }
+                );
+
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Failed to load delivery: ${response.status}`
+                    );
+                }
+
+
+                const backendDelivery =
+                    await response.json();
+
+
+                // Update only the status
+                backendDelivery.delivery_status =
+                    nextStatus;
+
+
+                // When delivered, record delivery time
+                if (nextStatus === "DELIVERED") {
+
+                    backendDelivery.delivered_at =
+                        new Date().toISOString();
+
+                }
+
+
+                // Save the updated delivery
+                const updateResponse = await fetch(
+                    `${API_BASE_URL}/api/deliveries/${deliveryId}`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        credentials: "include",
+
+                        body: JSON.stringify(
+                            backendDelivery
+                        )
+                    }
+                );
+
+
+                if (!updateResponse.ok) {
+
+                    const errorText =
+                        await updateResponse.text();
+
+                    throw new Error(
+                        `Failed to update delivery: ${updateResponse.status} ${errorText}`
+                    );
+                }
+
+
+                const updatedDelivery =
+                    await updateResponse.json();
+
+
+                console.log(
+                    "Delivery updated:",
+                    updatedDelivery
+                );
+
+
+                // Reload deliveries from backend
+                await loadDeliveries();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error updating delivery:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to update delivery status."
+                );
+
+
+                // Restore button
+                this.disabled = false;
+                this.textContent = "Update Status";
+            }
+
+        });
+
     });
-
 }
+// ======================================================
+// START
+// ======================================================
 
-
-
-/* =========================================
-   LOGOUT
-========================================= */
-
-function logout() {
-
-    window.location.href =
-        "../public/index.html";
-
-}
-
-
-const logoutButton =
-    document.getElementById("logout-btn");
-
-
-const mobileLogoutButton =
-    document.getElementById("mobile-logout-btn");
-
-
-const footerLogout =
-    document.getElementById("footer-logout");
-
-
-if (logoutButton) {
-
-    logoutButton.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            logout();
-
-        }
-    );
-
-}
-
-
-if (mobileLogoutButton) {
-
-    mobileLogoutButton.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            logout();
-
-        }
-    );
-
-}
-
-
-if (footerLogout) {
-
-    footerLogout.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            logout();
-
-        }
-    );
-
-}
-
-
-
-/* =========================================
-   INITIAL LOAD
-========================================= */
-
-displayDeliveries(deliveries);
-
-updateSummary();
+loadDeliveries();})();

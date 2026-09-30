@@ -27,6 +27,7 @@ signupForm.addEventListener('submit', async (e) => {
 
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
+    const role = document.getElementById('role').value;
     const password = passwordInput.value;
     const confirmPassword = confirmPasswordInput.value;
 
@@ -46,10 +47,10 @@ signupForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        const response = await fetch('http://localhost:8080/api/auth/register', {
+        const response = await fetch('http://127.0.0.1:8080/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, password })
+            body: JSON.stringify({ name, email, password, role })
         });
 
         const data = await response.json();

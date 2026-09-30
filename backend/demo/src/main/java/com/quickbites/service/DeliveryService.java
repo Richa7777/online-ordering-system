@@ -25,9 +25,44 @@ public class DeliveryService {
     }
 
     public Delivery createDelivery(Delivery delivery) {
-        return deliveryRepository.save(delivery);
+
+    Delivery existing =
+            deliveryRepository.findExistingDelivery(
+                    delivery.getOrder_id()
+            );
+
+    // If this order already has a delivery,
+    // update the rider assignment
+    if (existing != null) {
+
+        existing.setRider_id(
+                delivery.getRider_id()
+        );
+
+        existing.setDelivery_status(
+                Delivery.DeliveryStatus.ASSIGNED
+        );
+
+        // Set assignment time
+        existing.setAssigned_at(
+                java.time.LocalDateTime.now()
+        );
+
+        return deliveryRepository.save(existing);
     }
 
+    // New delivery
+    delivery.setDelivery_status(
+            Delivery.DeliveryStatus.ASSIGNED
+    );
+
+    // Set assignment time
+    delivery.setAssigned_at(
+            java.time.LocalDateTime.now()
+    );
+
+    return deliveryRepository.save(delivery);
+}
     public Delivery updateDelivery(Integer id, Delivery deliveryDetails) {
         Delivery delivery = getDeliveryById(id);
 

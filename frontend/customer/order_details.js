@@ -1,4 +1,11 @@
 // ========================================
+// BACKEND API
+// ========================================
+
+const API_BASE_URL = "http://127.0.0.1:8080";
+
+
+// ========================================
 // GET ORDER ID
 // ========================================
 
@@ -10,88 +17,143 @@ const orderId = urlParams.get("id");
 
 
 // ========================================
-// DUMMY ORDERS FOR FRONTEND TESTING
+// LOAD ORDER
 // ========================================
 
-const dummyOrders = {
-    QB1001: {
-        id: "QB1001",
-        date: "7 September 2026",
-        status: "Delivered",
-        customerName: "Susmita Tamang",
-        phone: "Not available",
-        address: "Kathmandu, Nepal",
-        city: "",
-        paymentMethod: "Cash on Delivery",
-        items: [
-            {
-                name: "Classic Burger",
-                quantity: 2,
-                price: 450,
-                image: "../public/images/burger.png"
-            }
-        ]
-    },
+async function loadOrder() {
 
-    QB1002: {
-        id: "QB1002",
-        date: "5 September 2026",
-        status: "Preparing",
-        customerName: "Susmita Tamang",
-        phone: "Not available",
-        address: "Kathmandu, Nepal",
-        city: "",
-        paymentMethod: "Cash on Delivery",
-        items: [
-            {
-                name: "Cheese Pizza",
-                quantity: 1,
-                price: 750,
-                image: "../public/images/pizza.png"
-            }
-        ]
-    },
-
-    QB1003: {
-        id: "QB1003",
-        date: "1 September 2026",
-        status: "Cancelled",
-        customerName: "Susmita Tamang",
-        phone: "Not available",
-        address: "Kathmandu, Nepal",
-        city: "",
-        paymentMethod: "Cash on Delivery",
-        items: [
-            {
-                name: "Fried Chicken",
-                quantity: 1,
-                price: 500,
-                image: "../public/images/fried-chicken.png"
-            }
-        ]
+    if (!orderId) {
+        showOrderNotFound();
+        return;
     }
-};
+
+    try {
+
+        // --------------------------------
+        // Load current logged-in user
+        // --------------------------------
+
+        const userResponse = await fetch(
+            `${API_BASE_URL}/api/auth/me`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        if (!userResponse.ok) {
+            throw new Error("User is not logged in");
+        }
+
+        const currentUser =
+            await userResponse.json();
 
 
-// ========================================
-// FIND ORDER
-// ========================================
+        // --------------------------------
+        // Load order
+        // --------------------------------
 
-const savedOrders = quickBites.getOrders();
+        const orderResponse = await fetch(
+            `${API_BASE_URL}/api/orders/${encodeURIComponent(orderId)}`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
 
-const order =
-    savedOrders.find(item => item.id === orderId) ||
-    dummyOrders[orderId];
+        if (!orderResponse.ok) {
+            throw new Error(
+                `Failed to load order: ${orderResponse.status}`
+            );
+        }
+
+        const order =
+            await orderResponse.json();
 
 
-// ========================================
-// DISPLAY ORDER
-// ========================================
+        // --------------------------------
+        // Security check
+        // Make sure this order belongs
+        // to the logged-in customer
+        // --------------------------------
 
-if (order) {
-    displayOrder(order);
-} else {
-    showOrderNotFound();
+        if (
+            Number(order.user_id) !==
+            Number(currentUser.id)
+        ) {
+            showOrderNotFound();
+            return;
+        }
+
+
+        // --------------------------------
+        // Load order items
+        // --------------------------------
+
+        const itemsResponse = await fetch(
+            `${API_BASE_URL}/api/order-items`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        if (!itemsResponse.ok) {
+            throw new Error(
+                `Failed to load order items: ${itemsResponse.status}`
+            );
+        }
+
+        const allItems =
+            await itemsResponse.json();
+
+
+        const orderItems =
+            allItems.filter(item =>
+                Number(item.order_id) ===
+                Number(order.order_id)
+            );
+
+
+        // --------------------------------
+        // Load address
+        // --------------------------------
+
+        const addressResponse = await fetch(
+            `${API_BASE_URL}/api/addresses/${order.address_id}`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        let address = null;
+
+        if (addressResponse.ok) {
+            address =
+                await addressResponse.json();
+        }
+
+
+        // --------------------------------
+        // Display everything
+        // --------------------------------
+
+        displayOrder(
+            order,
+            orderItems,
+            address
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Order details loading error:",
+            error
+        );
+
+        showOrderError(error.message);
+    }
 }
 
 
@@ -99,25 +161,59 @@ if (order) {
 // DISPLAY ORDER
 // ========================================
 
-function displayOrder(order) {
-    document.querySelector("#order-id").textContent = order.id;
-    document.querySelector("#order-date").textContent = order.date;
-    document.querySelector("#order-status").textContent =
-        order.status || "Unknown";
+function displayOrder(
+    order,
+    items,
+    address
+) {
 
-    document.querySelector("#order-address").textContent =
-        quickBites.getAddress(order);
+    const orderIdElement =
+        document.querySelector("#order-id");
 
-    displayItems(order.items || []);
-    displayTotals(order.items || []);
+    const orderDateElement =
+        document.querySelector("#order-date");
 
-    const paymentElement =
-        document.querySelector("#payment-method");
+    const orderStatusElement =
+        document.querySelector("#order-status");
 
-    if (paymentElement) {
-        paymentElement.textContent =
-            order.paymentMethod || "Not available";
+    const orderAddressElement =
+        document.querySelector("#order-address");
+
+
+    if (orderIdElement) {
+        orderIdElement.textContent =
+            order.order_id;
     }
+
+
+    if (orderDateElement) {
+        orderDateElement.textContent =
+            formatDate(order.order_date);
+    }
+
+
+    if (orderStatusElement) {
+
+        orderStatusElement.textContent =
+            formatStatus(order.order_status);
+
+        orderStatusElement.className =
+            `order-status ${getStatusClass(
+                order.order_status
+            )}`;
+    }
+
+
+    if (orderAddressElement) {
+
+        orderAddressElement.textContent =
+            formatAddress(address);
+    }
+
+
+    displayItems(items);
+
+    displayTotals(order);
 }
 
 
@@ -126,37 +222,101 @@ function displayOrder(order) {
 // ========================================
 
 function displayItems(items) {
-    const orderItems =
+
+    const orderItemsContainer =
         document.querySelector("#order-items");
 
-    orderItems.innerHTML = "";
+    if (!orderItemsContainer) {
+        return;
+    }
 
-    items.forEach(item => {
-        const price = quickBites.parsePrice(item.price);
-        const itemTotal = price * Number(item.quantity || 0);
 
-        const itemElement = document.createElement("div");
-        itemElement.classList.add("order-item");
+    orderItemsContainer.innerHTML = "";
 
-        itemElement.innerHTML = `
-            <div class="order-item-image">
-                <img
-                    src="${quickBites.getImagePath(item.image)}"
-                    alt="${item.name}">
-            </div>
 
-            <div class="order-item-info">
-                <h4>${item.name}</h4>
-                <p>Quantity: ${item.quantity}</p>
-                <p>Price: Rs.${price.toFixed(2)}</p>
-            </div>
+    if (!items || items.length === 0) {
 
-            <div class="order-item-price">
-                Rs.${itemTotal.toFixed(2)}
+        orderItemsContainer.innerHTML = `
+            <div class="empty-checkout">
+
+                <i class="fa-solid fa-box-open"></i>
+
+                <h3>No Items Found</h3>
+
+                <p>
+                    No items were found for this order.
+                </p>
+
             </div>
         `;
 
-        orderItems.appendChild(itemElement);
+        return;
+    }
+
+
+    items.forEach(item => {
+
+        const price =
+            Number(item.price || 0);
+
+        const quantity =
+            Number(item.quantity || 0);
+
+        const itemTotal =
+            Number(item.subtotal || price * quantity);
+
+
+        const itemElement =
+            document.createElement("div");
+
+        itemElement.classList.add(
+            "order-item"
+        );
+
+
+        itemElement.innerHTML = `
+
+            <div class="order-item-image">
+
+                <div class="order-item-placeholder">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+
+            </div>
+
+
+            <div class="order-item-info">
+
+                <h4>
+                    ${escapeHtml(
+                        item.food_name || "Food Item"
+                    )}
+                </h4>
+
+                <p>
+                    Quantity: ${quantity}
+                </p>
+
+                <p>
+                    Price: Rs.${price.toFixed(2)}
+                </p>
+
+            </div>
+
+
+            <div class="order-item-price">
+
+                Rs.${itemTotal.toFixed(2)}
+
+            </div>
+
+        `;
+
+
+        orderItemsContainer.appendChild(
+            itemElement
+        );
+
     });
 }
 
@@ -165,28 +325,191 @@ function displayItems(items) {
 // DISPLAY TOTALS
 // ========================================
 
-function displayTotals(items) {
-    const subtotal = items.reduce(
-        (total, item) =>
-            total +
-            quickBites.parsePrice(item.price) *
-            Number(item.quantity || 0),
-        0
-    );
+function displayTotals(order) {
 
-    const deliveryFee = subtotal > 0 ? 50 : 0;
-    const total = subtotal + deliveryFee;
+    const subtotal =
+        Number(order.subtotal || 0);
 
-    document.querySelector("#subtotal").textContent =
-        `Rs.${subtotal.toFixed(2)}`;
+    const deliveryFee =
+        Number(order.delivery_fee || 0);
 
-    document.querySelector("#delivery-fee").textContent =
-        `Rs.${deliveryFee.toFixed(2)}`;
+    const total =
+        Number(order.total_amount || 0);
 
-    document.querySelector("#order-total").textContent =
-        `Rs.${total.toFixed(2)}`;
+
+    const subtotalElement =
+        document.querySelector("#subtotal");
+
+    const deliveryFeeElement =
+        document.querySelector("#delivery-fee");
+
+    const totalElement =
+        document.querySelector("#order-total");
+
+
+    if (subtotalElement) {
+
+        subtotalElement.textContent =
+            `Rs.${subtotal.toFixed(2)}`;
+    }
+
+
+    if (deliveryFeeElement) {
+
+        deliveryFeeElement.textContent =
+            `Rs.${deliveryFee.toFixed(2)}`;
+    }
+
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            `Rs.${total.toFixed(2)}`;
+    }
 }
 
+
+// ========================================
+// FORMAT ADDRESS
+// ========================================
+
+function formatAddress(address) {
+
+    if (!address) {
+        return "Not available";
+    }
+
+
+    const parts = [];
+
+
+    if (address.addressLine) {
+        parts.push(address.addressLine);
+    }
+
+
+    if (address.city) {
+        parts.push(address.city);
+    }
+
+
+    if (address.phone) {
+        parts.push(`Phone: ${address.phone}`);
+    }
+
+
+    return parts.length > 0
+        ? parts.join(", ")
+        : "Not available";
+}
+
+
+// ========================================
+// FORMAT DATE
+// ========================================
+
+function formatDate(dateValue) {
+
+    if (!dateValue) {
+        return "Not available";
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+
+    if (Number.isNaN(date.getTime())) {
+        return dateValue;
+    }
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }
+    );
+}
+
+
+// ========================================
+// FORMAT STATUS
+// ========================================
+
+function formatStatus(status) {
+
+    if (!status) {
+        return "Unknown";
+    }
+
+
+    return String(status)
+        .replace(/_/g, " ")
+        .toLowerCase()
+        .replace(/\b\w/g, letter =>
+            letter.toUpperCase()
+        );
+}
+
+
+// ========================================
+// STATUS CLASS
+// ========================================
+
+function getStatusClass(status) {
+
+    const formattedStatus =
+        String(status || "")
+            .toLowerCase();
+
+
+    const statusClasses = {
+
+        delivered:
+            "status-delivered",
+
+        preparing:
+            "status-preparing",
+
+        cancelled:
+            "status-cancelled",
+
+        confirmed:
+            "status-preparing",
+
+        ready:
+            "status-preparing",
+
+        out_for_delivery:
+            "status-preparing",
+
+        placed:
+            "status-preparing"
+    };
+
+
+    return statusClasses[
+        formattedStatus
+    ] || "";
+}
+
+
+// ========================================
+// HTML ESCAPE
+// ========================================
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
 
 // ========================================
@@ -194,17 +517,85 @@ function displayTotals(items) {
 // ========================================
 
 function showOrderNotFound() {
-    document.querySelector("#order-id").textContent =
-        "Not Found";
 
-    document.querySelector("#order-status").textContent =
-        "Order Not Found";
+    const orderIdElement =
+        document.querySelector("#order-id");
 
-    document.querySelector("#order-items").innerHTML = `
+    const statusElement =
+        document.querySelector("#order-status");
+
+    const itemsElement =
+        document.querySelector("#order-items");
+
+
+    if (orderIdElement) {
+        orderIdElement.textContent =
+            "Not Found";
+    }
+
+
+    if (statusElement) {
+        statusElement.textContent =
+            "Order Not Found";
+    }
+
+
+    if (itemsElement) {
+
+        itemsElement.innerHTML = `
+
+            <div class="empty-checkout">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <h3>Order Not Found</h3>
+
+                <p>
+                    We could not find this order.
+                </p>
+
+            </div>
+
+        `;
+    }
+}
+
+
+// ========================================
+// ORDER ERROR
+// ========================================
+
+function showOrderError(message) {
+
+    const itemsElement =
+        document.querySelector("#order-items");
+
+
+    if (!itemsElement) {
+        return;
+    }
+
+
+    itemsElement.innerHTML = `
+
         <div class="empty-checkout">
+
             <i class="fa-solid fa-circle-exclamation"></i>
-            <h3>Order Not Found</h3>
-            <p>We could not find this order.</p>
+
+            <h3>Could Not Load Order</h3>
+
+            <p>
+                ${escapeHtml(message)}
+            </p>
+
         </div>
+
     `;
 }
+
+
+// ========================================
+// START
+// ========================================
+
+loadOrder();

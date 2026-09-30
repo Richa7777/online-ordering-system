@@ -1,148 +1,372 @@
 // ========================================
+// BACKEND API
+// ========================================
+
+const API_BASE_URL = "http://127.0.0.1:8080";
+
+
+// ========================================
 // ELEMENTS
 // ========================================
 
-const ordersList = document.querySelector("#orders-list");
+const ordersList =
+    document.querySelector("#orders-list");
+
+
+// ========================================
+// LOAD CURRENT USER
+// ========================================
+
+async function loadCurrentUser() {
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/auth/me`,
+        {
+            method: "GET",
+            credentials: "include"
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("User is not logged in");
+    }
+
+    return await response.json();
+}
 
 
 // ========================================
 // LOAD ORDERS
 // ========================================
 
-const orders = quickBites.getOrders();
+async function loadOrders() {
+
+    if (!ordersList) {
+        return;
+    }
+
+    try {
+
+        // --------------------------------
+        // Get logged-in user
+        // --------------------------------
+
+        const currentUser =
+            await loadCurrentUser();
+
+
+        // --------------------------------
+        // Get all orders
+        // --------------------------------
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/orders`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
+
+
+        if (!response.ok) {
+            throw new Error(
+                `Failed to load orders: ${response.status}`
+            );
+        }
+
+
+        const allOrders =
+            await response.json();
+
+
+        // --------------------------------
+        // Filter this customer's orders
+        // --------------------------------
+
+        const orders =
+            allOrders.filter(order =>
+                Number(order.user_id) ===
+                Number(currentUser.id)
+            );
+
+
+        // --------------------------------
+        // Sort newest first
+        // --------------------------------
+
+        orders.sort((a, b) => {
+
+            return new Date(b.order_date) -
+                   new Date(a.order_date);
+
+        });
+
+
+        // --------------------------------
+        // Display
+        // --------------------------------
+
+        displayOrders(orders);
+
+
+    } catch (error) {
+
+        console.error(
+            "Orders loading error:",
+            error
+        );
+
+
+        ordersList.innerHTML = `
+            <div class="no-orders">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <h3>Could Not Load Orders</h3>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            </div>
+        `;
+    }
+}
 
 
 // ========================================
 // DISPLAY ORDERS
 // ========================================
 
-function displayOrders() {
-    if (!ordersList) {
-        return;
-    }
+function displayOrders(orders) {
 
     ordersList.innerHTML = "";
 
+
     if (orders.length === 0) {
+
         ordersList.innerHTML = `
             <div class="no-orders">
+
                 <i class="fa-solid fa-receipt"></i>
+
                 <h3>No Orders Yet</h3>
-                <p>You have not placed any orders yet.</p>
-                <a href="index.html" class="btn">
+
+                <p>
+                    You have not placed any orders yet.
+                </p>
+
+                <a
+                    href="index.html"
+                    class="btn"
+                >
                     Start Shopping
                 </a>
+
             </div>
         `;
+
         return;
     }
 
-    [...orders].reverse().forEach(order => {
-        const subtotal = calculateSubtotal(order.items);
-        const deliveryFee = subtotal > 0 ? 50 : 0;
-        const total = subtotal + deliveryFee;
 
-        const itemText = getItemText(order.items);
-        const address = quickBites.getAddress(order);
+    orders.forEach(order => {
 
-        const orderCard = document.createElement("div");
-        orderCard.classList.add("order-card");
+        const subtotal =
+            Number(order.subtotal || 0);
+
+        const deliveryFee =
+            Number(order.delivery_fee || 0);
+
+        const total =
+            Number(order.total_amount || 0);
+
+
+        const orderCard =
+            document.createElement("div");
+
+        orderCard.classList.add(
+            "order-card"
+        );
+
 
         orderCard.innerHTML = `
+
             <div class="order-top">
+
                 <div>
-                    <h3>Order #${order.id}</h3>
+
+                    <h3>
+                        Order #${order.order_id}
+                    </h3>
+
                     <p>
                         <i class="fa-regular fa-calendar"></i>
-                        ${order.date}
+                        ${formatDate(order.order_date)}
                     </p>
+
                 </div>
 
-                <span class="order-status ${getStatusClass(order.status)}">
-                    ${order.status || "Unknown"}
+
+                <span
+                    class="order-status ${getStatusClass(order.order_status)}"
+                >
+                    ${order.order_status || "Unknown"}
                 </span>
+
             </div>
+
 
             <div class="order-middle">
-                <div>
-                    <strong>Items</strong>
-                    <p>${itemText}</p>
-                </div>
 
                 <div>
-                    <strong>Total</strong>
-                    <p>Rs.${total.toFixed(2)}</p>
+
+                    <strong>
+                        Subtotal
+                    </strong>
+
+                    <p>
+                        Rs.${subtotal.toFixed(2)}
+                    </p>
+
                 </div>
+
+
+                <div>
+
+                    <strong>
+                        Delivery Fee
+                    </strong>
+
+                    <p>
+                        Rs.${deliveryFee.toFixed(2)}
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Total
+                    </strong>
+
+                    <p>
+                        Rs.${total.toFixed(2)}
+                    </p>
+
+                </div>
+
             </div>
 
+
             <div class="order-bottom">
+
                 <div>
-                    <strong>Delivery Address</strong>
-                    <p>${address}</p>
+
+                    <strong>
+                        Order Status
+                    </strong>
+
+                    <p>
+                        ${order.order_status || "Unknown"}
+                    </p>
+
                 </div>
 
+
                 <a
-                    href="order_details.html?id=${encodeURIComponent(order.id)}"
-                    class="view-details-btn">
+                    href="order_details.html?id=${encodeURIComponent(order.order_id)}"
+                    class="view-details-btn"
+                >
                     <i class="fa-solid fa-eye"></i>
                     View Details
                 </a>
+
             </div>
+
         `;
 
-        ordersList.appendChild(orderCard);
+
+        ordersList.appendChild(
+            orderCard
+        );
+
     });
 }
 
 
 // ========================================
-// CALCULATE SUBTOTAL
+// FORMAT DATE
 // ========================================
 
-function calculateSubtotal(items = []) {
-    return items.reduce((subtotal, item) => {
-        const price = quickBites.parsePrice(item.price);
-        return subtotal + price * Number(item.quantity || 0);
-    }, 0);
+function formatDate(dateValue) {
+
+    if (!dateValue) {
+        return "Not available";
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+
+    if (Number.isNaN(date.getTime())) {
+        return dateValue;
+    }
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        }
+    );
 }
 
 
 // ========================================
-// GET ITEM TEXT
-// ========================================
-
-function getItemText(items = []) {
-    if (items.length === 0) {
-        return "No items";
-    }
-
-    let text = items[0].name;
-
-    if (items.length > 1) {
-        text += ` + ${items.length - 1} more`;
-    }
-
-    return text;
-}
-
-
-
-
-// ========================================
-// ORDER STATUS CLASS
+// STATUS CLASS
 // ========================================
 
 function getStatusClass(status) {
+
     const formattedStatus =
-        String(status || "").toLowerCase();
+        String(status || "")
+            .toLowerCase();
+
 
     const statusClasses = {
-        delivered: "status-delivered",
-        preparing: "status-preparing",
-        cancelled: "status-cancelled"
+
+        delivered:
+            "status-delivered",
+
+        preparing:
+            "status-preparing",
+
+        cancelled:
+            "status-cancelled",
+
+        confirmed:
+            "status-preparing",
+
+        ready:
+            "status-preparing",
+
+        out_for_delivery:
+            "status-preparing",
+
+        placed:
+            "status-preparing"
     };
 
-    return statusClasses[formattedStatus] || "";
+
+    return statusClasses[
+        formattedStatus
+    ] || "";
 }
 
 
@@ -150,4 +374,4 @@ function getStatusClass(status) {
 // START
 // ========================================
 
-displayOrders();
+loadOrders();

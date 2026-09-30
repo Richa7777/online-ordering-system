@@ -1,56 +1,42 @@
 // ========================================
 // QUICK BITES CUSTOMER UTILITIES
+// Session/database based - no localStorage
 // ========================================
 
 (function () {
 
-    const CART_KEY = "quickBitesCart";
-    const ORDERS_KEY = "quickBitesOrders";
-
-    function readJSON(key, fallback) {
-        try {
-            const value = localStorage.getItem(key);
-            return value ? JSON.parse(value) : fallback;
-        } catch (error) {
-            console.error(`Could not read ${key}:`, error);
-            return fallback;
-        }
-    }
-
-    function saveJSON(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
-    }
+    let memoryCart = [];
 
     function getCart() {
-        return readJSON(CART_KEY, []);
+        return memoryCart;
     }
 
     function saveCart(cart) {
-        saveJSON(CART_KEY, cart);
-        updateCartBadge(cart);
+        memoryCart = Array.isArray(cart) ? cart : [];
+        updateCartBadge(memoryCart);
     }
 
     function clearCart() {
-        localStorage.removeItem(CART_KEY);
+        memoryCart = [];
         updateCartBadge([]);
     }
 
     function getOrders() {
-        return readJSON(ORDERS_KEY, []);
+        return [];
     }
 
     function saveOrders(orders) {
-        saveJSON(ORDERS_KEY, orders);
+        // Orders are stored in the database.
+        // This function is kept only for compatibility.
     }
 
     function getCustomer(key, fallback = "") {
-        return localStorage.getItem(key) || fallback;
+        // Customer information comes from /api/auth/me.
+        return fallback;
     }
 
     function setCustomer(data) {
-        Object.entries(data).forEach(([key, value]) => {
-            localStorage.setItem(key, value);
-        });
+        // Customer information is stored in the database/session.
     }
 
     function parsePrice(price) {
@@ -90,7 +76,7 @@
         element.style.color = color;
     }
 
-    function updateCartBadge(cart = getCart()) {
+    function updateCartBadge(cart = memoryCart) {
         const cartValue = document.querySelector(".cart-value");
 
         if (!cartValue) {

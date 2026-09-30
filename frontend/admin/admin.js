@@ -1,115 +1,90 @@
 /* =========================================================
    QUICK BITES ADMIN DASHBOARD
+   Backend connected
    ========================================================= */
 
+const API_BASE_URL = "http://127.0.0.1:8080";
+
+let orders = [];
+let products = [];
+let customers = [];
+let orderItems = [];
+let riders = [];
+
+
+/* =========================================================
+   START
+   ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
 
-
-    /* =====================================================
-       INITIALIZE PRODUCTS
-       ===================================================== */
-
-    initializeProducts();
-
-
-    /* =====================================================
-       MOBILE MENU
-       ===================================================== */
-
     setupMobileMenu();
 
-
-    /* =====================================================
-       LOAD DASHBOARD
-       ===================================================== */
+    setupLogout();
 
     loadDashboard();
-
-
-    /* =====================================================
-       LOGOUT
-       ===================================================== */
-
-    setupLogout();
 
 });
 
 
-
 /* =========================================================
-   INITIALIZE PRODUCTS
+   LOAD DASHBOARD
    ========================================================= */
 
-async function initializeProducts() {
-
-
-    /*
-        Check whether products have already been
-        copied from products.json into localStorage.
-    */
-
-    const existingProducts =
-        localStorage.getItem("quickBitesProducts");
-
-
-    /*
-        If products already exist, don't overwrite them.
-    */
-
-    if (existingProducts) {
-
-        return;
-
-    }
-
+async function loadDashboard() {
 
     try {
 
-
-        const response =
-            await fetch("../public/products.json");
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Could not load products.json"
-            );
-
-        }
+        await Promise.all([
+            loadProducts(),
+            loadOrders(),
+            loadCustomers(),
+            loadOrderItems(),
+            loadRiders()
+        ]);
 
 
-        const products =
-            await response.json();
+        console.log("Dashboard data loaded successfully.");
 
+        console.log(
+            "Products:",
+            products.length
+        );
 
-        /*
-            Save the existing products to localStorage.
+        console.log(
+            "Orders:",
+            orders.length
+        );
 
-            This allows the Admin Products page
-            to modify them later.
-        */
+        console.log(
+            "Customers:",
+            customers.length
+        );
 
-        localStorage.setItem(
-            "quickBitesProducts",
-            JSON.stringify(products)
+        console.log(
+            "Order items:",
+            orderItems.length
+        );
+
+        console.log(
+            "Riders:",
+            riders.length
         );
 
 
-        /*
-            Update product count.
-        */
-
         updateProductCount();
 
+        updateOrderStatistics();
 
-    }
-    catch (error) {
+        updateCustomerCount();
 
+        displayRecentOrders();
+
+
+    } catch (error) {
 
         console.error(
-            "Error loading products:",
+            "Dashboard loading error:",
             error
         );
 
@@ -118,30 +93,228 @@ async function initializeProducts() {
 }
 
 
-
 /* =========================================================
-   LOAD DASHBOARD
+   LOAD PRODUCTS
    ========================================================= */
 
-function loadDashboard() {
+async function loadProducts() {
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/food-items`,
+        {
+            method: "GET",
+            credentials: "include"
+        }
+    );
 
 
-    updateProductCount();
+    if (!response.ok) {
+
+        throw new Error(
+            `Failed to load products: ${response.status}`
+        );
+
+    }
 
 
-    updateOrderStatistics();
+    products = await response.json();
 
 
-    updateCustomerCount();
+    if (!Array.isArray(products)) {
 
+        products = [];
 
-    updateRiderCount();
+        throw new Error(
+            "Products response is not an array."
+        );
 
-
-    displayRecentOrders();
+    }
 
 }
 
+
+/* =========================================================
+   LOAD ORDERS
+   ========================================================= */
+
+async function loadOrders() {
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/orders`,
+        {
+            method: "GET",
+            credentials: "include"
+        }
+    );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Failed to load orders: ${response.status}`
+        );
+
+    }
+
+
+    orders = await response.json();
+
+
+    if (!Array.isArray(orders)) {
+
+        orders = [];
+
+        throw new Error(
+            "Orders response is not an array."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD CUSTOMERS
+   ========================================================= */
+
+async function loadCustomers() {
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/users/customers`,
+        {
+            method: "GET",
+            credentials: "include"
+        }
+    );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Failed to load customers: ${response.status}`
+        );
+
+    }
+
+
+    customers = await response.json();
+
+
+    if (!Array.isArray(customers)) {
+
+        customers = [];
+
+        throw new Error(
+            "Customers response is not an array."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD RIDERS
+   ========================================================= */
+
+async function loadRiders() {
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/users/riders`,
+        {
+            method: "GET",
+            credentials: "include"
+        }
+    );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Failed to load riders: ${response.status}`
+        );
+
+    }
+
+
+    riders = await response.json();
+
+
+    if (!Array.isArray(riders)) {
+
+        riders = [];
+
+        throw new Error(
+            "Riders response is not an array."
+        );
+
+    }
+
+
+    console.log(
+        "Dashboard riders:",
+        riders
+    );
+
+
+    console.log(
+        "Dashboard rider count:",
+        riders.length
+    );
+
+
+    const element =
+        document.getElementById("total-riders");
+
+
+    if (element) {
+
+        element.textContent =
+            riders.length;
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD ORDER ITEMS
+   ========================================================= */
+
+async function loadOrderItems() {
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/order-items`,
+        {
+            method: "GET",
+            credentials: "include"
+        }
+    );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Failed to load order items: ${response.status}`
+        );
+
+    }
+
+
+    orderItems = await response.json();
+
+
+    if (!Array.isArray(orderItems)) {
+
+        orderItems = [];
+
+        throw new Error(
+            "Order items response is not an array."
+        );
+
+    }
+
+}
 
 
 /* =========================================================
@@ -150,31 +323,56 @@ function loadDashboard() {
 
 function updateProductCount() {
 
-
-    const productsElement =
+    const element =
         document.getElementById(
             "total-products"
         );
 
 
-    if (!productsElement) {
+    if (!element) {
+
+        console.warn(
+            "Element #total-products was not found."
+        );
 
         return;
 
     }
 
 
-    const products =
-        getLocalStorageArray(
-            "quickBitesProducts"
-        );
-
-
-    productsElement.textContent =
+    element.textContent =
         products.length;
 
 }
 
+
+/* =========================================================
+   UPDATE CUSTOMER COUNT
+   ========================================================= */
+
+function updateCustomerCount() {
+
+    const element =
+        document.getElementById(
+            "total-customers"
+        );
+
+
+    if (!element) {
+
+        console.warn(
+            "Element #total-customers was not found."
+        );
+
+        return;
+
+    }
+
+
+    element.textContent =
+        customers.length;
+
+}
 
 
 /* =========================================================
@@ -182,15 +380,6 @@ function updateProductCount() {
    ========================================================= */
 
 function updateOrderStatistics() {
-
-
-    const orders =
-        getLocalStorageArray(
-            "quickBitesOrders"
-        );
-
-
-    /* ================= TOTAL ORDERS ================= */
 
     const totalOrders =
         document.getElementById(
@@ -206,9 +395,6 @@ function updateOrderStatistics() {
     }
 
 
-
-    /* ================= STATUS COUNTS ================= */
-
     let pending = 0;
 
     let preparing = 0;
@@ -220,15 +406,19 @@ function updateOrderStatistics() {
 
     orders.forEach(function (order) {
 
-
         const status =
             String(
-                order.status || "Pending"
-            ).toLowerCase();
+                order.order_status || ""
+            )
+            .trim()
+            .toLowerCase()
+            .replace(/-/g, "_")
+            .replace(/ /g, "_");
 
 
         if (
-            status === "pending"
+            status === "placed" ||
+            status === "confirmed"
         ) {
 
             pending++;
@@ -237,7 +427,8 @@ function updateOrderStatistics() {
 
 
         else if (
-            status === "preparing"
+            status === "preparing" ||
+            status === "ready"
         ) {
 
             preparing++;
@@ -246,9 +437,7 @@ function updateOrderStatistics() {
 
 
         else if (
-            status === "out for delivery" ||
-            status === "out_for_delivery" ||
-            status === "delivery"
+            status === "out_for_delivery"
         ) {
 
             delivery++;
@@ -257,7 +446,6 @@ function updateOrderStatistics() {
 
 
         else if (
-            status === "completed" ||
             status === "delivered"
         ) {
 
@@ -267,9 +455,6 @@ function updateOrderStatistics() {
 
     });
 
-
-
-    /* ================= DISPLAY COUNTS ================= */
 
     setText(
         "pending-orders",
@@ -297,97 +482,11 @@ function updateOrderStatistics() {
 }
 
 
-
-/* =========================================================
-   UPDATE CUSTOMER COUNT
-   ========================================================= */
-
-function updateCustomerCount() {
-
-
-    const customerElement =
-        document.getElementById(
-            "total-customers"
-        );
-
-
-    if (!customerElement) {
-
-        return;
-
-    }
-
-
-    /*
-        Customer data will be connected
-        when the Admin Customers page
-        is created.
-    */
-
-    const customers =
-        getLocalStorageArray(
-            "quickBitesCustomers"
-        );
-
-
-    customerElement.textContent =
-        customers.length;
-
-}
-
-
-
-/* =========================================================
-   UPDATE RIDER COUNT
-   ========================================================= */
-
-function updateRiderCount() {
-
-
-    const riderElement =
-        document.getElementById(
-            "total-riders"
-        );
-
-
-    if (!riderElement) {
-
-        return;
-
-    }
-
-
-    /*
-        Rider data will be connected
-        when the Admin Riders page
-        is created.
-    */
-
-    const riders =
-        getLocalStorageArray(
-            "quickBitesRiders"
-        );
-
-
-    riderElement.textContent =
-        riders.length;
-
-}
-
-
-
 /* =========================================================
    DISPLAY RECENT ORDERS
    ========================================================= */
 
 function displayRecentOrders() {
-
-
-    const orders =
-        getLocalStorageArray(
-            "quickBitesOrders"
-        );
-
 
     const tableBody =
         document.getElementById(
@@ -408,20 +507,10 @@ function displayRecentOrders() {
     }
 
 
-    /*
-        Clear the table.
-    */
-
     tableBody.innerHTML = "";
 
 
-
-    /* =====================================================
-       NO ORDERS
-       ===================================================== */
-
     if (orders.length === 0) {
-
 
         if (emptyMessage) {
 
@@ -430,16 +519,10 @@ function displayRecentOrders() {
 
         }
 
-
         return;
 
     }
 
-
-
-    /* =====================================================
-       ORDERS EXIST
-       ===================================================== */
 
     if (emptyMessage) {
 
@@ -449,178 +532,142 @@ function displayRecentOrders() {
     }
 
 
-
     /*
-        Reverse the orders so the newest
-        orders appear first.
-
-        Only display the latest 5.
-    */
+     * Sort newest orders first.
+     */
 
     const recentOrders =
         [...orders]
-            .reverse()
+            .sort(function (a, b) {
+
+                const dateA =
+                    new Date(
+                        a.order_date || 0
+                    );
+
+
+                const dateB =
+                    new Date(
+                        b.order_date || 0
+                    );
+
+
+                return dateB - dateA;
+
+            })
             .slice(0, 5);
 
 
+    recentOrders.forEach(function (order) {
 
-    recentOrders.forEach(
-        function (order) {
-
-
-            const row =
-                document.createElement("tr");
+        const row =
+            document.createElement("tr");
 
 
-            /* ================= ORDER ID ================= */
-
-            const orderId =
-                order.id ||
-                order.orderId ||
-                "N/A";
+        const orderId =
+            order.order_id || "N/A";
 
 
-            /* ================= CUSTOMER ================= */
+        const customer =
+            customers.find(function (customer) {
 
-            const customerName =
-                order.customerName ||
-                order.name ||
-                "Customer";
+                return Number(customer.id) ===
+                    Number(order.user_id);
 
-
-            /* ================= ITEMS ================= */
-
-            const itemCount =
-                getOrderItemCount(order);
+            });
 
 
-            /* ================= TOTAL ================= */
-
-            const total =
-                order.total ||
-                order.grandTotal ||
-                order.amount ||
-                "Rs.0";
+        const customerName =
+            customer
+                ? customer.name
+                : `Customer #${order.user_id}`;
 
 
-            /* ================= STATUS ================= */
-
-            const status =
-                order.status ||
-                "Pending";
-
+        const itemCount =
+            getOrderItemCount(
+                order.order_id
+            );
 
 
-            /* ================= CREATE ROW ================= */
-
-            row.innerHTML = `
-
-                <td>
-                    #${escapeHTML(orderId)}
-                </td>
-
-                <td>
-                    ${escapeHTML(customerName)}
-                </td>
-
-                <td>
-                    ${itemCount}
-                </td>
-
-                <td>
-                    ${escapeHTML(String(total))}
-                </td>
-
-                <td>
-                    ${createStatusBadge(status)}
-                </td>
-
-            `;
+        const total =
+            Number(
+                order.total_amount || 0
+            );
 
 
-            tableBody.appendChild(row);
+        const status =
+            order.order_status ||
+            "PLACED";
 
-        }
-    );
+
+        row.innerHTML = `
+
+            <td>
+                #${escapeHTML(orderId)}
+            </td>
+
+            <td>
+                ${escapeHTML(customerName)}
+            </td>
+
+            <td>
+                ${itemCount}
+            </td>
+
+            <td>
+                Rs. ${total.toFixed(2)}
+            </td>
+
+            <td>
+                ${createStatusBadge(status)}
+            </td>
+
+        `;
+
+
+        tableBody.appendChild(row);
+
+    });
 
 }
-
 
 
 /* =========================================================
    GET ORDER ITEM COUNT
    ========================================================= */
 
-function getOrderItemCount(order) {
+function getOrderItemCount(orderId) {
 
+    return orderItems
+        .filter(function (item) {
 
-    /*
-        Check order.items first.
-    */
+            return Number(item.order_id) ===
+                Number(orderId);
 
-    if (
-        Array.isArray(order.items)
-    ) {
+        })
+        .reduce(function (total, item) {
 
+            return total +
+                Number(
+                    item.quantity || 0
+                );
 
-        return order.items.reduce(
-            function (total, item) {
-
-
-                return total +
-                    Number(
-                        item.quantity || 1
-                    );
-
-            },
-            0
-        );
-
-    }
-
-
-
-    /*
-        Some orders may use order.cart.
-    */
-
-    if (
-        Array.isArray(order.cart)
-    ) {
-
-
-        return order.cart.reduce(
-            function (total, item) {
-
-
-                return total +
-                    Number(
-                        item.quantity || 1
-                    );
-
-            },
-            0
-        );
-
-    }
-
-
-    return 0;
+        }, 0);
 
 }
 
 
-
 /* =========================================================
-   CREATE ORDER STATUS BADGE
+   CREATE STATUS BADGE
    ========================================================= */
 
 function createStatusBadge(status) {
 
-
     const cleanStatus =
         String(status)
-            .toLowerCase();
+            .trim()
+            .toLowerCase()
+            .replace(/_/g, " ");
 
 
     let className =
@@ -628,7 +675,8 @@ function createStatusBadge(status) {
 
 
     if (
-        cleanStatus === "preparing"
+        cleanStatus === "preparing" ||
+        cleanStatus === "ready"
     ) {
 
         className = "preparing";
@@ -637,9 +685,7 @@ function createStatusBadge(status) {
 
 
     else if (
-        cleanStatus === "out for delivery" ||
-        cleanStatus === "out_for_delivery" ||
-        cleanStatus === "delivery"
+        cleanStatus === "out for delivery"
     ) {
 
         className = "delivery";
@@ -648,7 +694,6 @@ function createStatusBadge(status) {
 
 
     else if (
-        cleanStatus === "completed" ||
         cleanStatus === "delivered"
     ) {
 
@@ -661,7 +706,9 @@ function createStatusBadge(status) {
 
         <span class="order-badge ${className}">
 
-            ${escapeHTML(status)}
+            ${escapeHTML(
+                formatStatus(status)
+            )}
 
         </span>
 
@@ -670,13 +717,29 @@ function createStatusBadge(status) {
 }
 
 
+/* =========================================================
+   FORMAT STATUS
+   ========================================================= */
+
+function formatStatus(status) {
+
+    return String(status)
+        .toLowerCase()
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, function (letter) {
+
+            return letter.toUpperCase();
+
+        });
+
+}
+
 
 /* =========================================================
    MOBILE MENU
    ========================================================= */
 
 function setupMobileMenu() {
-
 
     const hamburger =
         document.querySelector(
@@ -700,15 +763,9 @@ function setupMobileMenu() {
     }
 
 
-
-    /* =====================================================
-       OPEN / CLOSE MENU
-       ===================================================== */
-
     hamburger.addEventListener(
         "click",
         function (event) {
-
 
             event.preventDefault();
 
@@ -724,11 +781,9 @@ function setupMobileMenu() {
 
             if (icon) {
 
-
                 icon.classList.toggle(
                     "fa-bars"
                 );
-
 
                 icon.classList.toggle(
                     "fa-xmark"
@@ -740,20 +795,13 @@ function setupMobileMenu() {
     );
 
 
-
-    /* =====================================================
-       CLOSE AFTER CLICKING LINK
-       ===================================================== */
-
     mobileMenu
         .querySelectorAll("a")
         .forEach(function (link) {
 
-
             link.addEventListener(
                 "click",
                 function () {
-
 
                     mobileMenu.classList.remove(
                         "mobile-menu-active"
@@ -767,13 +815,11 @@ function setupMobileMenu() {
 }
 
 
-
 /* =========================================================
    LOGOUT
    ========================================================= */
 
 function setupLogout() {
-
 
     const logoutLinks =
         document.querySelectorAll(
@@ -784,11 +830,9 @@ function setupLogout() {
     logoutLinks.forEach(
         function (logoutLink) {
 
-
             logoutLink.addEventListener(
                 "click",
-                function (event) {
-
+                async function (event) {
 
                     event.preventDefault();
 
@@ -801,14 +845,17 @@ function setupLogout() {
 
                     if (confirmLogout) {
 
-
-                        /*
-                            Authentication will be
-                            added later with the backend.
-
-                            For now, return to the
-                            public homepage.
-                        */
+                        try {
+                            await fetch(
+                                "http://127.0.0.1:8080/api/auth/logout",
+                                {
+                                    method: "POST",
+                                    credentials: "include"
+                                }
+                            );
+                        } catch (error) {
+                            console.error("Logout error:", error);
+                        }
 
                         window.location.href =
                             "../public/index.html";
@@ -824,56 +871,6 @@ function setupLogout() {
 }
 
 
-
-/* =========================================================
-   LOCAL STORAGE ARRAY
-   ========================================================= */
-
-function getLocalStorageArray(key) {
-
-
-    try {
-
-
-        const value =
-            localStorage.getItem(key);
-
-
-        if (!value) {
-
-            return [];
-
-        }
-
-
-        const parsed =
-            JSON.parse(value);
-
-
-        return Array.isArray(parsed)
-            ? parsed
-            : [];
-
-    }
-
-
-    catch (error) {
-
-
-        console.error(
-            `Error reading ${key}:`,
-            error
-        );
-
-
-        return [];
-
-    }
-
-}
-
-
-
 /* =========================================================
    SET TEXT
    ========================================================= */
@@ -882,7 +879,6 @@ function setText(
     elementId,
     value
 ) {
-
 
     const element =
         document.getElementById(
@@ -900,39 +896,17 @@ function setText(
 }
 
 
-
 /* =========================================================
-   HTML ESCAPE
+   ESCAPE HTML
    ========================================================= */
 
 function escapeHTML(value) {
 
-
     return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }

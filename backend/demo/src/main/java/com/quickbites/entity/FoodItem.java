@@ -31,6 +31,9 @@ public class FoodItem {
     @Column(name = "is_available")
     private Boolean isAvailable = true;
 
+    @Column(name = "is_popular")
+private Boolean isPopular = false;
+
     public FoodItem() {
     }
 
@@ -89,4 +92,12 @@ public class FoodItem {
     public void setIsAvailable(Boolean isAvailable) {
         this.isAvailable = isAvailable;
     }
+
+    public Boolean getIsPopular() {
+    return isPopular;
+}
+
+public void setIsPopular(Boolean isPopular) {
+    this.isPopular = isPopular;
+}
 }

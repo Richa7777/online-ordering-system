@@ -2,9 +2,11 @@
 // QUICK BITES - ADMIN ORDERS
 // ==================================================
 
-const ORDERS_KEY = "quickBitesOrders";
+const API_BASE_URL = "http://127.0.0.1:8080";
 
 let orders = [];
+let orderItems = [];
+let riders = [];
 
 
 // ==================================================
@@ -23,9 +25,6 @@ const statusFilter =
 const orderCount =
     document.querySelector("#order-count");
 
-
-// Modal
-
 const orderModal =
     document.querySelector("#order-modal");
 
@@ -42,287 +41,300 @@ const closeModalBtn =
     document.querySelector("#close-modal-btn");
 
 
-
-// ==================================================
-// MOBILE MENU
-// ==================================================
-
-const hamburger =
-    document.querySelector(".hamburger");
-
-const mobileMenu =
-    document.querySelector(".mobile-menu");
-
-
-if (hamburger && mobileMenu) {
-
-    hamburger.addEventListener(
-        "click",
-        function (event) {
-
-            event.preventDefault();
-
-            mobileMenu.classList.toggle(
-                "mobile-menu-active"
-            );
-
-
-            const icon =
-                hamburger.querySelector("i");
-
-
-            if (icon) {
-
-                icon.classList.toggle(
-                    "fa-bars"
-                );
-
-                icon.classList.toggle(
-                    "fa-xmark"
-                );
-
-            }
-
-        }
-    );
-
-
-    mobileMenu
-        .querySelectorAll("a")
-        .forEach(link => {
-
-            link.addEventListener(
-                "click",
-                function () {
-
-                    mobileMenu.classList.remove(
-                        "mobile-menu-active"
-                    );
-
-                }
-            );
-
-        });
-
-}
-
-
-
 // ==================================================
 // LOAD ORDERS
 // ==================================================
 
-function loadOrders() {
+async function loadOrders() {
 
     try {
 
-        const savedOrders =
-            localStorage.getItem(ORDERS_KEY);
+        // ------------------------------------------
+        // Check logged-in user
+        // ------------------------------------------
+
+        const userResponse =
+            await fetch(
+                `${API_BASE_URL}/api/auth/me`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
 
 
-        if (savedOrders) {
+        console.log(
+            "Admin auth status:",
+            userResponse.status
+        );
 
-            orders =
-                JSON.parse(savedOrders);
+
+        if (!userResponse.ok) {
+
+            throw new Error(
+                `Authentication check failed: ${userResponse.status}`
+            );
 
         }
-        else {
 
-            orders = [];
+
+        const currentUser =
+            await userResponse.json();
+
+
+        console.log(
+            "Current logged-in user:",
+            currentUser
+        );
+
+
+        // ------------------------------------------
+        // Load orders
+        // ------------------------------------------
+
+        const ordersResponse =
+            await fetch(
+                `${API_BASE_URL}/api/orders`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
+
+
+        console.log(
+            "Orders response status:",
+            ordersResponse.status
+        );
+
+
+        if (!ordersResponse.ok) {
+
+            throw new Error(
+                `Failed to load orders: ${ordersResponse.status}`
+            );
 
         }
 
-    }
 
-    catch (error) {
+        orders =
+            await ordersResponse.json();
+
+
+        console.log(
+            "Orders loaded:",
+            orders
+        );
+
+
+        // ------------------------------------------
+        // Load order items
+        // ------------------------------------------
+
+        const itemsResponse =
+            await fetch(
+                `${API_BASE_URL}/api/order-items`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
+
+
+        console.log(
+            "Order items response status:",
+            itemsResponse.status
+        );
+
+
+        if (!itemsResponse.ok) {
+
+            throw new Error(
+                `Failed to load order items: ${itemsResponse.status}`
+            );
+
+        }
+
+
+        orderItems =
+            await itemsResponse.json();
+
+
+        console.log(
+            "Order items loaded:",
+            orderItems
+        );
+
+
+        // ------------------------------------------
+        // Load riders
+        // ------------------------------------------
+
+        await loadRiders();
+
+
+        // ------------------------------------------
+        // Display orders
+        // ------------------------------------------
+
+        displayOrders();
+
+
+    } catch (error) {
 
         console.error(
             "Could not load orders:",
             error
         );
 
-        orders = [];
 
-    }
+        if (ordersList) {
 
+            ordersList.innerHTML = `
 
-    displayOrders();
+                <div class="empty-orders">
 
-}
+                    <i class="fa-solid fa-circle-exclamation"></i>
 
+                    <h3>
+                        Could Not Load Orders
+                    </h3>
 
+                    <p>
+                        ${escapeHTML(error.message)}
+                    </p>
 
-// ==================================================
-// SAVE ORDERS
-// ==================================================
+                </div>
 
-function saveOrders() {
+            `;
 
-    localStorage.setItem(
-        ORDERS_KEY,
-        JSON.stringify(orders)
-    );
-
-}
-
-
-
-// ==================================================
-// PARSE PRICE
-// ==================================================
-
-function parsePrice(price) {
-
-    return Number(
-        String(price)
-            .replace("Rs.", "")
-            .replace(/,/g, "")
-    ) || 0;
-
-}
-
-
-
-// ==================================================
-// CALCULATE TOTAL
-// ==================================================
-
-function calculateOrderTotal(order) {
-
-    let total = 0;
-
-
-    if (
-        order.items &&
-        Array.isArray(order.items)
-    ) {
-
-        order.items.forEach(item => {
-
-            const price =
-                parsePrice(item.price);
-
-
-            const quantity =
-                Number(item.quantity) || 0;
-
-
-            total +=
-                price * quantity;
-
-        });
-
-    }
-
-
-    return total;
-
-}
-
-
-
-// ==================================================
-// STATUS CLASS
-// ==================================================
-
-function getStatusClass(status) {
-
-    switch (
-        String(status || "").toLowerCase()
-    ) {
-
-        case "preparing":
-
-            return "status-preparing";
-
-
-        case "out for delivery":
-
-            return "status-delivery";
-
-
-        case "delivered":
-
-            return "status-delivered";
-
-
-        case "cancelled":
-
-            return "status-cancelled";
-
-
-        default:
-
-            return "";
+        }
 
     }
 
 }
 
 
+// ==================================================
+// LOAD RIDERS
+// ==================================================
+
+async function loadRiders() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/users/riders`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
+
+
+        console.log(
+            "Riders response status:",
+            response.status
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Failed to load riders: ${response.status}`
+            );
+
+        }
+
+
+        riders =
+            await response.json();
+
+
+        console.log(
+            "Riders loaded for order assignment:",
+            riders
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Could not load riders:",
+            error
+        );
+
+
+        riders = [];
+
+    }
+
+}
+
 
 // ==================================================
-// FILTER ORDERS
+// GET FILTERED ORDERS
 // ==================================================
 
 function getFilteredOrders() {
 
     const searchTerm =
-        searchInput.value
-            .trim()
-            .toLowerCase();
+        searchInput
+            ? searchInput.value.trim().toLowerCase()
+            : "";
 
 
     const selectedStatus =
-        statusFilter.value;
+        statusFilter
+            ? statusFilter.value
+            : "All";
 
 
     return [...orders]
-        .reverse()
+
+        .sort((a, b) => {
+
+            return new Date(b.order_date) -
+                   new Date(a.order_date);
+
+        })
+
         .filter(order => {
 
-
             const orderId =
-                String(order.id || "")
+                String(order.order_id || "")
                     .toLowerCase();
 
 
-            const customerName =
-                String(
-                    order.customerName || ""
-                )
+            const userId =
+                String(order.user_id || "")
                     .toLowerCase();
 
 
-            const phone =
-                String(
-                    order.phone || ""
-                )
+            const status =
+                String(order.order_status || "")
+                    .trim()
                     .toLowerCase();
 
 
             const matchesSearch =
-
                 searchTerm === "" ||
+                orderId.includes(searchTerm) ||
+                userId.includes(searchTerm);
 
-                orderId.includes(
-                    searchTerm
-                ) ||
 
-                customerName.includes(
-                    searchTerm
-                ) ||
-
-                phone.includes(
-                    searchTerm
-                );
+            const normalizedSelectedStatus =
+                String(selectedStatus)
+                    .trim()
+                    .toLowerCase()
+                    .replace(/-/g, "_")
+                    .replace(/ /g, "_");
 
 
             const matchesStatus =
-
-                selectedStatus === "All" ||
-
-                order.status === selectedStatus;
+                normalizedSelectedStatus === "all" ||
+                status === normalizedSelectedStatus;
 
 
             return (
@@ -335,12 +347,18 @@ function getFilteredOrders() {
 }
 
 
-
 // ==================================================
 // DISPLAY ORDERS
 // ==================================================
 
 function displayOrders() {
+
+    if (!ordersList) {
+
+        return;
+
+    }
+
 
     ordersList.innerHTML = "";
 
@@ -349,17 +367,17 @@ function displayOrders() {
         getFilteredOrders();
 
 
-    orderCount.textContent =
-        `${filteredOrders.length} ${
-            filteredOrders.length === 1
-                ? "order"
-                : "orders"
-        }`;
+    if (orderCount) {
 
+        orderCount.textContent =
+            `${filteredOrders.length} ${
+                filteredOrders.length === 1
+                    ? "order"
+                    : "orders"
+            }`;
 
-    // ==================================================
-    // NO ORDERS
-    // ==================================================
+    }
+
 
     if (filteredOrders.length === 0) {
 
@@ -386,30 +404,18 @@ function displayOrders() {
     }
 
 
-
-    // ==================================================
-    // CREATE ORDER CARDS
-    // ==================================================
-
     filteredOrders.forEach(order => {
+
+        const items =
+            getOrderItems(order.order_id);
 
 
         const total =
-            calculateOrderTotal(order);
-
-
-        const customerName =
-            order.customerName ||
-            "Customer";
+            Number(order.total_amount || 0);
 
 
         const status =
-            order.status ||
-            "Preparing";
-
-
-        const itemNames =
-            getItemNames(order);
+            formatStatus(order.order_status);
 
 
         const card =
@@ -422,23 +428,24 @@ function displayOrders() {
 
         card.innerHTML = `
 
-            <!-- ORDER TOP -->
-
             <div class="order-card-top">
-
 
                 <div class="order-main-info">
 
                     <span class="order-id">
 
-                        #${escapeHTML(order.id)}
+                        #${escapeHTML(
+                            order.order_id
+                        )}
 
                     </span>
 
 
                     <span class="order-customer">
 
-                        ${escapeHTML(customerName)}
+                        Customer #${escapeHTML(
+                            order.user_id
+                        )}
 
                     </span>
 
@@ -448,8 +455,9 @@ function displayOrders() {
                         <i class="fa-regular fa-calendar"></i>
 
                         ${escapeHTML(
-                            order.date ||
-                            "Date unavailable"
+                            formatDate(
+                                order.order_date
+                            )
                         )}
 
                     </span>
@@ -458,7 +466,10 @@ function displayOrders() {
 
 
                 <span
-                    class="order-status ${getStatusClass(status)}">
+                    class="order-status ${getStatusClass(
+                        order.order_status
+                    )}"
+                >
 
                     ${escapeHTML(status)}
 
@@ -467,11 +478,7 @@ function displayOrders() {
             </div>
 
 
-
-            <!-- ORDER CONTENT -->
-
             <div class="order-card-content">
-
 
                 <div class="order-items">
 
@@ -484,7 +491,9 @@ function displayOrders() {
 
                     <div class="order-items-list">
 
-                        ${escapeHTML(itemNames)}
+                        ${escapeHTML(
+                            getItemNames(items)
+                        )}
 
                     </div>
 
@@ -511,69 +520,68 @@ function displayOrders() {
             </div>
 
 
-
-            <!-- ORDER BOTTOM -->
-
             <div class="order-card-bottom">
-
 
                 <select
                     class="order-status-select"
-                    data-id="${escapeHTML(order.id)}"
+                    data-id="${escapeHTML(
+                        order.order_id
+                    )}"
                 >
 
-                    <option value="Preparing"
-                        ${status === "Preparing"
+                    <option value="PLACED"
+                        ${order.order_status === "PLACED"
                             ? "selected"
                             : ""}>
+                        Placed
+                    </option>
 
+                    <option value="CONFIRMED"
+                        ${order.order_status === "CONFIRMED"
+                            ? "selected"
+                            : ""}>
+                        Confirmed
+                    </option>
+
+                    <option value="PREPARING"
+                        ${order.order_status === "PREPARING"
+                            ? "selected"
+                            : ""}>
                         Preparing
-
                     </option>
 
-
-                    <option value="Out for Delivery"
-                        ${status === "Out for Delivery"
+                    <option value="READY"
+                        ${order.order_status === "READY"
                             ? "selected"
                             : ""}>
+                        Ready
+                    </option>
 
+                    <option value="OUT_FOR_DELIVERY"
+                        ${order.order_status === "OUT_FOR_DELIVERY"
+                            ? "selected"
+                            : ""}>
                         Out for Delivery
-
                     </option>
 
-
-                    <option value="Delivered"
-                        ${status === "Delivered"
+                    <option value="DELIVERED"
+                        ${order.order_status === "DELIVERED"
                             ? "selected"
                             : ""}>
-
                         Delivered
-
                     </option>
 
-
-                    <option value="Cancelled"
-                        ${status === "Cancelled"
+                    <option value="CANCELLED"
+                        ${order.order_status === "CANCELLED"
                             ? "selected"
                             : ""}>
-
                         Cancelled
-
                     </option>
 
                 </select>
 
 
-                <button
-                    type="button"
-                    class="view-order-btn"
-                    data-id="${escapeHTML(order.id)}">
-
-                    <i class="fa-solid fa-eye"></i>
-
-                    View Details
-
-                </button>
+                ${createRiderAssignmentHTML(order)}
 
             </div>
 
@@ -590,17 +598,164 @@ function displayOrders() {
 }
 
 
+// ==================================================
+// CREATE RIDER ASSIGNMENT HTML
+// ==================================================
+
+function createRiderAssignmentHTML(order) {
+
+    const orderStatus =
+        String(order.order_status || "")
+            .toUpperCase();
+
+
+    // ------------------------------------------
+    // Don't assign cancelled/delivered orders
+    // ------------------------------------------
+
+    if (
+        orderStatus === "CANCELLED" ||
+        orderStatus === "DELIVERED"
+    ) {
+
+        return `
+
+            <div class="rider-assignment">
+
+                <span class="assignment-disabled">
+
+                    Rider assignment unavailable
+
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+
+    // ------------------------------------------
+    // No riders
+    // ------------------------------------------
+
+    if (riders.length === 0) {
+
+        return `
+
+            <div class="rider-assignment">
+
+                <span class="assignment-disabled">
+
+                    No riders available
+
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+
+    // ------------------------------------------
+    // Rider dropdown
+    // ------------------------------------------
+
+    let options = `
+
+        <option value="">
+
+            Select Rider
+
+        </option>
+
+    `;
+
+
+    riders.forEach(rider => {
+
+        options += `
+
+            <option value="${escapeHTML(rider.id)}">
+
+                ${escapeHTML(
+                    rider.name || "Unnamed Rider"
+                )}
+
+                ${
+                    rider.email
+                        ? ` - ${escapeHTML(rider.email)}`
+                        : ""
+                }
+
+            </option>
+
+        `;
+
+    });
+
+
+    return `
+
+        <div class="rider-assignment">
+
+            <select
+                class="rider-select"
+                data-order-id="${escapeHTML(
+                    order.order_id
+                )}"
+            >
+
+                ${options}
+
+            </select>
+
+
+            <button
+                type="button"
+                class="assign-rider-btn"
+                data-order-id="${escapeHTML(
+                    order.order_id
+                )}"
+            >
+
+                <i class="fa-solid fa-motorcycle"></i>
+
+                Assign Rider
+
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+// ==================================================
+// GET ORDER ITEMS
+// ==================================================
+
+function getOrderItems(orderId) {
+
+    return orderItems.filter(item =>
+        Number(item.order_id) ===
+        Number(orderId)
+    );
+
+}
+
 
 // ==================================================
 // GET ITEM NAMES
 // ==================================================
 
-function getItemNames(order) {
+function getItemNames(items) {
 
     if (
-        !order.items ||
-        !Array.isArray(order.items) ||
-        order.items.length === 0
+        !items ||
+        items.length === 0
     ) {
 
         return "No items available";
@@ -608,45 +763,19 @@ function getItemNames(order) {
     }
 
 
-    return order.items
+    return items
         .map(item => {
 
             const quantity =
-                Number(item.quantity) || 1;
+                Number(item.quantity || 0);
 
 
-            return `${item.name} × ${quantity}`;
+            return `${item.food_name} × ${quantity}`;
 
         })
         .join(" · ");
 
 }
-
-
-
-// ==================================================
-// GET ADDRESS
-// ==================================================
-
-function getAddress(order) {
-
-    let address =
-        order.address ||
-        "Not available";
-
-
-    if (order.city) {
-
-        address +=
-            `, ${order.city}`;
-
-    }
-
-
-    return address;
-
-}
-
 
 
 // ==================================================
@@ -655,13 +784,12 @@ function getAddress(order) {
 
 function attachOrderEvents() {
 
-
-    // STATUS
+    // ------------------------------------------
+    // Order status
+    // ------------------------------------------
 
     document
-        .querySelectorAll(
-            ".order-status-select"
-        )
+        .querySelectorAll(".order-status-select")
         .forEach(select => {
 
             select.addEventListener(
@@ -679,13 +807,12 @@ function attachOrderEvents() {
         });
 
 
-
-    // VIEW DETAILS
+    // ------------------------------------------
+    // View order buttons
+    // ------------------------------------------
 
     document
-        .querySelectorAll(
-            ".view-order-btn"
-        )
+        .querySelectorAll(".view-order-btn")
         .forEach(button => {
 
             button.addEventListener(
@@ -701,24 +828,253 @@ function attachOrderEvents() {
 
         });
 
+
+    // ------------------------------------------
+    // Assign rider
+    // ------------------------------------------
+
+    document
+        .querySelectorAll(".assign-rider-btn")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    assignRiderToOrder(
+                        this.dataset.orderId,
+                        this
+                    );
+
+                }
+            );
+
+        });
+
 }
 
 
+// ==================================================
+// ASSIGN RIDER TO ORDER
+// ==================================================
+
+async function assignRiderToOrder(
+    orderId,
+    button
+) {
+
+    const riderSelect =
+        document.querySelector(
+            `.rider-select[data-order-id="${orderId}"]`
+        );
+
+
+    if (!riderSelect) {
+
+        return;
+
+    }
+
+
+    const riderId =
+        riderSelect.value;
+
+
+    // ------------------------------------------
+    // Validate
+    // ------------------------------------------
+
+    if (!riderId) {
+
+        alert(
+            "Please select a rider first."
+        );
+
+        return;
+
+    }
+
+
+    // ------------------------------------------
+    // Find rider
+    // ------------------------------------------
+
+    const selectedRider =
+        riders.find(
+            rider =>
+                String(rider.id) ===
+                String(riderId)
+        );
+
+
+    if (!selectedRider) {
+
+        alert(
+            "Selected rider could not be found."
+        );
+
+        return;
+
+    }
+
+
+    // ------------------------------------------
+    // Find order
+    // ------------------------------------------
+
+    const order =
+        orders.find(
+            item =>
+                String(item.order_id) ===
+                String(orderId)
+        );
+
+
+    if (!order) {
+
+        alert(
+            "Order could not be found."
+        );
+
+        return;
+
+    }
+
+
+    // ------------------------------------------
+    // Disable button
+    // ------------------------------------------
+
+    button.disabled = true;
+
+    button.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        Assigning...
+
+    `;
+
+
+    try {
+
+        // --------------------------------------
+        // Create delivery
+        // --------------------------------------
+
+        const delivery = {
+
+            order_id:
+                Number(order.order_id),
+
+            rider_id:
+                Number(selectedRider.id),
+
+            delivery_status:
+                "ASSIGNED"
+
+        };
+
+
+        console.log(
+            "Creating delivery:",
+            delivery
+        );
+
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/deliveries`,
+                {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:
+                        JSON.stringify(delivery)
+                }
+            );
+
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+
+            throw new Error(
+                `Failed to assign rider: ${response.status} ${errorText}`
+            );
+
+        }
+
+
+        const savedDelivery =
+            await response.json();
+
+
+        console.log(
+            "Delivery created:",
+            savedDelivery
+        );
+
+
+        alert(
+            `Rider ${selectedRider.name} assigned successfully.`
+        );
+
+
+        // --------------------------------------
+        // Reload orders
+        // --------------------------------------
+
+        await loadOrders();
+
+
+    } catch (error) {
+
+        console.error(
+            "Rider assignment error:",
+            error
+        );
+
+
+        alert(
+            `Could not assign rider.\n\n${error.message}`
+        );
+
+
+        button.disabled = false;
+
+
+        button.innerHTML = `
+
+            <i class="fa-solid fa-motorcycle"></i>
+
+            Assign Rider
+
+        `;
+
+    }
+
+}
+
 
 // ==================================================
-// UPDATE STATUS
+// UPDATE ORDER STATUS
 // ==================================================
 
-function updateOrderStatus(
+async function updateOrderStatus(
     orderId,
     newStatus
 ) {
 
     const order =
-        orders.find(
-            item =>
-                String(item.id) ===
-                String(orderId)
+        orders.find(item =>
+            String(item.order_id) ===
+            String(orderId)
         );
 
 
@@ -729,16 +1085,101 @@ function updateOrderStatus(
     }
 
 
-    order.status =
-        newStatus;
+    try {
+
+        const updatedOrder = {
+
+            user_id:
+                order.user_id,
+
+            address_id:
+                order.address_id,
+
+            order_status:
+                newStatus,
+
+            subtotal:
+                order.subtotal,
+
+            delivery_fee:
+                order.delivery_fee,
+
+            total_amount:
+                order.total_amount,
+
+            order_date:
+                order.order_date
+
+        };
 
 
-    saveOrders();
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/orders/${orderId}`,
+                {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:
+                        JSON.stringify(
+                            updatedOrder
+                        )
+                }
+            );
 
-    displayOrders();
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Failed to update order: ${response.status}`
+            );
+
+        }
+
+
+        const savedOrder =
+            await response.json();
+
+
+        const index =
+            orders.findIndex(item =>
+                String(item.order_id) ===
+                String(orderId)
+            );
+
+
+        if (index !== -1) {
+
+            orders[index] =
+                savedOrder;
+
+        }
+
+
+        displayOrders();
+
+
+    } catch (error) {
+
+        console.error(
+            "Order status update error:",
+            error
+        );
+
+
+        alert(
+            "Could not update the order status."
+        );
+
+
+        displayOrders();
+
+    }
 
 }
-
 
 
 // ==================================================
@@ -748,10 +1189,9 @@ function updateOrderStatus(
 function showOrderDetails(orderId) {
 
     const order =
-        orders.find(
-            item =>
-                String(item.id) ===
-                String(orderId)
+        orders.find(item =>
+            String(item.order_id) ===
+            String(orderId)
         );
 
 
@@ -762,73 +1202,57 @@ function showOrderDetails(orderId) {
     }
 
 
-    const total =
-        calculateOrderTotal(order);
+    const items =
+        getOrderItems(order.order_id);
 
 
-    modalOrderId.textContent =
-        `#${order.id}`;
+    if (modalOrderId) {
+
+        modalOrderId.textContent =
+            `#${order.order_id}`;
+
+    }
 
 
     let itemsHTML = "";
 
 
-    if (
-        order.items &&
-        Array.isArray(order.items) &&
-        order.items.length > 0
-    ) {
+    if (items.length > 0) {
 
-        itemsHTML = order.items
-            .map(item => {
+        itemsHTML =
+            items.map(item => {
 
                 const price =
-                    parsePrice(item.price);
+                    Number(item.price || 0);
 
 
                 const quantity =
-                    Number(item.quantity) || 1;
+                    Number(item.quantity || 0);
 
 
                 const itemTotal =
-                    price * quantity;
-
-
-                const image =
-                    getImagePath(item.image);
+                    Number(
+                        item.subtotal ||
+                        price * quantity
+                    );
 
 
                 return `
 
                     <div class="modal-item">
 
-
-                        <div class="modal-item-image">
-
-                            <img
-                                src="${image}"
-                                alt="${escapeHTML(item.name)}"
-                                onerror="this.style.display='none'"
-                            >
-
-                        </div>
-
-
                         <div class="modal-item-info">
 
                             <h4>
-
-                                ${escapeHTML(item.name)}
-
+                                ${escapeHTML(
+                                    item.food_name
+                                )}
                             </h4>
 
-
                             <p>
-
                                 Rs.${price.toFixed(2)}
                                 ×
                                 ${quantity}
-
                             </p>
 
                         </div>
@@ -844,199 +1268,154 @@ function showOrderDetails(orderId) {
 
                 `;
 
-            })
-            .join("");
+            }).join("");
 
-    }
-    else {
+    } else {
 
         itemsHTML = `
+            <p>No items available.</p>
+        `;
 
-            <p>
-                No items available.
-            </p>
+    }
+
+
+    if (orderDetailsContent) {
+
+        orderDetailsContent.innerHTML = `
+
+            <div class="detail-row">
+
+                <strong>
+                    Customer
+                </strong>
+
+                <span>
+                    Customer #${escapeHTML(
+                        order.user_id
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Date
+                </strong>
+
+                <span>
+                    ${escapeHTML(
+                        formatDate(
+                            order.order_date
+                        )
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Address ID
+                </strong>
+
+                <span>
+                    ${escapeHTML(
+                        order.address_id
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Status
+                </strong>
+
+                <span>
+                    ${escapeHTML(
+                        formatStatus(
+                            order.order_status
+                        )
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="modal-items">
+
+                <h3>
+                    Ordered Items
+                </h3>
+
+                ${itemsHTML}
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Subtotal
+                </strong>
+
+                <span>
+                    Rs.${Number(
+                        order.subtotal || 0
+                    ).toFixed(2)}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Delivery Fee
+                </strong>
+
+                <span>
+                    Rs.${Number(
+                        order.delivery_fee || 0
+                    ).toFixed(2)}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <strong>
+                    Total
+                </strong>
+
+                <span>
+                    Rs.${Number(
+                        order.total_amount || 0
+                    ).toFixed(2)}
+                </span>
+
+            </div>
 
         `;
 
     }
 
 
+    if (orderModal) {
 
-    orderDetailsContent.innerHTML = `
-
-        <!-- CUSTOMER -->
-
-        <div class="detail-row">
-
-            <strong>
-                Customer
-            </strong>
-
-            <span>
-                ${escapeHTML(
-                    order.customerName ||
-                    "Not available"
-                )}
-            </span>
-
-        </div>
-
-
-        <!-- DATE -->
-
-        <div class="detail-row">
-
-            <strong>
-                Date
-            </strong>
-
-            <span>
-                ${escapeHTML(
-                    order.date ||
-                    "Not available"
-                )}
-            </span>
-
-        </div>
-
-
-        <!-- PHONE -->
-
-        <div class="detail-row">
-
-            <strong>
-                Phone
-            </strong>
-
-            <span>
-                ${escapeHTML(
-                    order.phone ||
-                    "Not available"
-                )}
-            </span>
-
-        </div>
-
-
-        <!-- ADDRESS -->
-
-        <div class="detail-row">
-
-            <strong>
-                Delivery Address
-            </strong>
-
-            <span>
-                ${escapeHTML(
-                    getAddress(order)
-                )}
-            </span>
-
-        </div>
-
-
-        <!-- PAYMENT -->
-
-        <div class="detail-row">
-
-            <strong>
-                Payment Method
-            </strong>
-
-            <span>
-                ${escapeHTML(
-                    order.paymentMethod ||
-                    "Not available"
-                )}
-            </span>
-
-        </div>
-
-
-        <!-- STATUS -->
-
-        <div class="detail-row">
-
-            <strong>
-                Status
-            </strong>
-
-            <span>
-                ${escapeHTML(
-                    order.status ||
-                    "Preparing"
-                )}
-            </span>
-
-        </div>
-
-
-        <!-- ITEMS -->
-
-        <div class="modal-items">
-
-            <h3>
-                Ordered Items
-            </h3>
-
-            ${itemsHTML}
-
-        </div>
-
-
-        <!-- TOTAL -->
-
-        <div class="detail-row">
-
-            <strong>
-                Total
-            </strong>
-
-            <span>
-
-                Rs.${total.toFixed(2)}
-
-            </span>
-
-        </div>
-
-    `;
-
-
-    orderModal.classList.add(
-        "active"
-    );
-
-}
-
-
-
-// ==================================================
-// IMAGE PATH
-// ==================================================
-
-function getImagePath(image) {
-
-    if (!image) {
-
-        return "";
+        orderModal.classList.add(
+            "modal-active"
+        );
 
     }
 
-
-    if (
-        image.startsWith("../")
-    ) {
-
-        return image;
-
-    }
-
-
-    return `../public/${image}`;
-
 }
-
 
 
 // ==================================================
@@ -1045,116 +1424,180 @@ function getImagePath(image) {
 
 function closeOrderModal() {
 
-    orderModal.classList.remove(
-        "active"
-    );
+    if (orderModal) {
 
-}
-
-
-closeModal.addEventListener(
-    "click",
-    closeOrderModal
-);
-
-
-closeModalBtn.addEventListener(
-    "click",
-    closeOrderModal
-);
-
-
-orderModal.addEventListener(
-    "click",
-    function (event) {
-
-        if (
-            event.target === orderModal
-        ) {
-
-            closeOrderModal();
-
-        }
-
-    }
-);
-
-
-
-// ==================================================
-// SEARCH
-// ==================================================
-
-searchInput.addEventListener(
-    "input",
-    displayOrders
-);
-
-
-
-// ==================================================
-// FILTER
-// ==================================================
-
-statusFilter.addEventListener(
-    "change",
-    displayOrders
-);
-
-
-
-// ==================================================
-// LOGOUT
-// ==================================================
-
-function logout() {
-
-    const confirmed =
-        confirm(
-            "Are you sure you want to logout?"
+        orderModal.classList.remove(
+            "modal-active"
         );
 
-
-    if (!confirmed) {
-
-        return;
-
     }
-
-
-    window.location.href =
-        "../public/index.html";
 
 }
 
 
-document
-    .querySelector("#logout-btn")
-    .addEventListener(
+if (closeModal) {
+
+    closeModal.addEventListener(
+        "click",
+        closeOrderModal
+    );
+
+}
+
+
+if (closeModalBtn) {
+
+    closeModalBtn.addEventListener(
+        "click",
+        closeOrderModal
+    );
+
+}
+
+
+if (orderModal) {
+
+    orderModal.addEventListener(
         "click",
         function (event) {
 
-            event.preventDefault();
+            if (
+                event.target === orderModal
+            ) {
 
-            logout();
+                closeOrderModal();
+
+            }
 
         }
     );
 
+}
 
-document
-    .querySelector("#mobile-logout")
-    .addEventListener(
-        "click",
-        function (event) {
 
-            event.preventDefault();
+// ==================================================
+// SEARCH / FILTER
+// ==================================================
 
-            logout();
+if (searchInput) {
 
+    searchInput.addEventListener(
+        "input",
+        displayOrders
+    );
+
+}
+
+
+if (statusFilter) {
+
+    statusFilter.addEventListener(
+        "change",
+        displayOrders
+    );
+
+}
+
+
+// ==================================================
+// FORMAT DATE
+// ==================================================
+
+function formatDate(dateValue) {
+
+    if (!dateValue) {
+
+        return "Date unavailable";
+
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+
+    if (Number.isNaN(date.getTime())) {
+
+        return "Date unavailable";
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
         }
     );
 
+}
+
+
+// ==================================================
+// FORMAT STATUS
+// ==================================================
+
+function formatStatus(status) {
+
+    if (!status) {
+
+        return "Unknown";
+
+    }
+
+
+    return String(status)
+        .replace(/_/g, " ")
+        .toLowerCase()
+        .replace(/\b\w/g, letter =>
+            letter.toUpperCase()
+        );
+
+}
+
+
+// ==================================================
+// STATUS CLASS
+// ==================================================
+
+function getStatusClass(status) {
+
+    switch (
+        String(status || "").toLowerCase()
+    ) {
+
+        case "preparing":
+        case "confirmed":
+        case "ready":
+        case "placed":
+
+            return "status-preparing";
+
+
+        case "out_for_delivery":
+
+            return "status-delivery";
+
+
+        case "delivered":
+
+            return "status-delivered";
+
+
+        case "cancelled":
+
+            return "status-cancelled";
+
+
+        default:
+
+            return "";
+
+    }
+
+}
 
 
 // ==================================================
@@ -1163,19 +1606,33 @@ document
 
 function escapeHTML(value) {
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
-
 // ==================================================
-// INITIALIZE
+// START
 // ==================================================
 
 loadOrders();

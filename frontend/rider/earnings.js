@@ -1,73 +1,252 @@
 /* =========================================
    RIDER EARNINGS
+   Backend connected
 ========================================= */
+
+// const API_BASE_URL = "http://127.0.0.1:8080";
+
+let earningsData = [];
 
 
 /* =========================================
-   EARNINGS DATA
+   PAGE LOAD
 ========================================= */
 
-const earningsData = [
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    {
-        deliveryId: "D1001",
-        order: "#QB1001",
-        date: "16 Sep 2026",
-        amount: 150,
-        period: "today",
-        status: "Paid"
-    },
+        loadEarnings();
 
-    {
-        deliveryId: "D1002",
-        order: "#QB1002",
-        date: "16 Sep 2026",
-        amount: 100,
-        period: "today",
-        status: "Paid"
-    },
+        const filter =
+            document.getElementById(
+                "earnings-filter"
+            );
 
-    {
-        deliveryId: "D1003",
-        order: "#QB1003",
-        date: "15 Sep 2026",
-        amount: 150,
-        period: "week",
-        status: "Paid"
-    },
+        if (filter) {
 
-    {
-        deliveryId: "D1004",
-        order: "#QB1004",
-        date: "15 Sep 2026",
-        amount: 120,
-        period: "week",
-        status: "Paid"
-    },
+            filter.addEventListener(
+                "change",
+                filterEarnings
+            );
 
-    {
-        deliveryId: "D1005",
-        order: "#QB1005",
-        date: "14 Sep 2026",
-        amount: 130,
-        period: "week",
-        status: "Paid"
+        }
+
     }
-
-];
-
+);
 
 
 /* =========================================
-   FORMAT CURRENCY
+   LOAD EARNINGS
 ========================================= */
 
-function formatCurrency(amount) {
+async function loadEarnings() {
 
-    return "Rs." + amount.toLocaleString();
+    try {
+
+        const currentRider =
+            await loadCurrentRider();
+
+
+        /* -----------------------------------------
+           LOAD ALL DELIVERIES
+        ----------------------------------------- */
+
+        const deliveryResponse =
+            await fetch(
+                `${API_BASE_URL}/api/deliveries`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
+
+
+        if (!deliveryResponse.ok) {
+
+            throw new Error(
+                `Failed to load deliveries: ${deliveryResponse.status}`
+            );
+
+        }
+
+
+        const allDeliveries =
+            await deliveryResponse.json();
+
+
+        /* -----------------------------------------
+           ONLY THIS RIDER'S COMPLETED DELIVERIES
+        ----------------------------------------- */
+
+        const completedDeliveries =
+            allDeliveries.filter(
+                delivery =>
+                    Number(delivery.rider_id) ===
+                        Number(currentRider.id) &&
+
+                    String(
+                        delivery.delivery_status
+                    ).toUpperCase() ===
+                        "DELIVERED"
+            );
+
+
+        /* -----------------------------------------
+           LOAD ORDER INFORMATION
+        ----------------------------------------- */
+
+        earningsData =
+            await Promise.all(
+                completedDeliveries.map(
+                    delivery =>
+                        convertDeliveryToEarning(
+                            delivery
+                        )
+                )
+            );
+
+
+        /*
+         * Remove deliveries where the order
+         * could not be loaded.
+         */
+
+        earningsData =
+            earningsData.filter(
+                item => item !== null
+            );
+
+
+        calculateEarnings();
+        displayEarnings(
+            getFilteredEarnings()
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error loading earnings:",
+            error
+        );
+
+
+        displayEmptyEarnings();
+
+
+        updateSummary(
+            0,
+            0,
+            0,
+            0
+        );
+
+    }
 
 }
 
+
+/* =========================================
+   LOAD CURRENT RIDER
+========================================= */
+
+async function loadCurrentRider() {
+
+    const response =
+        await fetch(
+            `${API_BASE_URL}/api/auth/me`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Failed to load current rider: ${response.status}`
+        );
+
+    }
+
+
+    return await response.json();
+
+}
+
+
+/* =========================================
+   CONVERT DELIVERY TO EARNING
+========================================= */
+
+async function convertDeliveryToEarning(
+    delivery
+) {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/orders/${delivery.order_id}`,
+                {
+                    method: "GET",
+                    credentials: "include"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Failed to load order ${delivery.order_id}`
+            );
+
+        }
+
+
+        const order =
+            await response.json();
+
+
+        return {
+
+            deliveryId:
+                `D${delivery.delivery_id}`,
+
+            order:
+                `#QB${delivery.order_id}`,
+
+            orderId:
+                delivery.order_id,
+
+            date:
+                delivery.delivered_at,
+
+            amount:
+                Number(
+                    order.delivery_fee || 0
+                ),
+
+            status:
+                "Paid"
+
+        };
+
+
+    } catch (error) {
+
+        console.error(
+            `Could not load earning for delivery ${delivery.delivery_id}:`,
+            error
+        );
+
+        return null;
+
+    }
+
+}
 
 
 /* =========================================
@@ -76,11 +255,23 @@ function formatCurrency(amount) {
 
 function calculateEarnings() {
 
+    const now =
+        new Date();
+
+
     const today =
         earningsData
-            .filter(item => item.period === "today")
+            .filter(
+                item =>
+                    isToday(item.date)
+            )
             .reduce(
-                (total, item) => total + item.amount,
+                (
+                    total,
+                    item
+                ) =>
+                    total +
+                    item.amount,
                 0
             );
 
@@ -89,41 +280,122 @@ function calculateEarnings() {
         earningsData
             .filter(
                 item =>
-                    item.period === "today" ||
-                    item.period === "week"
+                    isThisWeek(item.date)
             )
             .reduce(
-                (total, item) => total + item.amount,
+                (
+                    total,
+                    item
+                ) =>
+                    total +
+                    item.amount,
+                0
+            );
+
+
+    const month =
+        earningsData
+            .filter(
+                item =>
+                    isThisMonth(item.date)
+            )
+            .reduce(
+                (
+                    total,
+                    item
+                ) =>
+                    total +
+                    item.amount,
                 0
             );
 
 
     const total =
         earningsData.reduce(
-            (sum, item) => sum + item.amount,
+            (
+                sum,
+                item
+            ) =>
+                sum +
+                item.amount,
             0
         );
 
 
-    document.getElementById(
-        "today-earnings"
-    ).textContent =
-        formatCurrency(today);
-
-
-    document.getElementById(
-        "weekly-earnings"
-    ).textContent =
-        formatCurrency(week);
-
-
-    document.getElementById(
-        "total-earnings"
-    ).textContent =
-        formatCurrency(total);
+    updateSummary(
+        today,
+        week,
+        month,
+        total
+    );
 
 }
 
+
+/* =========================================
+   UPDATE SUMMARY
+========================================= */
+
+function updateSummary(
+    today,
+    week,
+    month,
+    total
+) {
+
+    const todayElement =
+        document.getElementById(
+            "today-earnings"
+        );
+
+    const weeklyElement =
+        document.getElementById(
+            "weekly-earnings"
+        );
+
+    const monthlyElement =
+        document.getElementById(
+            "monthly-earnings"
+        );
+
+    const totalElement =
+        document.getElementById(
+            "total-earnings"
+        );
+
+
+    if (todayElement) {
+
+        todayElement.textContent =
+            formatCurrency(today);
+
+    }
+
+
+    if (weeklyElement) {
+
+        weeklyElement.textContent =
+            formatCurrency(week);
+
+    }
+
+
+    if (monthlyElement) {
+
+        monthlyElement.textContent =
+            formatCurrency(month);
+
+    }
+
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            formatCurrency(total);
+
+    }
+
+}
 
 
 /* =========================================
@@ -132,11 +404,74 @@ function calculateEarnings() {
 
 function filterEarnings() {
 
+    displayEarnings(
+        getFilteredEarnings()
+    );
+
+}
+
+
+/* =========================================
+   GET FILTERED EARNINGS
+========================================= */
+
+function getFilteredEarnings() {
+
     const filter =
         document.getElementById(
             "earnings-filter"
-        ).value;
+        )?.value || "all";
 
+
+    if (filter === "all") {
+
+        return earningsData;
+
+    }
+
+
+    if (filter === "today") {
+
+        return earningsData.filter(
+            item =>
+                isToday(item.date)
+        );
+
+    }
+
+
+    if (filter === "week") {
+
+        return earningsData.filter(
+            item =>
+                isThisWeek(item.date)
+        );
+
+    }
+
+
+    if (filter === "month") {
+
+        return earningsData.filter(
+            item =>
+                isThisMonth(item.date)
+        );
+
+    }
+
+
+    return earningsData;
+
+}
+
+
+/* =========================================
+   DISPLAY EARNINGS
+========================================= */
+
+function displayEarnings(
+    data
+) {
 
     const tableBody =
         document.getElementById(
@@ -144,67 +479,15 @@ function filterEarnings() {
         );
 
 
-    tableBody.innerHTML = "";
-
-
-    let filteredData;
-
-
-    if (filter === "all") {
-
-        filteredData = earningsData;
-
-    } else {
-
-        filteredData =
-            earningsData.filter(
-                item => item.period === filter
-            );
-
+    if (!tableBody) {
+        return;
     }
 
 
-    filteredData.forEach(item => {
-
-        const row =
-            document.createElement("tr");
+    tableBody.innerHTML = "";
 
 
-        row.innerHTML = `
-
-            <td>
-                ${item.deliveryId}
-            </td>
-
-            <td>
-                ${item.order}
-            </td>
-
-            <td>
-                ${item.date}
-            </td>
-
-            <td>
-                ${formatCurrency(item.amount)}
-            </td>
-
-            <td>
-
-                <span class="earning-status paid">
-                    ${item.status}
-                </span>
-
-            </td>
-
-        `;
-
-
-        tableBody.appendChild(row);
-
-    });
-
-
-    if (filteredData.length === 0) {
+    if (data.length === 0) {
 
         tableBody.innerHTML = `
 
@@ -222,37 +505,258 @@ function filterEarnings() {
 
         `;
 
+        return;
+
     }
+
+
+    data.forEach(
+        item => {
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${item.deliveryId}
+                </td>
+
+                <td>
+                    ${item.order}
+                </td>
+
+                <td>
+                    ${formatDate(item.date)}
+                </td>
+
+                <td>
+                    ${formatCurrency(item.amount)}
+                </td>
+
+                <td>
+
+                    <span
+                        class="earning-status paid">
+
+                        ${item.status}
+
+                    </span>
+
+                </td>
+
+            `;
+
+
+            tableBody.appendChild(row);
+
+        }
+    );
 
 }
 
 
-
 /* =========================================
-   PAGE LOAD
+   EMPTY EARNINGS
 ========================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+function displayEmptyEarnings() {
 
-        calculateEarnings();
-
-
-        const filter =
-            document.getElementById(
-                "earnings-filter"
-            );
+    const tableBody =
+        document.getElementById(
+            "earnings-table-body"
+        );
 
 
-        if (filter) {
+    if (!tableBody) {
+        return;
+    }
 
-            filter.addEventListener(
-                "change",
-                filterEarnings
-            );
 
-        }
+    tableBody.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="5"
+                style="text-align:center; padding:30px;">
+
+                Unable to load earnings.
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =========================================
+   FORMAT CURRENCY
+========================================= */
+
+function formatCurrency(amount) {
+
+    return (
+        "Rs." +
+        Number(amount || 0).toFixed(2)
+    );
+
+}
+
+
+/* =========================================
+   FORMAT DATE
+========================================= */
+
+function formatDate(dateValue) {
+
+    if (!dateValue) {
+        return "N/A";
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "N/A";
 
     }
-);
+
+
+    return date.toLocaleDateString(
+        "en-GB",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================================
+   TODAY
+========================================= */
+
+function isToday(dateValue) {
+
+    if (!dateValue) {
+        return false;
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+    const now =
+        new Date();
+
+
+    return (
+        date.getFullYear() ===
+            now.getFullYear() &&
+
+        date.getMonth() ===
+            now.getMonth() &&
+
+        date.getDate() ===
+            now.getDate()
+    );
+
+}
+
+
+/* =========================================
+   THIS WEEK
+========================================= */
+
+function isThisWeek(dateValue) {
+
+    if (!dateValue) {
+        return false;
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+    const now =
+        new Date();
+
+
+    /*
+     * Monday is the first day of the week.
+     */
+
+    const day =
+        now.getDay();
+
+
+    const difference =
+        day === 0
+            ? 6
+            : day - 1;
+
+
+    const startOfWeek =
+        new Date(now);
+
+
+    startOfWeek.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    startOfWeek.setDate(
+        now.getDate() -
+        difference
+    );
+
+
+    return date >= startOfWeek &&
+           date <= now;
+
+}
+
+
+/* =========================================
+   THIS MONTH
+========================================= */
+
+function isThisMonth(dateValue) {
+
+    if (!dateValue) {
+        return false;
+    }
+
+
+    const date =
+        new Date(dateValue);
+
+    const now =
+        new Date();
+
+
+    return (
+        date.getFullYear() ===
+            now.getFullYear() &&
+
+        date.getMonth() ===
+            now.getMonth()
+    );
+
+}

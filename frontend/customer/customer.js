@@ -1,3 +1,4 @@
+
 // ========================================
 // ELEMENTS
 // ========================================
@@ -20,112 +21,173 @@ const categoryButtons = document.querySelectorAll(".category-btn");
 // ========================================
 
 let productList = [];
-let cart = quickBites.getCart();
+let cart = [];
+let databaseCartId = null;
+
+
+// ========================================
+// CURRENT USER
+// ========================================
+
+let currentUser = null;
+
+async function getCurrentUser() {
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8080/api/auth/me",
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        if (!response.ok) {
+            return null;
+        }
+
+        return await response.json();
+
+    } catch (error) {
+
+        console.error("Could not get current user:", error);
+        return null;
+    }
+}
 
 // ========================================
 // LOAD PRODUCTS
 // ========================================
 
-const PRODUCTS_KEY = "quickBitesProducts";
-
-
 async function loadProducts() {
-
-    /*
-        First check localStorage.
-
-        Admin products are stored here.
-    */
-
-    const savedProducts =
-        localStorage.getItem(PRODUCTS_KEY);
-
-
-    if (savedProducts) {
-
-        try {
-
-            productList =
-                JSON.parse(savedProducts);
-
-
-            showPopularProducts();
-
-            showExploreProducts("All");
-
-            updateCartButtons();
-
-            return;
-
-        }
-        catch (error) {
-
-            console.error(
-                "Could not read saved products:",
-                error
-            );
-
-        }
-
-    }
-
-
-
-    /*
-        If there are no products in localStorage,
-        load the original products.json.
-    */
 
     try {
 
-        const response =
-            await fetch("../public/products.json");
+        currentUser = await getCurrentUser();
 
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Could not load products"
-            );
-
+        if (!currentUser || currentUser.role !== "CUSTOMER") {
+            alert("Please sign in as a customer.");
+            window.location.href = "../public/login.html";
+            return;
         }
 
+        // ----------------------------------------
+        // LOAD CATEGORIES
+        // ----------------------------------------
+
+        const categoryResponse = await fetch(
+            "http://127.0.0.1:8080/api/categories",
+            {
+                credentials: "include"
+            }
+        );
+
+        if (!categoryResponse.ok) {
+
+            throw new Error(
+                `Could not load categories: ${categoryResponse.status}`
+            );
+        }
+
+        const categories =
+            await categoryResponse.json();
+
+
+        // ----------------------------------------
+        // LOAD FOOD ITEMS
+        // ----------------------------------------
+
+        const productResponse = await fetch(
+            "http://127.0.0.1:8080/api/food-items",
+            {
+                credentials: "include"
+            }
+        );
+
+        if (!productResponse.ok) {
+
+            throw new Error(
+                `Could not load food items: ${productResponse.status}`
+            );
+        }
 
         const data =
-            await response.json();
+            await productResponse.json();
 
 
-        productList = data;
+        // ----------------------------------------
+        // CONVERT BACKEND DATA
+        // ----------------------------------------
+
+        productList = data
+            .filter(product => product.isAvailable)
+            .map(product => {
+
+                const category =
+                    categories.find(
+                        item =>
+                            Number(item.categoryId) ===
+                            Number(product.categoryId)
+                    );
+
+                return {
+
+                    id: product.foodId,
+
+                    name: product.foodName,
+
+                    description:
+                        product.description,
+
+                    price:
+                        `Rs.${Number(product.price).toFixed(2)}`,
+
+                    image:
+                        product.imageUrl,
+
+                    categoryId:
+                        product.categoryId,
+
+                    category:
+                        category
+                            ? category.categoryName
+                            : "Other",
+
+                    popular:
+                        product.isPopular === true
+                };
+            });
 
 
-
-        /*
-            Save the original products
-            to localStorage.
-
-            This creates the shared product
-            list used by Admin and Customer.
-        */
-
-        localStorage.setItem(
-            PRODUCTS_KEY,
-            JSON.stringify(productList)
+        console.log(
+            "Products loaded:",
+            productList
         );
 
 
+        // ----------------------------------------
+        // LOAD DATABASE CART
+        // ----------------------------------------
+
+        await loadDatabaseCart();
+
+
+        // ----------------------------------------
+        // DISPLAY PRODUCTS
+        // ----------------------------------------
 
         showPopularProducts();
 
         showExploreProducts("All");
 
-        updateCartButtons();
+        updateCart();
 
-    }
 
-    catch (error) {
+    } catch (error) {
 
         console.error(
-            "Error loading products:",
+            "Error loading customer data:",
             error
         );
 
@@ -134,48 +196,215 @@ async function loadProducts() {
 }
 
 
-loadProducts();
+// ========================================
+// LOAD DATABASE CART
+// ========================================
+
+async function loadDatabaseCart() {
+
+    if (!currentUser) {
+        currentUser = await getCurrentUser();
+    }
+
+    if (!currentUser) {
+        cart = [];
+        databaseCartId = null;
+        return;
+    }
+
+    const userId = currentUser.id;
+
+
+    try {
+
+        // ----------------------------------------
+        // GET OR CREATE USER CART
+        // ----------------------------------------
+
+        const cartResponse = await fetch(
+            `http://127.0.0.1:8080/api/carts/user/${userId}`,
+            {
+                method: "POST",
+                credentials: "include"
+            }
+        );
+
+
+        if (!cartResponse.ok) {
+
+            throw new Error(
+                `Could not load cart: ${cartResponse.status}`
+            );
+        }
+
+
+        const databaseCart =
+            await cartResponse.json();
+
+
+        databaseCartId =
+            databaseCart.cartId ??
+            databaseCart.cart_id;
+
+
+        if (!databaseCartId) {
+
+            throw new Error(
+                "Cart ID was not returned by the server."
+            );
+        }
+
+
+        // ----------------------------------------
+        // GET CART ITEMS
+        // ----------------------------------------
+
+        const itemsResponse = await fetch(
+            `http://127.0.0.1:8080/api/cart-items/cart/${databaseCartId}`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+
+        if (!itemsResponse.ok) {
+
+            throw new Error(
+                `Could not load cart items: ${itemsResponse.status}`
+            );
+        }
+
+
+        const databaseItems =
+            await itemsResponse.json();
+
+cart = databaseItems
+    .map(databaseItem => {
+
+        const foodId =
+            databaseItem.food_id;
+
+        const quantity =
+            databaseItem.quantity;
+
+        const product =
+            productList.find(
+                item =>
+                    Number(item.id) ===
+                    Number(foodId)
+            );
+
+        if (!product) {
+            return null;
+        }
+
+        return {
+
+            ...product,
+
+            quantity:
+                Number(quantity) || 1,
+
+            cartItemId:
+                databaseItem.cart_item_id
+        };
+
+    })
+    .filter(item => item !== null);
+
+
+
+    } catch (error) {
+
+        console.error(
+            "Error loading database cart:",
+            error
+        );
+
+        cart = [];
+
+    }
+}
+
 
 // ========================================
 // CREATE PRODUCT CARD
 // ========================================
 
 function createProductCard(product) {
-    const orderCard = document.createElement("div");
-    const isInCart = cart.some(item => item.id === product.id);
 
-    orderCard.classList.add("food-card");
+    const orderCard =
+        document.createElement("div");
+
+    const isInCart =
+        cart.some(
+            item =>
+                Number(item.id) ===
+                Number(product.id)
+        );
+
+
+    orderCard.classList.add(
+        "food-card"
+    );
+
 
     orderCard.innerHTML = `
+
         <div class="card-image">
+
             <img
                 src="../public/${product.image}"
                 alt="${product.name}">
+
         </div>
 
-        <h4>${product.name}</h4>
 
-        <h4 class="price">${product.price}</h4>
+        <h4>
+            ${product.name}
+        </h4>
+
+
+        <h4 class="price">
+            ${product.price}
+        </h4>
+
 
         <p class="product-category">
             ${product.category}
         </p>
 
+
         <a
             href="#"
             class="btn card-btn ${isInCart ? "added" : ""}"
             data-product-id="${product.id}">
-            ${isInCart ? "Added to Cart ✓" : "Add to Cart"}
+
+            ${
+                isInCart
+                    ? "Added to Cart ✓"
+                    : "Add to Cart"
+            }
+
         </a>
+
     `;
 
-    orderCard.querySelector(".card-btn").addEventListener(
-        "click",
-        function (event) {
-            event.preventDefault();
-            addToCart(product);
-        }
-    );
+
+    orderCard
+        .querySelector(".card-btn")
+        .addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                addToCart(product);
+
+            }
+        );
+
 
     return orderCard;
 }
@@ -186,15 +415,31 @@ function createProductCard(product) {
 // ========================================
 
 function showPopularProducts() {
+
+    if (!popularList) {
+        return;
+    }
+
+
     popularList.innerHTML = "";
 
-    const popularProducts = productList.filter(
-        product => product.popular === true
-    );
 
-    popularProducts.forEach(product => {
-        popularList.appendChild(createProductCard(product));
-    });
+    const popularProducts =
+        productList.filter(
+            product =>
+                product.popular === true
+        );
+
+
+    popularProducts.forEach(
+        product => {
+
+            popularList.appendChild(
+                createProductCard(product)
+            );
+
+        }
+    );
 }
 
 
@@ -203,18 +448,33 @@ function showPopularProducts() {
 // ========================================
 
 function showExploreProducts(category) {
+
+    if (!exploreList) {
+        return;
+    }
+
+
     exploreList.innerHTML = "";
+
 
     const productsToShow =
         category === "All"
             ? productList
             : productList.filter(
-                product => product.category === category
+                product =>
+                    product.category === category
             );
 
-    productsToShow.forEach(product => {
-        exploreList.appendChild(createProductCard(product));
-    });
+
+    productsToShow.forEach(
+        product => {
+
+            exploreList.appendChild(
+                createProductCard(product)
+            );
+
+        }
+    );
 }
 
 
@@ -222,39 +482,171 @@ function showExploreProducts(category) {
 // CATEGORY FILTERS
 // ========================================
 
-categoryButtons.forEach(button => {
-    button.addEventListener("click", function () {
+categoryButtons.forEach(
+    button => {
 
-        categoryButtons.forEach(item => {
-            item.classList.remove("active");
-        });
+        button.addEventListener(
+            "click",
+            function () {
 
-        button.classList.add("active");
+                categoryButtons.forEach(
+                    item => {
 
-        showExploreProducts(button.dataset.category);
-    });
-});
+                        item.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                showExploreProducts(
+                    button.dataset.category
+                );
+
+            }
+        );
+
+    }
+);
 
 
 // ========================================
 // ADD TO CART
 // ========================================
 
-function addToCart(product) {
-    const existingProduct = cart.find(
-        item => item.id === product.id
-    );
+async function addToCart(product) {
 
-    if (existingProduct) {
-        existingProduct.quantity++;
-    } else {
-        cart.push({
-            ...product,
-            quantity: 1
-        });
+    if (!currentUser) {
+        currentUser = await getCurrentUser();
     }
 
-    updateCart();
+    if (!currentUser) {
+        alert("Please sign in before adding items to your cart.");
+        return;
+    }
+
+    const userId = currentUser.id;
+
+
+    try {
+
+        // ----------------------------------------
+        // MAKE SURE DATABASE CART EXISTS
+        // ----------------------------------------
+
+        if (!databaseCartId) {
+
+            const cartResponse =
+                await fetch(
+                    `http://127.0.0.1:8080/api/carts/user/${userId}`,
+                    {
+                        method: "POST",
+                        credentials: "include"
+                    }
+                );
+
+
+            if (!cartResponse.ok) {
+
+                throw new Error(
+                    `Could not create cart: ${cartResponse.status}`
+                );
+            }
+
+
+            const databaseCart =
+                await cartResponse.json();
+
+
+            databaseCartId =
+                databaseCart.cartId ??
+                databaseCart.cart_id;
+        }
+
+
+        // ----------------------------------------
+        // ADD ITEM TO DATABASE
+        // ----------------------------------------
+
+        const response =
+            await fetch(
+                `http://127.0.0.1:8080/api/cart-items/cart/${databaseCartId}`,
+                {
+                    method: "POST",
+
+                    credentials: "include",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        foodId:
+                            product.id,
+
+                        quantity:
+                            1
+
+                    })
+                }
+            );
+
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Cart backend error:",
+                errorText
+            );
+
+            throw new Error(
+                `Could not add item: ${response.status}`
+            );
+        }
+
+
+        // ----------------------------------------
+        // RELOAD DATABASE CART
+        // ----------------------------------------
+
+        await loadDatabaseCart();
+
+
+        updateCart();
+
+
+        // Update product buttons
+        showPopularProducts();
+
+        showExploreProducts(
+            document.querySelector(
+                ".category-btn.active"
+            )?.dataset.category || "All"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error adding item to cart:",
+            error
+        );
+
+        alert(
+            "Could not add the item to your cart."
+        );
+    }
 }
 
 
@@ -263,100 +655,201 @@ function addToCart(product) {
 // ========================================
 
 function updateCartButtons() {
-    document.querySelectorAll(".card-btn").forEach(button => {
-        const productId = Number(button.dataset.productId);
-        const isInCart = cart.some(
-            item => item.id === productId
-        );
 
-        button.textContent = isInCart
-            ? "Added to Cart ✓"
-            : "Add to Cart";
+    document
+        .querySelectorAll(".card-btn")
+        .forEach(button => {
 
-        button.classList.toggle("added", isInCart);
-    });
+            const productId =
+                Number(
+                    button.dataset.productId
+                );
+
+
+            const isInCart =
+                cart.some(
+                    item =>
+                        Number(item.id) ===
+                        productId
+                );
+
+
+            button.textContent =
+                isInCart
+                    ? "Added to Cart ✓"
+                    : "Add to Cart";
+
+
+            button.classList.toggle(
+                "added",
+                isInCart
+            );
+
+        });
 }
 
 
 // ========================================
-// UPDATE CART
+// UPDATE CART DISPLAY
 // ========================================
 
 function updateCart() {
+
+    if (!cartList) {
+        return;
+    }
+
+
     cartList.innerHTML = "";
 
+
     let total = 0;
+
     let totalItems = 0;
 
-    cart.forEach((product, index) => {
-        const price = quickBites.parsePrice(product.price);
 
-        const itemTotal = price * product.quantity;
+    cart.forEach(
+        (product, index) => {
 
-        total += itemTotal;
-        totalItems += product.quantity;
+            const price =
+                quickBites.parsePrice(
+                    product.price
+                );
 
-        const item = document.createElement("div");
-        item.classList.add("item");
 
-        item.innerHTML = `
-            <div class="item-image">
-                <img
-                    src="${quickBites.getImagePath(product.image)}"
-                    alt="${product.name}">
-            </div>
+            const quantity =
+                Number(product.quantity) || 0;
 
-            <div class="detail">
-                <h4>${product.name}</h4>
-                <h4 class="item-total">
-                    Rs.${itemTotal.toFixed(2)}
-                </h4>
-            </div>
 
-            <div class="flex">
-                <a
-                    href="#"
-                    class="quantity-btn decrease"
-                    aria-label="Decrease ${product.name} quantity">
-                    <i class="fa-solid fa-minus"></i>
-                </a>
+            const itemTotal =
+                price * quantity;
 
-                <h4 class="quantity-value">
-                    ${product.quantity}
-                </h4>
 
-                <a
-                    href="#"
-                    class="quantity-btn increase"
-                    aria-label="Increase ${product.name} quantity">
-                    <i class="fa-solid fa-plus"></i>
-                </a>
-            </div>
-        `;
+            total += itemTotal;
 
-        item.querySelector(".decrease").addEventListener(
-            "click",
-            function (event) {
-                event.preventDefault();
-                decreaseQuantity(index);
-            }
-        );
+            totalItems += quantity;
 
-        item.querySelector(".increase").addEventListener(
-            "click",
-            function (event) {
-                event.preventDefault();
-                increaseQuantity(index);
-            }
-        );
 
-        cartList.appendChild(item);
-    });
+            const item =
+                document.createElement("div");
 
-    cartTotal.textContent = `Rs.${total.toFixed(2)}`;
-    cartValue.textContent = totalItems;
 
-    quickBites.saveCart(cart);
+            item.classList.add(
+                "item"
+            );
+
+
+            item.innerHTML = `
+
+                <div class="item-image">
+
+                    <img
+                        src="${quickBites.getImagePath(product.image)}"
+                        alt="${product.name}">
+
+                </div>
+
+
+                <div class="detail">
+
+                    <h4>
+                        ${product.name}
+                    </h4>
+
+                    <h4 class="item-total">
+                        Rs.${itemTotal.toFixed(2)}
+                    </h4>
+
+                </div>
+
+
+                <div class="flex">
+
+                    <a
+                        href="#"
+                        class="quantity-btn decrease"
+                        aria-label="Decrease ${product.name} quantity">
+
+                        <i class="fa-solid fa-minus"></i>
+
+                    </a>
+
+
+                    <h4 class="quantity-value">
+
+                        ${quantity}
+
+                    </h4>
+
+
+                    <a
+                        href="#"
+                        class="quantity-btn increase"
+                        aria-label="Increase ${product.name} quantity">
+
+                        <i class="fa-solid fa-plus"></i>
+
+                    </a>
+
+                </div>
+
+            `;
+
+
+            item
+                .querySelector(".decrease")
+                .addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+
+                        decreaseQuantity(
+                            index
+                        );
+
+                    }
+                );
+
+
+            item
+                .querySelector(".increase")
+                .addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+
+                        increaseQuantity(
+                            index
+                        );
+
+                    }
+                );
+
+
+            cartList.appendChild(
+                item
+            );
+
+        }
+    );
+
+
+    cartTotal.textContent =
+        `Rs.${total.toFixed(2)}`;
+
+
+    cartValue.textContent =
+        totalItems;
+
+
+    quickBites.updateCartBadge(
+        cart
+    );
+
+
+
     updateCartButtons();
 }
 
@@ -365,9 +858,72 @@ function updateCart() {
 // INCREASE QUANTITY
 // ========================================
 
-function increaseQuantity(index) {
-    cart[index].quantity++;
-    updateCart();
+async function increaseQuantity(index) {
+
+    const product =
+        cart[index];
+
+
+    if (!product) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `http://127.0.0.1:8080/api/cart-items/${product.cartItemId}`,
+                {
+                    method: "PUT",
+
+                    credentials: "include",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        cart_id:
+                            databaseCartId,
+
+                        food_id:
+                            product.id,
+
+                        quantity:
+                            Number(product.quantity) + 1
+
+                    })
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Could not update quantity: ${response.status}`
+            );
+        }
+
+
+        await loadDatabaseCart();
+
+        updateCart();
+
+
+    } catch (error) {
+
+        console.error(
+            "Error increasing quantity:",
+            error
+        );
+
+        alert(
+            "Could not update the quantity."
+        );
+    }
 }
 
 
@@ -375,57 +931,219 @@ function increaseQuantity(index) {
 // DECREASE QUANTITY
 // ========================================
 
-function decreaseQuantity(index) {
-    cart[index].quantity--;
+async function decreaseQuantity(index) {
 
-    if (cart[index].quantity <= 0) {
-        cart.splice(index, 1);
+    const product =
+        cart[index];
+
+
+    if (!product) {
+        return;
     }
 
-    updateCart();
+
+    const newQuantity =
+        Number(product.quantity) - 1;
+
+
+    try {
+
+        // ----------------------------------------
+        // DELETE ITEM IF QUANTITY BECOMES ZERO
+        // ----------------------------------------
+
+        if (newQuantity <= 0) {
+
+            const response =
+                await fetch(
+                    `http://127.0.0.1:8080/api/cart-items/${product.cartItemId}`,
+                    {
+                        method: "DELETE",
+
+                        credentials: "include"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Could not remove item: ${response.status}`
+                );
+            }
+
+
+        } else {
+
+            // ----------------------------------------
+            // UPDATE QUANTITY
+            // ----------------------------------------
+
+            const response =
+                await fetch(
+                    `http://127.0.0.1:8080/api/cart-items/${product.cartItemId}`,
+                    {
+                        method: "PUT",
+
+                        credentials: "include",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            cart_id:
+                                databaseCartId,
+
+                            food_id:
+                                product.id,
+
+                            quantity:
+                                newQuantity
+
+                        })
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Could not update quantity: ${response.status}`
+                );
+            }
+        }
+
+
+        await loadDatabaseCart();
+
+        updateCart();
+
+
+    } catch (error) {
+
+        console.error(
+            "Error decreasing quantity:",
+            error
+        );
+
+        alert(
+            "Could not update the quantity."
+        );
+    }
 }
 
 
 // ========================================
-// OPEN / CLOSE CART
+// OPEN CART
 // ========================================
 
-cartIcon.addEventListener("click", function (event) {
-    event.preventDefault();
-    cartTab.classList.add("cart-tab-active");
-});
+if (cartIcon) {
 
-closeBtn.addEventListener("click", function (event) {
-    event.preventDefault();
-    cartTab.classList.remove("cart-tab-active");
-});
+    cartIcon.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            cartTab.classList.add(
+                "cart-tab-active"
+            );
+
+        }
+    );
+}
+
+
+// ========================================
+// CLOSE CART
+// ========================================
+
+if (closeBtn) {
+
+    closeBtn.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            cartTab.classList.remove(
+                "cart-tab-active"
+            );
+
+        }
+    );
+}
 
 
 // ========================================
 // ORDER NOW
 // ========================================
 
-orderNowBtn.addEventListener("click", function (event) {
-    event.preventDefault();
+if (orderNowBtn) {
 
-    document.querySelector("#menu").scrollIntoView({
-        behavior: "smooth"
-    });
-});
+    orderNowBtn.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const menu =
+                document.querySelector(
+                    "#menu"
+                );
+
+
+            if (menu) {
+
+                menu.scrollIntoView({
+                    behavior: "smooth"
+                });
+
+            }
+
+        }
+    );
+}
 
 
 // ========================================
 // CHECKOUT
 // ========================================
 
-checkoutBtn.addEventListener("click", function (event) {
-    event.preventDefault();
+if (checkoutBtn) {
 
-    if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-    }
+    checkoutBtn.addEventListener(
+        "click",
+        function (event) {
 
-    quickBites.saveCart(cart);
-    window.location.href = "checkout.html";
-});
+            event.preventDefault();
+
+
+            if (cart.length === 0) {
+
+                alert(
+                    "Your cart is empty!"
+                );
+
+                return;
+            }
+
+
+
+            window.location.href =
+                "checkout.html";
+
+        }
+    );
+}
+
+
+// ========================================
+// INITIALIZE
+// ========================================
+
+loadProducts();

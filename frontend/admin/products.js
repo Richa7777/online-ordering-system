@@ -1,13 +1,4 @@
-/* =========================================================
-   QUICK BITES ADMIN PRODUCTS
-   ========================================================= */
 
-
-/* =========================================================
-   GLOBAL VARIABLES
-   ========================================================= */
-
-const PRODUCTS_KEY = "quickBitesProducts";
 
 let products = [];
 
@@ -42,106 +33,74 @@ document.addEventListener(
     }
 );
 
-
-
-/* =========================================================
-   INITIALIZE PRODUCTS
-   ========================================================= */
-
 async function initializeProducts() {
-
-
-    /*
-        First check localStorage.
-
-        If Admin has already added/edited/deleted
-        products, we must use those products.
-    */
-
-    const savedProducts =
-        localStorage.getItem(PRODUCTS_KEY);
-
-
-    if (savedProducts) {
-
-
-        try {
-
-            products =
-                JSON.parse(savedProducts);
-
-        }
-        catch (error) {
-
-            console.error(
-                "Could not read saved products:",
-                error
-            );
-
-            products = [];
-
-        }
-
-
-        renderProducts();
-
-        return;
-
-    }
-
-
-
-    /*
-        If localStorage does not contain products,
-        load the original products.json.
-    */
 
     try {
 
+        // Load categories first
+        const categoryResponse = await fetch(
+            "http://localhost:8080/api/categories"
+        );
 
-        const response =
-            await fetch("../public/products.json");
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Could not load products.json"
-            );
-
+        if (!categoryResponse.ok) {
+            throw new Error("Could not load categories");
         }
 
+        const categories = await categoryResponse.json();
 
-        products =
-            await response.json();
+        // Store categories for use when loading products
+        window.quickBitesCategories = categories;
 
+        // Load food items from MySQL through Spring Boot
+        const productResponse = await fetch(
+            "http://localhost:8080/api/food-items"
+        );
 
-        /*
-            Save the original products to localStorage.
+        if (!productResponse.ok) {
+            throw new Error("Could not load food items");
+        }
 
-            This means future Admin changes will
-            use localStorage instead of the JSON file.
-        */
+        const data = await productResponse.json();
 
-        saveProducts();
+        // Convert backend format to the format
+        // currently used by the Admin frontend
+        products = data.map(product => {
 
+            const category = categories.find(
+                item =>
+                    Number(item.categoryId) ===
+                    Number(product.categoryId)
+            );
+
+            return {
+                id: product.foodId,
+                name: product.foodName,
+                description: product.description || "",
+                price: `Rs.${Number(product.price)}`,
+                image: product.imageUrl || "",
+                categoryId: product.categoryId,
+                category: category
+                    ? category.categoryName
+                    : "Unknown",
+                popular: product.isPopular === true,
+                isAvailable: product.isAvailable
+            };
+
+        });
+
+        loadProductCategories(categories);
 
         renderProducts();
 
     }
-
-
     catch (error) {
 
-
         console.error(
-            "Error loading products:",
+            "Error loading products from backend:",
             error
         );
 
-
         products = [];
-
 
         renderProducts();
 
@@ -149,23 +108,36 @@ async function initializeProducts() {
 
 }
 
+function loadProductCategories(categories) {
 
+    const select =
+        document.getElementById("product-category");
 
-/* =========================================================
-   SAVE PRODUCTS
-   ========================================================= */
+    if (!select) {
+        return;
+    }
 
-function saveProducts() {
+    select.innerHTML = `
+        <option value="">
+            Select Category
+        </option>
+    `;
 
+    categories.forEach(category => {
 
-    localStorage.setItem(
-        PRODUCTS_KEY,
-        JSON.stringify(products)
-    );
+        const option =
+            document.createElement("option");
+
+        option.value = category.categoryId;
+
+        option.textContent =
+            category.categoryName;
+
+        select.appendChild(option);
+
+    });
 
 }
-
-
 
 /* =========================================================
    RENDER PRODUCTS
@@ -955,10 +927,9 @@ function openEditProduct(productId) {
 
 
     document.getElementById(
-        "product-category"
-    ).value =
-        product.category;
-
+    "product-category"
+).value =
+    product.categoryId;
 
     document.getElementById(
         "product-image"
@@ -1093,38 +1064,27 @@ function setupProductForm() {
 
 }
 
-
-
-/* =========================================================
-   SAVE PRODUCT
-   ========================================================= */
-
-function saveProduct() {
-
+async function saveProduct() {
 
     const name =
         document.getElementById(
             "product-name"
         ).value.trim();
 
-
     const price =
         document.getElementById(
             "product-price"
         ).value.trim();
 
-
-    const category =
+    const categoryId =
         document.getElementById(
             "product-category"
         ).value;
-
 
     const image =
         document.getElementById(
             "product-image"
         ).value.trim();
-
 
     const popular =
         document.getElementById(
@@ -1132,15 +1092,14 @@ function saveProduct() {
         ).checked;
 
 
-
-    /* =====================================================
-       VALIDATION
-       ===================================================== */
+    // ==============================
+    // VALIDATION
+    // ==============================
 
     if (
         !name ||
         !price ||
-        !category ||
+        !categoryId ||
         !image
     ) {
 
@@ -1153,10 +1112,7 @@ function saveProduct() {
     }
 
 
-
-    if (
-        Number(price) < 0
-    ) {
+    if (Number(price) < 0) {
 
         alert(
             "Price cannot be negative."
@@ -1167,123 +1123,129 @@ function saveProduct() {
     }
 
 
+   const productData = {
 
-    /* =====================================================
-       EDIT EXISTING PRODUCT
-       ===================================================== */
+    categoryId: Number(categoryId),
 
-    if (
-        editingProductId !== null
-    ) {
+    foodName: name,
+
+    description: "",
+
+    price: Number(price),
+
+    imageUrl: image,
+
+    isAvailable: true,
+
+    isPopular: popular
+
+};
 
 
-        const productIndex =
-            products.findIndex(
-                function (product) {
+    try {
 
-                    return Number(product.id) ===
-                        Number(editingProductId);
+        let response;
 
+        let isEditing =
+            editingProductId !== null;
+
+
+        // ==============================
+        // EDIT
+        // ==============================
+
+        if (isEditing) {
+
+            response = await fetch(
+                `http://localhost:8080/api/food-items/${editingProductId}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(productData)
                 }
             );
 
-
-        if (
-            productIndex !== -1
-        ) {
+        }
 
 
-            products[productIndex] = {
+        // ==============================
+        // ADD
+        // ==============================
 
-                ...products[productIndex],
+        else {
 
-                name: name,
+            response = await fetch(
+                "http://localhost:8080/api/food-items",
+                {
+                    method: "POST",
 
-                price: `Rs.${Number(price)}`,
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                image: image,
-
-                category: category,
-
-                popular: popular
-
-            };
+                    body:
+                        JSON.stringify(productData)
+                }
+            );
 
         }
 
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Server returned ${response.status}`
+            );
+
+        }
+
+
+        // Get the updated item from backend
+        const savedProduct =
+            await response.json();
+
+
+        console.log(
+            "Saved to database:",
+            savedProduct
+        );
+
+
+        // Reload products directly from MySQL
+        await initializeProducts();
+
+
+        closeProductModal();
+
+
+        alert(
+            isEditing
+                ? "Product updated successfully."
+                : "Product added successfully."
+        );
+
     }
+    catch (error) {
 
+        console.error(
+            "Error saving product:",
+            error
+        );
 
-
-    /* =====================================================
-       ADD NEW PRODUCT
-       ===================================================== */
-
-    else {
-
-
-        const newProductId =
-            getNextProductId();
-
-
-        const newProduct = {
-
-            id: newProductId,
-
-            name: name,
-
-            price: `Rs.${Number(price)}`,
-
-            image: image,
-
-            category: category,
-
-            popular: popular
-
-        };
-
-
-        products.push(
-            newProduct
+        alert(
+            "Could not save the product to the database."
         );
 
     }
 
-
-
-    /* =====================================================
-       SAVE
-       ===================================================== */
-
-    saveProducts();
-
-
-    /*
-        Re-render the product cards.
-    */
-
-    renderProducts();
-
-
-    /*
-        Close modal.
-    */
-
-    closeProductModal();
-
-
-    /*
-        Inform the admin.
-    */
-
-    alert(
-        editingProductId === null
-            ? "Product added successfully."
-            : "Product updated successfully."
-    );
-
 }
-
 
 
 /* =========================================================
@@ -1318,14 +1280,7 @@ function getNextProductId() {
 
 }
 
-
-
-/* =========================================================
-   DELETE PRODUCT
-   ========================================================= */
-
-function deleteProduct(productId) {
-
+async function deleteProduct(productId) {
 
     const product =
         products.find(
@@ -1339,11 +1294,8 @@ function deleteProduct(productId) {
 
 
     if (!product) {
-
         return;
-
     }
-
 
 
     const confirmDelete =
@@ -1353,46 +1305,51 @@ function deleteProduct(productId) {
 
 
     if (!confirmDelete) {
-
         return;
-
     }
 
 
+    try {
 
-    /*
-        Remove product.
-    */
+        const response =
+            await fetch(
+                `http://localhost:8080/api/food-items/${productId}`,
+                {
+                    method: "DELETE"
+                }
+            );
 
-    products =
-        products.filter(
-            function (item) {
 
-                return Number(item.id) !==
-                    Number(productId);
+        if (!response.ok) {
 
-            }
+            throw new Error(
+                `Server returned ${response.status}`
+            );
+
+        }
+
+
+        // Reload directly from database
+        await initializeProducts();
+
+
+        alert(
+            "Product deleted successfully."
         );
 
+    }
+    catch (error) {
 
+        console.error(
+            "Error deleting product:",
+            error
+        );
 
-    /*
-        Save updated products.
-    */
+        alert(
+            "Could not delete the product from the database."
+        );
 
-    saveProducts();
-
-
-    /*
-        Update screen.
-    */
-
-    renderProducts();
-
-
-    alert(
-        "Product deleted successfully."
-    );
+    }
 
 }
 
@@ -1507,7 +1464,7 @@ function setupLogout() {
 
             logoutLink.addEventListener(
                 "click",
-                function (event) {
+                async function (event) {
 
 
                     event.preventDefault();
@@ -1530,6 +1487,18 @@ function setupLogout() {
 
                             For now return to public page.
                         */
+
+                        try {
+                            await fetch(
+                                "http://127.0.0.1:8080/api/auth/logout",
+                                {
+                                    method: "POST",
+                                    credentials: "include"
+                                }
+                            );
+                        } catch (error) {
+                            console.error("Logout error:", error);
+                        }
 
                         window.location.href =
                             "../public/index.html";

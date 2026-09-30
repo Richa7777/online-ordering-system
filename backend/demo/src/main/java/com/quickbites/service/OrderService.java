@@ -25,8 +25,13 @@ public class OrderService {
     }
 
     public Order createOrder(Order order) {
-        return orderRepository.save(order);
+
+    if (order.getOrder_date() == null) {
+        order.setOrder_date(java.time.LocalDateTime.now());
     }
+
+    return orderRepository.save(order);
+}
 
     public Order updateOrder(Integer id, Order orderDetails) {
         Order order = getOrderById(id);

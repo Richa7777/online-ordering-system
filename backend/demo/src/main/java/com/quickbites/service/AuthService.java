@@ -22,42 +22,49 @@ public class AuthService {
     /*
      * Register a new customer.
      */
-    public User register(User user) {
+    public User register(
+        String name,
+        String email,
+        String password,
+        String role) {
 
-        // Check whether the email is already registered
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already registered");
-        }
-
-        /*
-         * Public registration can ONLY create customers.
-         *
-         * We do not trust the role sent by the frontend.
-         */
-        user.setRole(User.Role.CUSTOMER);
-
-        /*
-         * Hash the password before saving it.
-         *
-         * Example:
-         *
-         * 123456
-         *
-         * becomes something like:
-         *
-         * $2a$10$....
-         */
-        user.setPasswordHash(
-                passwordEncoder.encode(user.getPasswordHash())
-        );
-
-        return userRepository.save(user);
+    if (userRepository.findByEmail(email).isPresent()) {
+        throw new RuntimeException("Email already registered");
     }
+
+    User user = new User();
+
+    user.setName(name);
+    user.setEmail(email);
+
+    User.Role selectedRole;
+
+    try {
+        selectedRole = User.Role.valueOf(role.toUpperCase());
+    } catch (Exception e) {
+        throw new RuntimeException("Invalid role");
+    }
+
+    if (selectedRole == User.Role.ADMIN) {
+        throw new RuntimeException(
+                "Admin accounts cannot be created through public registration"
+        );
+    }
+
+    user.setRole(selectedRole);
+
+    user.setPasswordHash(
+            passwordEncoder.encode(password)
+    );
+
+    return userRepository.save(user);
+}
+     
 
     /*
      * Login an existing user.
      */
-    public User login(String email, String password) {
+    public User login(String email, String password, String role) {
 
         // Find the user by email
         User user = userRepository.findByEmail(email)
@@ -65,15 +72,6 @@ public class AuthService {
                         new RuntimeException("Invalid email or password")
                 );
 
-        /*
-         * Compare:
-         *
-         * password entered by user
-         *
-         * with
-         *
-         * BCrypt password stored in database
-         */
         if (!passwordEncoder.matches(
                 password,
                 user.getPasswordHash())) {
@@ -81,6 +79,43 @@ public class AuthService {
             throw new RuntimeException("Invalid email or password");
         }
 
+        if (role == null || !user.getRole().name().equalsIgnoreCase(role)) {
+    throw new RuntimeException("Selected role does not match this account");
+}
+
         return user;
+        
     }
+
+    public User getUserByEmail(String email) {
+
+    return userRepository.findByEmail(email)
+            .orElseThrow(() ->
+                    new RuntimeException("User not found"));
+}
+
+public User updateCurrentUser(
+        String currentEmail,
+        String name,
+        String email) {
+
+    User user = userRepository.findByEmail(currentEmail)
+            .orElseThrow(() ->
+                    new RuntimeException("User not found"));
+
+    // Check whether the new email belongs to another account
+    if (!user.getEmail().equalsIgnoreCase(email)) {
+
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new RuntimeException(
+                    "Email is already registered"
+            );
+        }
+    }
+
+    user.setName(name);
+    user.setEmail(email);
+
+    return userRepository.save(user);
+}
 }
