@@ -18,25 +18,12 @@ const mobileMenu = document.querySelector('.mobile-menu');
 const bars = document.querySelector('.fa-bars');
 const orderNowBtn = document.querySelector('#order-now-btn');
 
-async function isLoggedIn() {
-    try {
-        const response = await fetch(
-            'http://127.0.0.1:8080/api/auth/me',
-            {
-                method: 'GET',
-                credentials: 'include'
-            }
-        );
+const isLoggedIn = () => localStorage.getItem('isLoggedIn') === 'true';
 
-        return response.ok;
-    } catch (error) {
-        return false;
-    }
-}
-
-function requireLogin() {
+const requireLogin = () => {
+    localStorage.setItem('redirectAfterLogin', window.location.pathname.split('/').pop() || 'index.html');
     window.location.href = 'login.html';
-}
+};
 
 cartIcon.addEventListener('click', () => cartTab.classList.add('cart-tab-active'));
 closeBtn.addEventListener('click', () => cartTab.classList.remove('cart-tab-active'));
@@ -46,9 +33,9 @@ hamburger.addEventListener('click', () => {
     bars.classList.toggle('fa-xmark');
 });
 
-orderNowBtn.addEventListener('click', async (e) => {
+orderNowBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    if (!(await isLoggedIn())) {
+    if (!isLoggedIn()) {
         requireLogin();
         return;
     }
@@ -94,14 +81,11 @@ const showCards = () => {
         const cardBtn = orderCard.querySelector('.card-btn');
         cardBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            isLoggedIn().then(loggedIn => {
-                if (!loggedIn) {
-                    requireLogin();
-                    return;
-                }
-                addToCart(product);
-            });
-            return;
+            if (!isLoggedIn()) {
+                requireLogin();
+                return;
+            }
+            addToCart(product);
         });
     });
 };
@@ -188,7 +172,7 @@ const addToCart = (product) => {
 
 const initApp = () => {
 
-    fetch('http://127.0.0.1:8080/api/food-items')
+    fetch('products.json')
         .then(response => response.json())
         .then(data => {
             productList = data;
